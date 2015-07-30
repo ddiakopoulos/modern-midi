@@ -3,38 +3,18 @@
 templates! cpp11! 
 
 ## todo
-- rtaudio midi output
-- rtaudio midi interface
-- generic concurrent queue / timer
+- find attached midi devices by name
+- (cross platform) thread priority 
 - cross-platform spinny timer
-- thread priority 
-- platform macros
-- common.h
 - euclidean rhythm generator
 - tick2frame, second2tick, frame2tick
 - bpm utilities 
-- find attached midi devices by name
-- write midi files
 - generate scales
 - tuning conversions
 - midi clock generator
 - controller remapping
+- write midi files
 
-#ifdef _MSC_VER  
-#define INLINE __forceinline
-#else
-#define INLINE inline
-#endif
-
-#define PI 3.1415926535897932384626433832795
-#define EULER 2.7182818284590452353602874713527
-#define SQRT2 1.4142135623730950488016887242097
-#define ONE_OVER_SQRT2 0.70710678118654752440084436210485
-#define LN10 2.3025850929940456840179914546844
-#define ONE_OVER_LN10 0.43429448190325182765112891891661
-#define LN2 0.69314718055994530941723212145818
-#define ONE_OVER_LN2 1.4426950408889634073599246810019
-#define SEMITONE_FACTOR 1.0594630943592952645618252949463
 
 //some useful macros for VST-Plug-In-Development:
 //calculates the logarithm to an arbitrary base:
@@ -42,7 +22,6 @@ templates! cpp11!
 
 //calculates the logarithm to base 2:
 #define LOG2(x) (1.4426950408889634073599246810019 * log((double)x))
-
 
 
 //conversion from a pitch offset value in semitones to a frequency scale factor:

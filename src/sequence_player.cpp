@@ -89,18 +89,18 @@ namespace mm
 		shouldSequence = true;
 		sequencerThread = std::thread(&MidiSequencePlayer::run, this);
 
-#if defined(PLATFORM_WINDOWS)
+#if defined(MM_PLATFORM_WINDOWS)
 		HANDLE threadHandle = sequencerThread.native_handle();
 		auto err = SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
 		if (err == 0)
 		{
-			GRAPHENE_LOG_ERROR("SetThreadPriority() failed: " << GetLastError());
+			std::cerr << "SetThreadPriority() failed: " << GetLastError() << std::endl;
 		}
 
 		err = SetThreadAffinityMask(threadHandle, 1);
 		if (err == 0)
 		{
-			GRAPHENE_LOG_ERROR("SetThreadAffinityMask() failed: " << GetLastError());
+			std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
 		}
 #endif
 		sequencerThread.detach();
