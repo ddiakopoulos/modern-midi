@@ -6,11 +6,11 @@
 #define METAMIDI_SEQUENCE_H
 
 #include "metamidi.h"
-#include "midi_structs.h"
+#include "midi_message.h"
 
 namespace mm 
 {
-	#define DECLARE_MIDI_EVENT(ev) struct ev ## Event : public MidiEvent { ev ## Event() : MidiEvent(MIDI_Event ## ev) { }
+	#define DECLARE_MIDI_EVENT(ev) struct ev ## Event : public MidiTrackEvent { ev ## Event() : MidiTrackEvent(MIDI_Event ## ev) { }
 
 	DECLARE_MIDI_EVENT(SequenceNumber) int number; };
 	DECLARE_MIDI_EVENT(Text) std::string text; };

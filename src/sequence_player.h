@@ -7,7 +7,7 @@
 
 #include "metamidi.h"
 #include "concurrent_queue.h"
-#include "midi_structs.h"
+#include "midi_message.h"
 #include "sequence.h"
 
 #include <functional>
@@ -53,8 +53,9 @@ namespace mm
 		std::function<void ()> startedEvent;
 		std::function<void ()> stoppedEvent;
 
-		ConcurrentQueue<MidiRtEvent> eventQueue;
-		std::vector<MidiRtEvent> eventList; // indexed by track
+		ConcurrentQueue<MidiPlayerEvent> eventQueue;
+
+		std::vector<MidiPlayerEvent> eventList; // indexed by track
 
 	private:
 		
@@ -62,9 +63,8 @@ namespace mm
 
 		void run();
 
-		void addTimestampedEvent(std::vector<MidiRtEvent> & list, int track, double now, MidiEvent * ev);
+		void addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, MidiTrackEvent * ev);
 
-		
 		float beatsPerMinute;
 		double ticksPerBeat;
 		double msPerTick;

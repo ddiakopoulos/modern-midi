@@ -2,13 +2,12 @@
 
 #include "metamidi.h"
 #include "sequence_player.h"
-#include "midi_structs.h"
+#include "midi_message.h"
 #include "midi_utils.h"
 #include "qpc_timer.h"
 
 namespace mm 
 {
-
 	MidiSequencePlayer::MidiSequencePlayer()
 	{
 
@@ -157,12 +156,12 @@ namespace mm
 		shouldSequence = false;
 	}
 	
-	void MidiSequencePlayer::addTimestampedEvent(std::vector<MidiRtEvent> & list, int track, double now, MidiEvent * ev)
+	void MidiSequencePlayer::addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, MidiTrackEvent * ev)
 	{
 		if (ev->eventType == MIDI_EventChannel)
 		{
 			ChannelEvent * ce = (ChannelEvent *) ev;
-			list.push_back(MidiRtEvent(now, ce->midiCommand, ce->param1, ce->param2, track));
+			list.push_back(MidiPlayerEvent(now, ce->midiCommand, ce->param1, ce->param2, track));
 		}
 	}
 

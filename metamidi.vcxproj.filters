@@ -51,9 +51,6 @@
     <ClInclude Include="src\midi_utils.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\midi_structs.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\sequence_player.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -77,6 +74,12 @@
     </ClInclude>
     <ClInclude Include="src\port_manager.h">
       <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\circular_buffer.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\midi_message.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

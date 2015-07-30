@@ -154,6 +154,7 @@
     <ClCompile Include="third_party\RtMidi\RtMidi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\circular_buffer.h" />
     <ClInclude Include="src\concurrent_queue.h" />
     <ClInclude Include="src\metamidi.h" />
     <ClInclude Include="src\midi_input.h" />
@@ -161,7 +162,7 @@
     <ClInclude Include="src\port_manager.h" />
     <ClInclude Include="src\sequence.h" />
     <ClInclude Include="src\sequence_player.h" />
-    <ClInclude Include="src\midi_structs.h" />
+    <ClInclude Include="src\midi_message.h" />
     <ClInclude Include="src\midi_utils.h" />
     <ClInclude Include="src\music_theory.h" />
     <ClInclude Include="src\qpc_timer.h" />

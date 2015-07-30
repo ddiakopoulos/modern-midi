@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <iostream>
 #include <exception>
+#include <algorithm>
 
 ///////////////
 // Platforms //
@@ -64,7 +65,7 @@ namespace mm
 		MidiDeviceInfo(int32_t idx, bool e, std::string n) : idx(idx), emulated(e), name(n) {};
 	};
 
-
+	template<class T> T clamp(T a, T min, T max) { return std::max(std::min(a, max), min); }
 }
 
 #endif

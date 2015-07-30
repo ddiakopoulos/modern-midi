@@ -2,7 +2,7 @@
 
 #include "metamidi.h"
 #include "sequence.h"
-#include "midi_structs.h"
+#include "midi_message.h"
 
 namespace mm 
 {
@@ -51,7 +51,7 @@ namespace mm
 		return result;
 	}
 	
-	MidiEvent * parseEvent(uint8_t const*& dataStart, uint8_t lastEventTypeByte)
+	MidiTrackEvent * parseEvent(uint8_t const*& dataStart, uint8_t lastEventTypeByte)
 	{
 		uint8_t eventTypeByte = *dataStart++;
 		
@@ -341,7 +341,7 @@ namespace mm
 			{
 				int duration = readVarInt(dataPtr);
 
-				auto ev = std::shared_ptr<MidiEvent>(parseEvent(dataPtr, runningEvent));
+				auto ev = std::shared_ptr<MidiTrackEvent>(parseEvent(dataPtr, runningEvent));
 
 				ev->deltatime = duration;
 
