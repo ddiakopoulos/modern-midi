@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #include "midi_output.h"
 
 using namespace mm;

@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #pragma once
 
 #ifndef METAMIDI_MIDI_PORT_MGR_H

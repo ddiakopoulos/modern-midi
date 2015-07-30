@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #pragma once
 
 #ifndef METAMIDI_SEQUENCE_PLAYER_H
@@ -15,16 +17,16 @@
 
 namespace mm 
 {
-    class MidiSequencePlayer 
-    {
+	class MidiSequencePlayer 
+	{
 
 	public:
 
-        MidiSequencePlayer();
-        ~MidiSequencePlayer();
-        
+		MidiSequencePlayer();
+		~MidiSequencePlayer();
+		
 		void loadSequence(MidiSequence sequence);
-        void start();
+		void start();
 		void stop();
 
 		void setLooping(bool newState)
@@ -32,23 +34,23 @@ namespace mm
 			loop = newState;
 		}
 
-        float length() const; // length of the contained song in seconds
-        
-        double ticksToSeconds(double ticks)
-        {
-            double beats = ticks / ticksPerBeat;
-            double seconds = beats / (beatsPerMinute / 60.0);
-            return seconds;
-        }
-        
-        int secondsToTicks(float seconds)
-        {
-            double ticksPerSecond = (beatsPerMinute * ticksPerBeat) / 60.0;
-            double ticks = ticksPerSecond * seconds;
-            return (int) ticks;
-        }
+		float length() const; // length of the contained song in seconds
+		
+		double ticksToSeconds(double ticks)
+		{
+			double beats = ticks / ticksPerBeat;
+			double seconds = beats / (beatsPerMinute / 60.0);
+			return seconds;
+		}
+		
+		int secondsToTicks(float seconds)
+		{
+			double ticksPerSecond = (beatsPerMinute * ticksPerBeat) / 60.0;
+			double ticks = ticksPerSecond * seconds;
+			return (int) ticks;
+		}
 
-        std::function<void ()> startedEvent;
+		std::function<void ()> startedEvent;
 		std::function<void ()> stoppedEvent;
 
 		ConcurrentQueue<MidiRtEvent> eventQueue;
@@ -60,23 +62,23 @@ namespace mm
 
 		void run();
 
-        void addTimestampedEvent(std::vector<MidiRtEvent> & list, int track, double now, MidiEvent * ev);
+		void addTimestampedEvent(std::vector<MidiRtEvent> & list, int track, double now, MidiEvent * ev);
 
-        
-        float beatsPerMinute;
-        double ticksPerBeat;
+		
+		float beatsPerMinute;
+		double ticksPerBeat;
 		double msPerTick;
-        
+		
 		float playTimeSeconds = 0;
-        float startTime = 0;
-        int eventCursor = 0;
+		float startTime = 0;
+		int eventCursor = 0;
 
 		std::thread sequencerThread;
 		std::atomic<bool> shouldSequence = false;
 		bool loop = false;
 
 		MidiSequence internalSequence;
-    };
+	};
 
 } // mm
 

@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #include "metamidi.h"
 #include "sequence_player.h"
 #include "midi_structs.h"

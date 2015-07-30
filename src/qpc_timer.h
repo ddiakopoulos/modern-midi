@@ -1,5 +1,7 @@
-#ifndef GRAPHENE_QPC_TIMER_H
-#define GRAPHENE_QPC_TIMER_H
+#pragma comment(user, "license")
+
+#ifndef QPC_TIMER_H
+#define QPC_TIMER_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

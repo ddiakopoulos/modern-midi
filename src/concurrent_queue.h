@@ -1,5 +1,7 @@
-#ifndef GRAPHENE_CONCURRENT_QUEUE_H
-#define GRAPHENE_CONCURRENT_QUEUE_H
+#pragma comment(user, "license")
+
+#ifndef CONCURRENT_QUEUE_H
+#define CONCURRENT_QUEUE_H
 
 #include <queue>
 #include <thread>

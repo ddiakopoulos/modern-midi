@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #include "midi_input.h"
 
 using namespace mm;

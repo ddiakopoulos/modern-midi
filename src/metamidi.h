@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #pragma once
 
 #ifndef METAMIDI_H
@@ -20,7 +22,7 @@
 #endif
 
 #ifdef __APPLE__
-    #define MM_PLATFORM_OSX 1
+	#define MM_PLATFORM_OSX 1
 	//#define __MACOSX_CORE__
 #endif
 
@@ -61,6 +63,7 @@ namespace mm
 		MidiDeviceInfo() {};
 		MidiDeviceInfo(int32_t idx, bool e, std::string n) : idx(idx), emulated(e), name(n) {};
 	};
+
 
 }
 

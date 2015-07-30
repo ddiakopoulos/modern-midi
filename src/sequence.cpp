@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #include "metamidi.h"
 #include "sequence.h"
 #include "midi_structs.h"
@@ -247,8 +249,8 @@ namespace mm
 			switch (eventTypeByte & 0xf0)
 			{
 				case 0x80: // note off
-					event->param2 = int(*dataStart++);
-					return event;
+				event->param2 = int(*dataStart++);
+				return event;
 				case 0x90: // note on
 					event->param2 = int(*dataStart++); // velocity
 					return event;
@@ -259,14 +261,14 @@ namespace mm
 					event->param2 = int(*dataStart++); // amount
 					return event;
 				case 0xc0: // program change
-					return event;
+				return event;
 				case 0xd0: // channel after touch
-					return event;
+				return event;
 				case 0xe0: // pitch bend
-					event->param2 = int(*dataStart++);
-					return event;
+				event->param2 = int(*dataStart++);
+				return event;
 				default:
-					throw std::runtime_error("Unrecognised MIDI event type");
+				throw std::runtime_error("Unrecognised MIDI event type");
 			}
 		}
 		throw std::runtime_error("Unparsed event");

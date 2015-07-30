@@ -1,3 +1,5 @@
+#pragma comment(user, "license")
+
 #include "port_manager.h"
 
 std::shared_ptr<RtMidiOut> PortManager::outputDevice;
