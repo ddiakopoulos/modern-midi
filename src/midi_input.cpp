@@ -23,7 +23,10 @@ MidiInput::~MidiInput()
 
 void MidiInput::handleMessage(double delta, std::vector<uint8_t> * message)
 {
-	//@todo
+	MidiMessage incomingMsg (message->at(0),message->at(1), message->at(2));
+
+	if (messageCallback)
+		messageCallback(incomingMsg);
 }
 
 bool MidiInput::openPort(int32_t portNumber) 

@@ -6,7 +6,9 @@
 #define METAMIDI_MIDI_INPUT_H
 
 #include "metamidi.h"
+#include "midi_message.h"
 #include "rtmidi/RtMidi.h"
+#include <functional>
 
 class MidiInput
 {
@@ -33,6 +35,8 @@ public:
 	RtMidiIn * getInputDevice() { return inputDevice.get(); }
 
 	mm::MidiDeviceInfo info;
+
+	std::function<void (const mm::MidiMessage msg)> messageCallback;
 };
 
 #endif
