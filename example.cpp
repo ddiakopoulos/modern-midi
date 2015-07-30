@@ -12,6 +12,7 @@
 #include <cassert>
 #include <map>
 #include <type_traits>
+#include <array>
 
 #include "metamidi.h"
 #include "port_manager.h"
@@ -21,6 +22,43 @@ int main(int argc, char *argv[], char *envp[])
 {
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
 	//auto name = PortManager::GetPortName(mm::PortType::TYPE_OUTPUT, 1);
+
+	std::vector<std::vector<int>> scales = 
+	{
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 },
+		{ 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 1, 0 },
+		{ 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 0, -1 },
+		{ 0, 1, 0, 1, 0, -1, 1, 0, 1, 0, -1, 1 },
+		{ 0, -1, 1, 0, -1, 0, 1, 0, -1, 1, 0, -1 },
+		{ 0, 1, 0, 0, -1, 0, 1, 0, 1, 0, 0, -1 },
+		{ 0, 0, -1, 0, -1, 0, 1, 0, 0, -1, 0, -1 },
+		{ 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 },
+		{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, -1 },
+		{ 0, 0, -1, 0, -1, 0, 0, -1, 0, -1, 0, -1 },
+		{ 0, 0, -1, 1, 0, 0, 1, 0, 0, -1, 1, 0 },
+		{ 0, 1, 0, 0, -1, 0, 0, -1, 0, -1, 0, -1}
+	};
+
+	std::vector<int> progression = {0, -5, 2, -3, 4, -1, 6, 1, -4, 3, -2, 5};
+
+	int progressionState = 0; 
+	int baseNote = 0;
+	int centerNote = 0;
+	int mode = 5;
+
+	/*
+	if (transpose)
+	{
+			progressionState = (progressionState + 1) % 12; 
+			baseNote = centerNote + progression[progressionState];
+	}
+	*/
+
+	int transposedNote = 0;
+	int scaleIndexToUse = transposedNote % 12;
+	int modifier = scales[5][scaleIndexToUse];
+
 
 	MidiOutput hiduino("hiduino device");
 	hiduino.openPort(1);

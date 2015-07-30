@@ -13,11 +13,6 @@
 
 namespace mm
 {
-	inline uint8_t MakeTypeWithChannel(const int type, const int channel)
-    {
-        return (uint8_t) (type | mm::clamp<uint8_t> (0, 15, channel - 1));
-    }
-
 	// Channel info (MSN=command LSN=channel)
 	#define MIDI_NOTE_OFF           0x80
 	#define MIDI_NOTE_ON            0x90
@@ -118,44 +113,53 @@ namespace mm
 		uint8_t byte3;
 	};
 
+	///////////////////////
+	// Message Factories //
+	///////////////////////
+
+	inline uint8_t MakeCommand(const int type, const int channel)
+    {
+        return (uint8_t) (type | mm::clamp<uint8_t> (0, 15, channel - 1));
+    }
+
 	inline MidiMessage MakeNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_NOTE_ON, channel), note, velocity);
+		return MidiMessage(MakeCommand(MIDI_NOTE_ON, channel), note, velocity);
 	}
 
 	inline MidiMessage MakeNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_NOTE_OFF, channel), note, velocity);
+		return MidiMessage(MakeCommand(MIDI_NOTE_OFF, channel), note, velocity);
 	}
 
 	inline MidiMessage MakeControlChange(uint8_t channel, uint8_t control, uint8_t value)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_CONTROL_CHANGE, channel), control, value);
+		return MidiMessage(MakeCommand(MIDI_CONTROL_CHANGE, channel), control, value);
 	}
 
 	inline MidiMessage MakeProgramChange(uint8_t channel, uint8_t value)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_PROGRAM_CHANGE, channel), value);
+		return MidiMessage(MakeCommand(MIDI_PROGRAM_CHANGE, channel), value);
 	}
 
 	inline MidiMessage MakePitchBend(uint8_t channel, int value)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_PITCH_BEND, channel), value & 0x7F, (uint8_t)((value >> 7) & 0x7F)); 
+		return MidiMessage(MakeCommand(MIDI_PITCH_BEND, channel), value & 0x7F, (uint8_t)((value >> 7) & 0x7F)); 
 	}
 
 	inline MidiMessage MakePitchBend(uint8_t channel, uint8_t lsb, uint8_t msb)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_PITCH_BEND, channel), lsb, msb);
+		return MidiMessage(MakeCommand(MIDI_PITCH_BEND, channel), lsb, msb);
 	}
 
 	inline MidiMessage MakePolyPressure(uint8_t channel, uint8_t note, uint8_t value)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_POLY_PRESSURE, channel), note, value);
+		return MidiMessage(MakeCommand(MIDI_POLY_PRESSURE, channel), note, value);
 	}
 
 	inline MidiMessage MakeAftertouch(uint8_t channel, uint8_t value)
 	{
-		return MidiMessage(MakeTypeWithChannel(MIDI_AFTERTOUCH, channel), value);
+		return MidiMessage(MakeCommand(MIDI_AFTERTOUCH, channel), value);
 	}
 
 	//////////////////////////
