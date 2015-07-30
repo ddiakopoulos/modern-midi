@@ -7,6 +7,7 @@
 
 #include "metamidi.h"
 #include "rtmidi/RtMidi.h"
+#include <assert.h>
 
 #if defined(_MSC_VER)
 	#pragma comment(lib, "winmm.lib")

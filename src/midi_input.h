@@ -13,13 +13,9 @@
 class MidiInput
 {
 	std::unique_ptr<RtMidiIn> inputDevice;
-
 	static void _callback(double delta, std::vector<uint8_t> * message, void * userData);
-
 	void handleMessage(double delta, std::vector<uint8_t> * message);
-
 	bool attached = false;
-	
 public:
 
 	MidiInput(const std::string & name);
@@ -31,7 +27,6 @@ public:
 	void closePort();
 	
 	void ignoreTypes(bool midiSysex, bool midiTiming, bool midiSense);
-
 	RtMidiIn * getInputDevice() { return inputDevice.get(); }
 
 	mm::MidiDeviceInfo info;

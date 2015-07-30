@@ -53,7 +53,8 @@ namespace mm
 	enum PortType
 	{
 		TYPE_INPUT,
-		TYPE_OUTPUT
+		TYPE_OUTPUT,
+		TYPE_INVALID
 	};
 
 	struct MidiDeviceInfo
