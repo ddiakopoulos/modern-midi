@@ -9,6 +9,7 @@
 class MidiOutput
 {
 	std::unique_ptr<RtMidiOut> outputDevice;
+	bool attached = false;
 public:
 
 	MidiOutput(const std::string & name);

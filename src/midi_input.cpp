@@ -26,18 +26,19 @@ void MidiInput::handleMessage(double delta, std::vector<uint8_t> * message)
 
 bool MidiInput::openPort(int32_t portNumber) 
 {	
-	closePort();
+	if (attached) throw std::runtime_error("device is already attached to a port");
 	try 
 	{
 		inputDevice->setCallback(&_callback, this);
 		inputDevice->openPort(portNumber, std::to_string(portNumber));
+		attached = true;
 	}
 	catch (RtMidiError& e) 
 	{
 		std::cerr << e.what() << std::endl;
 		return false;
 	}
-	info = {portNumber, false, true, inputDevice->getPortName(portNumber)};
+	info = {portNumber, false, inputDevice->getPortName(portNumber)};
 	return true;
 }
 
@@ -62,11 +63,12 @@ bool MidiInput::openPort(std::string deviceName)
 
 bool MidiInput::openVirtualPort(std::string portName) 
 {
-	closePort();
+	if (attached) throw std::runtime_error("device is already attached to a port");
 	try 
 	{
 		inputDevice->setCallback(&_callback, this);
 		inputDevice->openVirtualPort(portName);
+		attached = true;
 	}
 	catch(RtMidiError & e) 
 	{
@@ -75,15 +77,16 @@ bool MidiInput::openVirtualPort(std::string portName)
 	}
 
 	// Why 0? 
-	info = {0, true, true, portName};
+	info = {0, true, portName};
 	return true;
 }
 
 void MidiInput::closePort() 
 {
 	inputDevice->closePort();
-	if (info.open) inputDevice->cancelCallback();
-	info = {-1, false, false, ""};
+	if (attached) inputDevice->cancelCallback();
+	info = {-1, false, ""};
+	attached = false;
 }
 
 void MidiInput::ignoreTypes(bool midiSysex, bool midiTiming, bool midiSense) 

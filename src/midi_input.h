@@ -13,6 +13,8 @@ class MidiInput
 	static void _callback(double delta, std::vector<uint8_t> * message, void * userData);
 
 	void handleMessage(double delta, std::vector<uint8_t> * message);
+
+	bool attached = false;
 	
 public:
 
