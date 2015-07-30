@@ -18,6 +18,9 @@
 #include "port_manager.h"
 #include "midi_output.h"
 
+std::random_device rd;
+std::mt19937 gen(rd());
+
 int main(int argc, char *argv[], char *envp[])
 {
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
@@ -59,14 +62,31 @@ int main(int argc, char *argv[], char *envp[])
 	int scaleIndexToUse = transposedNote % 12;
 	int modifier = scales[5][scaleIndexToUse];
 
-
 	MidiOutput hiduino("hiduino device");
 	hiduino.openPort(1);
 
-	for (int i = 0; i < 8; i++)
+	uint8_t scaleIdx = 0;
+
+	auto randomScaleDegree = std::uniform_int_distribution<int>(1, 7);
+
+	for (int i = 0; i < 128; i++)
 	{
-		hiduino.sendMessage({144, uint8_t(i), 1});
-		std::this_thread::sleep_for(std::chrono::milliseconds(250));
+		if (i % 4 == 0)
+		{
+			hiduino.sendMessage({144, scaleIdx, 1});
+		}
+
+		if (i % 8 == 0)
+		{
+			hiduino.sendMessage({144, uint8_t(randomScaleDegree(gen)), 1});
+		}
+
+		if (i % 16 == 0)
+		{
+			scaleIdx++;
+		}
+
+		std::this_thread::sleep_for(std::chrono::microseconds(16 * 8333)); // 120 bpm
 	}
 
 	return 0;
