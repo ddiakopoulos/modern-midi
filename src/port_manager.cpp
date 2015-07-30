@@ -1,7 +1,7 @@
 #include "port_manager.h"
 
-std::shared_ptr<RtMidiOut> PortManager::outputDevice = nullptr;
-std::shared_ptr<RtMidiIn> PortManager::inputDevice = nullptr;
+std::shared_ptr<RtMidiOut> PortManager::outputDevice;
+std::shared_ptr<RtMidiIn> PortManager::inputDevice;
 
 using namespace mm;
 

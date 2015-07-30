@@ -16,30 +16,29 @@ class PortManager
 	static std::shared_ptr<RtMidiIn> inputDevice;
 
 	template<typename T>
-	static T * fetch(std::shared_ptr<T> port)
+	static std::shared_ptr<T> fetch(std::shared_ptr<T> device)
 	{
-		if (port.get()) 
-			return port.get();
+		if (device) return device;
 		else
 		{
-			port.reset(new T());
-			return port.get();
+			device = std::make_shared<T>();
+			return device;
 		}
 	}
 
 	template<typename T>
-	static void listPorts(T * device)
+	static void listPorts(std::shared_ptr<T> device)
 	{
-		std::cout << device->getPortCount() << " ports available: ";
+		std::cout << device->getPortCount() << " ports available: \n";
 		for (uint32_t i = 0; i < device->getPortCount(); ++i)
 		{
-			std::cout << "\t" << i << " : " << device->getPortName(i);
+			std::cout << "## " << i << " : " << device->getPortName(i) << std::endl;
 		}
 		std::cout << std::endl;
 	}
 
 	template<typename T>
-	static std::vector<std::string> getPortList(T * device)
+	static std::vector<std::string> getPortList(std::shared_ptr<T> device)
 	{
 		std::vector<std::string> portList;
 		for(uint32_t i = 0; i < device->getPortCount(); ++i) 
@@ -50,13 +49,13 @@ class PortManager
 	}
 
 	template<typename T>
-	static int getNumPorts(T * device)
+	static int getNumPorts(std::shared_ptr<T> device)
 	{
 		return device->getPortCount();
 	}
 
 	template<typename T>
-	static std::string getPortName(T * device, uint32_t portNumber)
+	static std::string getPortName(std::shared_ptr<T> device, uint32_t portNumber)
 	{
 		try 
 		{

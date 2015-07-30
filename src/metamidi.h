@@ -16,17 +16,17 @@
 
 #if defined(WIN32) || defined(_WIN32)
 	#define MM_PLATFORM_WINDOWS 1
-	#define __WINDOWS_MM__
+	//#define __WINDOWS_MM__
 #endif
 
 #ifdef __APPLE__
     #define MM_PLATFORM_OSX 1
-	#define __MACOSX_CORE__
+	//#define __MACOSX_CORE__
 #endif
 
 #if defined(__linux) || defined(__unix) || defined (__posix)
 	#define MM_PLATFORM_POSIX
-	#define __LINUX_ALSA__
+	//#define __LINUX_ALSA__
 #endif
 
 #if defined(MM_PLATFORM_WINDOWS)
