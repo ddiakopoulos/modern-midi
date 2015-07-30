@@ -129,7 +129,7 @@ namespace mm
 			// Spin until next loop 
 			while ( (timer.running_diff_seconds()) <= (outputMsg.timestamp))
 			{
-				// Spinny spin spin.
+				// Spinny spin spin. continue? 
 			}
 
 			// Exit? 

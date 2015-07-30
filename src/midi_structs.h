@@ -18,7 +18,7 @@ namespace mm
 	#define MIDI_POLY_PRESSURE      0xA0
 	#define MIDI_CONTROL_CHANGE     0xB0
 	#define MIDI_PROGRAM_CHANGE     0xC0
-	#define MIDI_CHANNEL_PRESSURE   0xD0
+	#define MIDI_AFTERTOUCH		    0xD0
 	#define MIDI_PITCH_BEND         0xE0
 	
 	// System Common Messages
@@ -101,7 +101,7 @@ namespace mm
 		MidiMessage msg;
 	};
 
-	template<class C, class R> std::basic_ostream<C, R> & operator <<(std::basic_ostream<C, R> & ss, const MidiRtEvent & v) 
+	template<class C, class R> std::basic_ostream<C, R> & operator << (std::basic_ostream<C, R> & ss, const MidiRtEvent & v) 
 	{
 		return ss << "[" << int(v.msg.byte1) << ", " << int(v.msg.byte2) << ", " << int(v.msg.byte3) << "]";
 	}
@@ -112,12 +112,25 @@ namespace mm
 
 	enum MIDI_EventType 
 	{
-		MIDI_EventSequenceNumber, MIDI_EventText, MIDI_EventCopyrightNotice,
-		MIDI_EventTrackName, MIDI_EventInstrumentName, MIDI_EventLyrics,
-		MIDI_EventMarker, MIDI_EventCuePoint, MIDI_EventMidiChannelPrefix,
-		MIDI_EventEndOfTrack, MIDI_EventSetTempo, MIDI_EventSmpteOffset,
-		MIDI_EventTimeSignature, MIDI_EventKeySignature, MIDI_EventSequencerSpecific,
-		MIDI_EventUnknown, MIDI_EventSysEx, MIDI_EventDividedSysEx, MIDI_EventChannel
+		MIDI_EventSequenceNumber, 
+		MIDI_EventText, 
+		MIDI_EventCopyrightNotice,
+		MIDI_EventTrackName, 
+		MIDI_EventInstrumentName,
+		MIDI_EventLyrics,
+		MIDI_EventMarker,
+		MIDI_EventCuePoint,
+		MIDI_EventMidiChannelPrefix,
+		MIDI_EventEndOfTrack,
+		MIDI_EventSetTempo, 
+		MIDI_EventSmpteOffset,
+		MIDI_EventTimeSignature, 
+		MIDI_EventKeySignature, 
+		MIDI_EventSequencerSpecific,
+		MIDI_EventUnknown,
+		MIDI_EventSysEx,
+		MIDI_EventDividedSysEx,
+		MIDI_EventChannel
 	};
 	
 	struct MidiEvent 
