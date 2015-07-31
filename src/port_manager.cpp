@@ -2,6 +2,7 @@
 
 #include "port_manager.h"
 
+// Statics
 std::shared_ptr<RtMidiOut> PortManager::outputDevice;
 std::shared_ptr<RtMidiIn> PortManager::inputDevice;
 
