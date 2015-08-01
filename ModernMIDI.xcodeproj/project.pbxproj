@@ -16,6 +16,9 @@
 		08567C891B6D68E200EB6C0D /* sequence_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C801B6D68E200EB6C0D /* sequence_player.cpp */; };
 		08567C8A1B6D68E200EB6C0D /* sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C821B6D68E200EB6C0D /* sequence.cpp */; };
 		08567C8C1B6D68EC00EB6C0D /* sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C8B1B6D68EC00EB6C0D /* sample.cpp */; };
+		08567C8E1B6D801A00EB6C0D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08567C8D1B6D801A00EB6C0D /* CoreFoundation.framework */; };
+		08567C901B6D801E00EB6C0D /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08567C8F1B6D801E00EB6C0D /* CoreMIDI.framework */; };
+		08567C921B6D802200EB6C0D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08567C911B6D802200EB6C0D /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +57,9 @@
 		08567C821B6D68E200EB6C0D /* sequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sequence.cpp; path = src/sequence.cpp; sourceTree = SOURCE_ROOT; };
 		08567C831B6D68E200EB6C0D /* sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sequence.h; path = src/sequence.h; sourceTree = SOURCE_ROOT; };
 		08567C8B1B6D68EC00EB6C0D /* sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sample.cpp; sourceTree = SOURCE_ROOT; };
+		08567C8D1B6D801A00EB6C0D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		08567C8F1B6D801E00EB6C0D /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		08567C911B6D802200EB6C0D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08567C921B6D802200EB6C0D /* CoreAudio.framework in Frameworks */,
+				08567C901B6D801E00EB6C0D /* CoreMIDI.framework in Frameworks */,
+				08567C8E1B6D801A00EB6C0D /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +79,9 @@
 		08567C571B6D684A00EB6C0D = {
 			isa = PBXGroup;
 			children = (
+				08567C911B6D802200EB6C0D /* CoreAudio.framework */,
+				08567C8F1B6D801E00EB6C0D /* CoreMIDI.framework */,
+				08567C8D1B6D801A00EB6C0D /* CoreFoundation.framework */,
 				08567C6C1B6D68BD00EB6C0D /* third_party */,
 				08567C621B6D684A00EB6C0D /* ModernMIDI */,
 				08567C611B6D684A00EB6C0D /* Products */,
@@ -292,6 +304,7 @@
 		08567C681B6D684A00EB6C0D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX_CORE__;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -305,6 +318,7 @@
 		08567C691B6D684A00EB6C0D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX_CORE__;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,

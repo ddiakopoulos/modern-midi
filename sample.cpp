@@ -63,8 +63,9 @@ int main(int argc, char *argv[], char *envp[])
 	int modifier = scales[5][scaleIndexToUse];
 
 	MidiOutput hiduino("hiduino device");
-	hiduino.openPort(1);
+	bool success = hiduino.openPort(1);
 
+    
 	uint8_t scaleIdx = 0;
 
 	auto randomScaleDegree = std::uniform_int_distribution<int>(1, 7);
