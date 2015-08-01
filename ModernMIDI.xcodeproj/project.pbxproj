@@ -1,0 +1,342 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08567C701B6D68D700EB6C0D /* RtMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */; };
+		08567C841B6D68E200EB6C0D /* midi_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C741B6D68E200EB6C0D /* midi_input.cpp */; };
+		08567C851B6D68E200EB6C0D /* midi_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C771B6D68E200EB6C0D /* midi_output.cpp */; };
+		08567C861B6D68E200EB6C0D /* midi_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C791B6D68E200EB6C0D /* midi_utils.cpp */; };
+		08567C871B6D68E200EB6C0D /* music_theory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C7B1B6D68E200EB6C0D /* music_theory.cpp */; };
+		08567C881B6D68E200EB6C0D /* port_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C7D1B6D68E200EB6C0D /* port_manager.cpp */; };
+		08567C891B6D68E200EB6C0D /* sequence_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C801B6D68E200EB6C0D /* sequence_player.cpp */; };
+		08567C8A1B6D68E200EB6C0D /* sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C821B6D68E200EB6C0D /* sequence.cpp */; };
+		08567C8C1B6D68EC00EB6C0D /* sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C8B1B6D68EC00EB6C0D /* sample.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		08567C5E1B6D684A00EB6C0D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08567C601B6D684A00EB6C0D /* ModernMIDI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ModernMIDI; sourceTree = BUILT_PRODUCTS_DIR; };
+		08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RtMidi.cpp; path = third_party/rtmidi/RtMidi.cpp; sourceTree = "<group>"; };
+		08567C6F1B6D68D700EB6C0D /* RtMidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RtMidi.h; path = third_party/rtmidi/RtMidi.h; sourceTree = "<group>"; };
+		08567C711B6D68E200EB6C0D /* circular_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = circular_buffer.h; path = src/circular_buffer.h; sourceTree = SOURCE_ROOT; };
+		08567C721B6D68E200EB6C0D /* concurrent_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = concurrent_queue.h; path = src/concurrent_queue.h; sourceTree = SOURCE_ROOT; };
+		08567C731B6D68E200EB6C0D /* metamidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metamidi.h; path = src/metamidi.h; sourceTree = SOURCE_ROOT; };
+		08567C741B6D68E200EB6C0D /* midi_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_input.cpp; path = src/midi_input.cpp; sourceTree = SOURCE_ROOT; };
+		08567C751B6D68E200EB6C0D /* midi_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_input.h; path = src/midi_input.h; sourceTree = SOURCE_ROOT; };
+		08567C761B6D68E200EB6C0D /* midi_message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_message.h; path = src/midi_message.h; sourceTree = SOURCE_ROOT; };
+		08567C771B6D68E200EB6C0D /* midi_output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_output.cpp; path = src/midi_output.cpp; sourceTree = SOURCE_ROOT; };
+		08567C781B6D68E200EB6C0D /* midi_output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_output.h; path = src/midi_output.h; sourceTree = SOURCE_ROOT; };
+		08567C791B6D68E200EB6C0D /* midi_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_utils.cpp; path = src/midi_utils.cpp; sourceTree = SOURCE_ROOT; };
+		08567C7A1B6D68E200EB6C0D /* midi_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_utils.h; path = src/midi_utils.h; sourceTree = SOURCE_ROOT; };
+		08567C7B1B6D68E200EB6C0D /* music_theory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = music_theory.cpp; path = src/music_theory.cpp; sourceTree = SOURCE_ROOT; };
+		08567C7C1B6D68E200EB6C0D /* music_theory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = music_theory.h; path = src/music_theory.h; sourceTree = SOURCE_ROOT; };
+		08567C7D1B6D68E200EB6C0D /* port_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = port_manager.cpp; path = src/port_manager.cpp; sourceTree = SOURCE_ROOT; };
+		08567C7E1B6D68E200EB6C0D /* port_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = port_manager.h; path = src/port_manager.h; sourceTree = SOURCE_ROOT; };
+		08567C7F1B6D68E200EB6C0D /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = src/timer.h; sourceTree = SOURCE_ROOT; };
+		08567C801B6D68E200EB6C0D /* sequence_player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sequence_player.cpp; path = src/sequence_player.cpp; sourceTree = SOURCE_ROOT; };
+		08567C811B6D68E200EB6C0D /* sequence_player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sequence_player.h; path = src/sequence_player.h; sourceTree = SOURCE_ROOT; };
+		08567C821B6D68E200EB6C0D /* sequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sequence.cpp; path = src/sequence.cpp; sourceTree = SOURCE_ROOT; };
+		08567C831B6D68E200EB6C0D /* sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sequence.h; path = src/sequence.h; sourceTree = SOURCE_ROOT; };
+		08567C8B1B6D68EC00EB6C0D /* sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sample.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		08567C5D1B6D684A00EB6C0D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08567C571B6D684A00EB6C0D = {
+			isa = PBXGroup;
+			children = (
+				08567C6C1B6D68BD00EB6C0D /* third_party */,
+				08567C621B6D684A00EB6C0D /* ModernMIDI */,
+				08567C611B6D684A00EB6C0D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		08567C611B6D684A00EB6C0D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				08567C601B6D684A00EB6C0D /* ModernMIDI */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		08567C621B6D684A00EB6C0D /* ModernMIDI */ = {
+			isa = PBXGroup;
+			children = (
+				08567C6B1B6D68B400EB6C0D /* library */,
+				08567C6A1B6D68AC00EB6C0D /* sample */,
+			);
+			path = ModernMIDI;
+			sourceTree = "<group>";
+		};
+		08567C6A1B6D68AC00EB6C0D /* sample */ = {
+			isa = PBXGroup;
+			children = (
+				08567C8B1B6D68EC00EB6C0D /* sample.cpp */,
+			);
+			name = sample;
+			sourceTree = "<group>";
+		};
+		08567C6B1B6D68B400EB6C0D /* library */ = {
+			isa = PBXGroup;
+			children = (
+				08567C711B6D68E200EB6C0D /* circular_buffer.h */,
+				08567C721B6D68E200EB6C0D /* concurrent_queue.h */,
+				08567C731B6D68E200EB6C0D /* metamidi.h */,
+				08567C741B6D68E200EB6C0D /* midi_input.cpp */,
+				08567C751B6D68E200EB6C0D /* midi_input.h */,
+				08567C761B6D68E200EB6C0D /* midi_message.h */,
+				08567C771B6D68E200EB6C0D /* midi_output.cpp */,
+				08567C781B6D68E200EB6C0D /* midi_output.h */,
+				08567C791B6D68E200EB6C0D /* midi_utils.cpp */,
+				08567C7A1B6D68E200EB6C0D /* midi_utils.h */,
+				08567C7B1B6D68E200EB6C0D /* music_theory.cpp */,
+				08567C7C1B6D68E200EB6C0D /* music_theory.h */,
+				08567C7D1B6D68E200EB6C0D /* port_manager.cpp */,
+				08567C7E1B6D68E200EB6C0D /* port_manager.h */,
+				08567C7F1B6D68E200EB6C0D /* timer.h */,
+				08567C801B6D68E200EB6C0D /* sequence_player.cpp */,
+				08567C811B6D68E200EB6C0D /* sequence_player.h */,
+				08567C821B6D68E200EB6C0D /* sequence.cpp */,
+				08567C831B6D68E200EB6C0D /* sequence.h */,
+			);
+			name = library;
+			sourceTree = "<group>";
+		};
+		08567C6C1B6D68BD00EB6C0D /* third_party */ = {
+			isa = PBXGroup;
+			children = (
+				08567C6D1B6D68C800EB6C0D /* rtmidi */,
+			);
+			name = third_party;
+			sourceTree = "<group>";
+		};
+		08567C6D1B6D68C800EB6C0D /* rtmidi */ = {
+			isa = PBXGroup;
+			children = (
+				08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */,
+				08567C6F1B6D68D700EB6C0D /* RtMidi.h */,
+			);
+			name = rtmidi;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		08567C5F1B6D684A00EB6C0D /* ModernMIDI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08567C671B6D684A00EB6C0D /* Build configuration list for PBXNativeTarget "ModernMIDI" */;
+			buildPhases = (
+				08567C5C1B6D684A00EB6C0D /* Sources */,
+				08567C5D1B6D684A00EB6C0D /* Frameworks */,
+				08567C5E1B6D684A00EB6C0D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ModernMIDI;
+			productName = ModernMIDI;
+			productReference = 08567C601B6D684A00EB6C0D /* ModernMIDI */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08567C581B6D684A00EB6C0D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Dimitri Diakopoulos";
+				TargetAttributes = {
+					08567C5F1B6D684A00EB6C0D = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
+			};
+			buildConfigurationList = 08567C5B1B6D684A00EB6C0D /* Build configuration list for PBXProject "ModernMIDI" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 08567C571B6D684A00EB6C0D;
+			productRefGroup = 08567C611B6D684A00EB6C0D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				08567C5F1B6D684A00EB6C0D /* ModernMIDI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		08567C5C1B6D684A00EB6C0D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08567C701B6D68D700EB6C0D /* RtMidi.cpp in Sources */,
+				08567C851B6D68E200EB6C0D /* midi_output.cpp in Sources */,
+				08567C8C1B6D68EC00EB6C0D /* sample.cpp in Sources */,
+				08567C891B6D68E200EB6C0D /* sequence_player.cpp in Sources */,
+				08567C881B6D68E200EB6C0D /* port_manager.cpp in Sources */,
+				08567C861B6D68E200EB6C0D /* midi_utils.cpp in Sources */,
+				08567C871B6D68E200EB6C0D /* music_theory.cpp in Sources */,
+				08567C8A1B6D68E200EB6C0D /* sequence.cpp in Sources */,
+				08567C841B6D68E200EB6C0D /* midi_input.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		08567C651B6D684A00EB6C0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		08567C661B6D684A00EB6C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		08567C681B6D684A00EB6C0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/third_party",
+					"$(SRCROOT)/src",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		08567C691B6D684A00EB6C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/third_party",
+					"$(SRCROOT)/src",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		08567C5B1B6D684A00EB6C0D /* Build configuration list for PBXProject "ModernMIDI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08567C651B6D684A00EB6C0D /* Debug */,
+				08567C661B6D684A00EB6C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		08567C671B6D684A00EB6C0D /* Build configuration list for PBXNativeTarget "ModernMIDI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08567C681B6D684A00EB6C0D /* Debug */,
+				08567C691B6D684A00EB6C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08567C581B6D684A00EB6C0D /* Project object */;
+}

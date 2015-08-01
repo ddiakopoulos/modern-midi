@@ -1,6 +1,7 @@
 #pragma comment(user, "license")
 
 #include "midi_utils.h"
+#include <cmath>
 
 namespace mm 
 {

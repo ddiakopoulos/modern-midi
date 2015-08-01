@@ -4,11 +4,11 @@
 #include "sequence_player.h"
 #include "midi_message.h"
 #include "midi_utils.h"
-#include "qpc_timer.h"
+#include "timer.h"
 
 namespace mm 
 {
-	MidiSequencePlayer::MidiSequencePlayer()
+    MidiSequencePlayer::MidiSequencePlayer() : shouldSequence(false)
 	{
 
 	}
@@ -115,7 +115,7 @@ namespace mm
 		double lastTime = 0;
 		size_t eventCursor = 0;
 
-		QPCTimer timer;
+		PlatformTimer timer;
 		timer.start();
 
 		while (eventCursor < eventList.size())
@@ -126,7 +126,7 @@ namespace mm
 			auto outputMsg = eventList[eventCursor];
 
 			// Spin until next loop 
-			while ( (timer.running_diff_seconds()) <= (outputMsg.timestamp))
+			while ( (timer.running_time_ms()) <= (outputMsg.timestamp))
 			{
 				// Spinny spin spin. continue? 
 			}

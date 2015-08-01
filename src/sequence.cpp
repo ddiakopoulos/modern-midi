@@ -3,6 +3,7 @@
 #include "metamidi.h"
 #include "sequence.h"
 #include "midi_message.h"
+#include <cmath>
 
 namespace mm 
 {

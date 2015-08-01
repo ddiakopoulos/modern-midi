@@ -74,7 +74,7 @@ namespace mm
 		int eventCursor = 0;
 
 		std::thread sequencerThread;
-		std::atomic<bool> shouldSequence = false;
+		std::atomic<bool> shouldSequence;
 		bool loop = false;
 
 		MidiSequence internalSequence;
