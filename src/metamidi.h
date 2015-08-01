@@ -48,6 +48,10 @@
 #define MM_ONE_OVER_LN2 double(1.4426950408889634073599246810019)
 #define MM_SEMITONE_FACTOR double(1.0594630943592952645618252949463)
 
+#if defined(MM_PLATFORM_WINDOWS)
+    #pragma comment(lib, "winmm.lib")
+#endif
+
 namespace mm
 {
 	enum PortType

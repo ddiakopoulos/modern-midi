@@ -55,6 +55,11 @@ bool MidiOutput::openPort(std::string deviceName)
 
 bool MidiOutput::openVirtualPort(std::string portName) 
 {
+    
+#if defined (MM_PLATFORM_WINDOWS)
+    static_assert(false, "virtual ports are unsupported on windows");
+#endif
+    
 	if (attached) throw std::runtime_error("device is already attached to a port");
 	try 
 	{
@@ -68,8 +73,7 @@ bool MidiOutput::openVirtualPort(std::string portName)
 		return false;
 	}
 
-	// Why 0? 
-	info = {0, true, portName};
+	info = {-1, true, portName};
 	return true;
 }
 

@@ -9,10 +9,6 @@
 #include "rtmidi/RtMidi.h"
 #include <assert.h>
 
-#if defined(_MSC_VER)
-	#pragma comment(lib, "winmm.lib")
-#endif
-
 class PortManager
 {
 	static std::shared_ptr<RtMidiOut> outputDevice;
@@ -74,7 +70,7 @@ class PortManager
 public:
 
 	static void PrintPortList(mm::PortType t);
-	static std::vector<std::string>  GetPortList(mm::PortType t);
+	static std::vector<std::string> GetPortList(mm::PortType t);
 	static int GetPortCount(mm::PortType t);
 	static std::string GetPortName(mm::PortType t, uint32_t portNumber);
 
