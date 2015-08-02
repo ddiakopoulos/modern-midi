@@ -119,7 +119,7 @@ namespace mm
 
 	inline uint8_t MakeCommand(const int type, const int channel)
     {
-        return (uint8_t) (type | mm::clamp<uint8_t> (0, 15, channel - 1));
+        return (uint8_t) (type | mm::clamp<uint8_t> (channel, 0, channel - 1));
     }
 
 	inline MidiMessage MakeNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)

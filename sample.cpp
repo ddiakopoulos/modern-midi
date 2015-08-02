@@ -17,6 +17,7 @@
 #include "metamidi.h"
 #include "port_manager.h"
 #include "midi_output.h"
+#include "midi_message.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -61,6 +62,11 @@ int main(int argc, char *argv[], char *envp[])
 	int transposedNote = 0;
 	int scaleIndexToUse = transposedNote % 12;
 	int modifier = scales[5][scaleIndexToUse];
+    
+    auto msg = mm::MakeNoteOn(2, 60, 127);
+    std::cout << "B1: " << (int) msg.byte1 << std::endl;
+    std::cout << "B2: " << (int) msg.byte2 << std::endl;
+    std::cout << "B3: " << (int) msg.byte3 << std::endl;
 
 	MidiOutput hiduino("hiduino device");
 	bool success = hiduino.openPort(1);
