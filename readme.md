@@ -3,10 +3,11 @@
 templates! cpp11! 
 
 ## todo
-- build message helpers
-- rename MidiRtMessage + fix
-- (cross platform) thread priority 
-- cross-platform spinny timer
+- [X] build message factories
+- [X] rename MidiRtMessage + fix
+- [X] (cross platform) thread priority 
+- [X] cross-platform timer
+
 - tick2frame, second2tick, frame2tick
 - bpm utilities 
 - generate scales
