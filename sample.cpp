@@ -14,10 +14,10 @@
 #include <type_traits>
 #include <array>
 
-#include "metamidi.h"
-#include "port_manager.h"
-#include "midi_output.h"
-#include "midi_message.h"
+#include "src/modernmidi.h"
+#include "src/port_manager.h"
+#include "src/midi_output.h"
+#include "src/midi_message.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());

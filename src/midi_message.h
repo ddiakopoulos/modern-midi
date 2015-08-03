@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_MESSAGE_H
-#define METAMIDI_MESSAGE_H
+#ifndef MODERNMIDI_MESSAGE_H
+#define MODERNMIDI_MESSAGE_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include <stdint.h>
 #include <vector>
 #include <memory>

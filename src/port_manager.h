@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_MIDI_PORT_MGR_H
-#define METAMIDI_MIDI_PORT_MGR_H
+#ifndef MODERNMIDI_MIDI_PORT_MGR_H
+#define MODERNMIDI_MIDI_PORT_MGR_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include "rtmidi/RtMidi.h"
 #include <assert.h>
 

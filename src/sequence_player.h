@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_SEQUENCE_PLAYER_H
-#define METAMIDI_SEQUENCE_PLAYER_H
+#ifndef MODERNMIDI_SEQUENCE_PLAYER_H
+#define MODERNMIDI_SEQUENCE_PLAYER_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include "concurrent_queue.h"
 #include "midi_message.h"
 #include "sequence.h"

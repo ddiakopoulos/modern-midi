@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_MIDI_INPUT_H
-#define METAMIDI_MIDI_INPUT_H
+#ifndef MODERNMIDI_MIDI_INPUT_H
+#define MODERNMIDI_MIDI_INPUT_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include "midi_message.h"
 #include "rtmidi/RtMidi.h"
 #include <functional>

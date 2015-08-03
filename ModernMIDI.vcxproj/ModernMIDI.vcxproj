@@ -85,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;__WINDOWS_MM__;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party;$(ProjectDir)../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,10 +96,10 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;__WINDOWS_MM__;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party;$(ProjectDir)../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,7 +115,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;__WINDOWS_MM__;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party;$(ProjectDir)../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +133,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;__WINDOWS_MM__;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party;$(ProjectDir)../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,30 +143,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="example.cpp" />
-    <ClCompile Include="src\midi_input.cpp" />
-    <ClCompile Include="src\midi_output.cpp" />
-    <ClCompile Include="src\port_manager.cpp" />
-    <ClCompile Include="src\sequence.cpp" />
-    <ClCompile Include="src\sequence_player.cpp" />
-    <ClCompile Include="src\midi_utils.cpp" />
-    <ClCompile Include="src\music_theory.cpp" />
-    <ClCompile Include="third_party\RtMidi\RtMidi.cpp" />
+    <ClCompile Include="..\sample.cpp" />
+    <ClCompile Include="..\src\midi_input.cpp" />
+    <ClCompile Include="..\src\midi_output.cpp" />
+    <ClCompile Include="..\src\port_manager.cpp" />
+    <ClCompile Include="..\src\sequence.cpp" />
+    <ClCompile Include="..\src\sequence_player.cpp" />
+    <ClCompile Include="..\src\midi_utils.cpp" />
+    <ClCompile Include="..\src\music_theory.cpp" />
+    <ClCompile Include="..\third_party\RtMidi\RtMidi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\circular_buffer.h" />
-    <ClInclude Include="src\concurrent_queue.h" />
-    <ClInclude Include="src\metamidi.h" />
-    <ClInclude Include="src\midi_input.h" />
-    <ClInclude Include="src\midi_output.h" />
-    <ClInclude Include="src\port_manager.h" />
-    <ClInclude Include="src\sequence.h" />
-    <ClInclude Include="src\sequence_player.h" />
-    <ClInclude Include="src\midi_message.h" />
-    <ClInclude Include="src\midi_utils.h" />
-    <ClInclude Include="src\music_theory.h" />
-    <ClInclude Include="src\qpc_timer.h" />
-    <ClInclude Include="third_party\RtMidi\RtMidi.h" />
+    <ClInclude Include="..\src\circular_buffer.h" />
+    <ClInclude Include="..\src\concurrent_queue.h" />
+    <ClInclude Include="..\src\modernmidi.h" />
+    <ClInclude Include="..\src\midi_input.h" />
+    <ClInclude Include="..\src\midi_output.h" />
+    <ClInclude Include="..\src\port_manager.h" />
+    <ClInclude Include="..\src\sequence.h" />
+    <ClInclude Include="..\src\sequence_player.h" />
+    <ClInclude Include="..\src\midi_message.h" />
+    <ClInclude Include="..\src\midi_utils.h" />
+    <ClInclude Include="..\src\music_theory.h" />
+    <ClInclude Include="..\src\timer.h" />
+    <ClInclude Include="..\third_party\RtMidi\RtMidi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

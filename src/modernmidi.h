@@ -2,8 +2,8 @@
 
 #pragma once
 
-#ifndef METAMIDI_H
-#define METAMIDI_H
+#ifndef MODERNMIDI_H
+#define MODERNMIDI_H
 
 #include <memory>
 #include <vector>
@@ -12,6 +12,7 @@
 #include <iostream>
 #include <exception>
 #include <algorithm>
+#include <assert.h>
 
 ///////////////
 // Platforms //

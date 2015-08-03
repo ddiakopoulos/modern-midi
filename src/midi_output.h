@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_MIDI_OUTPUT_H
-#define METAMIDI_MIDI_OUTPUT_H
+#ifndef MODERNMIDI_MIDI_OUTPUT_H
+#define MODERNMIDI_MIDI_OUTPUT_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include "rtmidi/RtMidi.h"
 
 class MidiOutput

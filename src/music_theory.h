@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_THEORY_H
-#define METAMIDI_THEORY_H
+#ifndef MODERNMIDI_THEORY_H
+#define MODERNMIDI_THEORY_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include <stdint.h>
 #include <vector>
 

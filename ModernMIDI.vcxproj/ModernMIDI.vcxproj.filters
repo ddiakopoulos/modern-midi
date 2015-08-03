@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\third_party\RtMidi\RtMidi.cpp">
+      <Filter>third_party\rtmidi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\midi_input.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\midi_output.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\midi_utils.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\music_theory.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\port_manager.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sequence.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sequence_player.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sample.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\third_party\RtMidi\RtMidi.h">
+      <Filter>third_party\rtmidi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\timer.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\concurrent_queue.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\circular_buffer.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\modernmidi.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_input.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_message.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_output.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_utils.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\music_theory.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\port_manager.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sequence.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sequence_player.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{aa518cee-b6cb-4c29-9b1b-10369bb9f7fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{d89e6036-80ba-4ad9-ac34-a33d146ea9e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{a1914162-b220-4264-8ba9-e0696e43d89b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\rtmidi">
+      <UniqueIdentifier>{3ab7d7de-927d-4bfc-aded-01e8da95059a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

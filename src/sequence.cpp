@@ -1,6 +1,6 @@
 #pragma comment(user, "license")
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include "sequence.h"
 #include "midi_message.h"
 #include <cmath>

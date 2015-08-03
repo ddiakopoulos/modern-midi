@@ -2,10 +2,10 @@
 
 #pragma once
 
-#ifndef METAMIDI_SEQUENCE_H
-#define METAMIDI_SEQUENCE_H
+#ifndef MODERNMIDI_SEQUENCE_H
+#define MODERNMIDI_SEQUENCE_H
 
-#include "metamidi.h"
+#include "modernmidi.h"
 #include "midi_message.h"
 
 namespace mm 
