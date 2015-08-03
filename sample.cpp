@@ -22,6 +22,8 @@
 std::random_device rd;
 std::mt19937 gen(rd());
 
+using namespace mm;
+
 int main(int argc, char *argv[], char *envp[])
 {
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
@@ -64,9 +66,6 @@ int main(int argc, char *argv[], char *envp[])
 	int modifier = scales[5][scaleIndexToUse];
     
     auto msg = mm::MakeNoteOn(2, 60, 127);
-    std::cout << "B1: " << (int) msg.byte1 << std::endl;
-    std::cout << "B2: " << (int) msg.byte2 << std::endl;
-    std::cout << "B3: " << (int) msg.byte3 << std::endl;
 
 	MidiOutput hiduino("hiduino device");
 	bool success = hiduino.openPort(1);
@@ -80,12 +79,12 @@ int main(int argc, char *argv[], char *envp[])
 	{
 		if (i % 4 == 0)
 		{
-			hiduino.sendMessage({144, scaleIdx, 1});
+			hiduino.send(MakeNoteOn(1, scaleIdx, 1));
 		}
 
 		if (i % 8 == 0)
 		{
-			hiduino.sendMessage({144, uint8_t(randomScaleDegree(gen)), 1});
+			hiduino.send(MakeNoteOn(1, uint8_t(randomScaleDegree(gen)), 1));
 		}
 
 		if (i % 16 == 0)

@@ -13,72 +13,88 @@
 
 namespace mm
 {
-	// Channel info (MSN=command LSN=channel)
-	#define MIDI_NOTE_OFF           0x80
-	#define MIDI_NOTE_ON            0x90
-	#define MIDI_POLY_PRESSURE      0xA0
-	#define MIDI_CONTROL_CHANGE     0xB0
-	#define MIDI_PROGRAM_CHANGE     0xC0
-	#define MIDI_AFTERTOUCH		    0xD0
-	#define MIDI_PITCH_BEND         0xE0
+	enum class MessageType : uint8_t
+	{
+		// Standard Message
+		MIDI_NOTE_OFF           = 0x80,
+		MIDI_NOTE_ON            = 0x90,
+		MIDI_POLY_PRESSURE      = 0xA0,
+		MIDI_CONTROL_CHANGE     = 0xB0,
+		MIDI_PROGRAM_CHANGE     = 0xC0,
+		MIDI_AFTERTOUCH		    = 0xD0,
+		MIDI_PITCH_BEND         = 0xE0,
 	
-	// System Common Messages
-	#define MIDI_SYSTEM_EXCLUSIVE   0xF0
-	#define MIDI_TIME_CODE          0xF1
-	#define MIDI_SONG_POS_POINTER   0xF2
-	#define MIDI_SONG_SELECT        0xF3
-	#define MIDI_RESERVED1          0xF4
-	#define MIDI_RESERVED2          0xF5
-	#define MIDI_TUNE_REQUEST       0xF6
-	#define MIDI_EOX                0xF7
+		// System Common Messages
+		MIDI_SYSTEM_EXCLUSIVE   = 0xF0,
+		MIDI_TIME_CODE          = 0xF1,
+		MIDI_SONG_POS_POINTER   = 0xF2,
+		MIDI_SONG_SELECT        = 0xF3,
+		MIDI_RESERVED1          = 0xF4,
+		MIDI_RESERVED2          = 0xF5,
+		MIDI_TUNE_REQUEST       = 0xF6,
+		MIDI_EOX                = 0xF7,
 	
-	// System Realtime Messages
-	#define MIDI_TIME_CLOCK         0xF8
-	#define MIDI_RESERVED3          0xF9
-	#define MIDI_START              0xFA
-	#define MIDI_CONTINUE           0xFB
-	#define MIDI_STOP               0xFC
-	#define MIDI_RESERVED4          0xFD
-	#define MIDI_ACTIVE_SENSING     0xFE
-	#define MIDI_SYSTEM_RESET       0xFF
+			// System Realtime Messages
+		MIDI_TIME_CLOCK         = 0xF8,
+		MIDI_RESERVED3          = 0xF9,
+		MIDI_START              = 0xFA,
+		MIDI_CONTINUE           = 0xFB,
+		MIDI_STOP               = 0xFC,
+		MIDI_RESERVED4          = 0xFD,
+		MIDI_ACTIVE_SENSING     = 0xFE,
+		MIDI_SYSTEM_RESET       = 0xFF
+	};
 
-	inline std::string getStatusString(uint8_t status) 
+	inline std::string getStatusString(MessageType status) 
 	{
 		switch(status) 
 		{ 
-			case MIDI_NOTE_OFF: return "Note Off";
-			case MIDI_NOTE_ON: return "Note On";
-			case MIDI_CONTROL_CHANGE: return "Control Change";
-			case MIDI_PROGRAM_CHANGE: return "Program Change";
-			case MIDI_PITCH_BEND: return "Pitch Bend";
-			case MIDI_POLY_PRESSURE: return "Poly Aftertouch";
-			case MIDI_AFTERTOUCH: return "Aftertouch";
-			case MIDI_SYSTEM_EXCLUSIVE: return "Sysex";
-			case MIDI_TIME_CODE: return "Time Code";
-			case MIDI_SONG_POS_POINTER: return "Song Pos";
-			case MIDI_SONG_SELECT: return "Song Select";
-			case MIDI_TUNE_REQUEST: return "Tune Request";
-			case MIDI_EOX: return "Sysex End";
-			case MIDI_TIME_CLOCK: return "Time Clock";
-			case MIDI_START: return "Start";
-			case MIDI_CONTINUE: return "Continue";
-			case MIDI_STOP: return "Stop";
-			case MIDI_ACTIVE_SENSING: return "Active Sensing";
-			case MIDI_SYSTEM_RESET: return "System Reset";
+			case MessageType::MIDI_NOTE_OFF: return "Note Off";
+			case MessageType::MIDI_NOTE_ON: return "Note On";
+			case MessageType::MIDI_CONTROL_CHANGE: return "Control Change";
+			case MessageType::MIDI_PROGRAM_CHANGE: return "Program Change";
+			case MessageType::MIDI_PITCH_BEND: return "Pitch Bend";
+			case MessageType::MIDI_POLY_PRESSURE: return "Poly Aftertouch";
+			case MessageType::MIDI_AFTERTOUCH: return "Aftertouch";
+			case MessageType::MIDI_SYSTEM_EXCLUSIVE: return "Sysex";
+			case MessageType::MIDI_TIME_CODE: return "Time Code";
+			case MessageType::MIDI_SONG_POS_POINTER: return "Song Pos";
+			case MessageType::MIDI_SONG_SELECT: return "Song Select";
+			case MessageType::MIDI_TUNE_REQUEST: return "Tune Request";
+			case MessageType::MIDI_EOX: return "Sysex End";
+			case MessageType::MIDI_TIME_CLOCK: return "Time Clock";
+			case MessageType::MIDI_START: return "Start";
+			case MessageType::MIDI_CONTINUE: return "Continue";
+			case MessageType::MIDI_STOP: return "Stop";
+			case MessageType::MIDI_ACTIVE_SENSING: return "Active Sensing";
+			case MessageType::MIDI_SYSTEM_RESET: return "System Reset";
 			default: return "Unknown";
 		}
 	}
 
 	///////////////////
-	// MIDI Command  //
+	// MIDI Message  //
 	///////////////////
 
 	// Channels are indexed @ 1 to 16 (not 0-15)
 	struct MidiMessage 
 	{
-		MidiMessage() {}
-		MidiMessage(uint8_t b1, uint8_t b2, uint8_t b3, double ts = 0) : byte1(b1), byte2(b2), byte3(b3), timestamp(ts) {}
-		MidiMessage(uint8_t b1, uint8_t b2, double ts = 0) : byte1(b1), byte2(b2), timestamp(ts) {}
+
+		MidiMessage() 
+		{
+			data = {0, 0, 0};
+		}
+
+		MidiMessage(const uint8_t b1, const uint8_t b2, const uint8_t b3, const double ts = 0) : timestamp(ts) 
+		{
+			data = {b1, b2, b3};
+		}
+
+		MidiMessage(const uint8_t b1, const  uint8_t b2, const double ts = 0) : timestamp(ts) 
+		{
+			data = {b1, b2, 0};
+		}
+
 		MidiMessage(const MidiMessage & rhs) 
 		{
 			*this = rhs;
@@ -86,9 +102,7 @@ namespace mm
 
 		MidiMessage & operator = (const MidiMessage & rhs)
 		{
-			byte1 = rhs.byte1;
-			byte2 = rhs.byte2;
-			byte3 = rhs.byte3;
+			data = rhs.data;
 			timestamp = rhs.timestamp;
 			return *this;
 		}
@@ -96,75 +110,90 @@ namespace mm
 		bool usesChannel(const int channel) const 
 		{
 			assert(channel > 0 && channel <= 16);
-			return ((byte1 & 0xF) == channel - 1) && ((byte1 & 0xF0) != 0xF0);
+			return ((data[0] & 0xF) == channel - 1) && ((data[0] & 0xF0) != 0xF0);
 		}
 
 		int getChannel() const
 		{
-			if ((byte1 & 0xF0) != 0xF0)
-				return (byte1 & 0xF) + 1;
+			if ((data[0] & 0xF0) != 0xF0)
+				return (data[0] & 0xF) + 1;
 			return 0;
 		}
 
-		double timestamp;
+		unsigned char operator [] (int i) 
+		{
+			//@tofix -- add assert
+			return data[i];
+		}
 
-		uint8_t byte1;
-		uint8_t byte2;
-		uint8_t byte3;
+		MessageType getStatus()
+		{
+			if (MessageType(data[0]) >= MessageType::MIDI_SYSTEM_EXCLUSIVE)
+			{
+				return MessageType(data[0] & 0xFF);
+			}
+			else
+			{
+				return MessageType(data[0] & 0xF0);
+			}
+		}
+
+		double timestamp = 0;
+		std::vector<unsigned char> data;
 	};
 
 	///////////////////////
 	// Message Factories //
 	///////////////////////
 
-	inline uint8_t MakeCommand(const int type, const int channel)
+	inline uint8_t MakeCommand(const MessageType type, const int channel)
     {
-        return (uint8_t) (type | mm::clamp<uint8_t> (channel, 0, channel - 1));
+        return (uint8_t) ((uint8_t) type | mm::clamp<uint8_t> (channel, 0, channel - 1));
     }
 
 	inline MidiMessage MakeNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 	{
-		return MidiMessage(MakeCommand(MIDI_NOTE_ON, channel), note, velocity);
+		return MidiMessage(MakeCommand(MessageType::MIDI_NOTE_ON, channel), note, velocity);
 	}
 
 	inline MidiMessage MakeNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 	{
-		return MidiMessage(MakeCommand(MIDI_NOTE_OFF, channel), note, velocity);
+		return MidiMessage(MakeCommand(MessageType::MIDI_NOTE_OFF, channel), note, velocity);
 	}
 
 	inline MidiMessage MakeControlChange(uint8_t channel, uint8_t control, uint8_t value)
 	{
-		return MidiMessage(MakeCommand(MIDI_CONTROL_CHANGE, channel), control, value);
+		return MidiMessage(MakeCommand(MessageType::MIDI_CONTROL_CHANGE, channel), control, value);
 	}
 
 	inline MidiMessage MakeProgramChange(uint8_t channel, uint8_t value)
 	{
-		return MidiMessage(MakeCommand(MIDI_PROGRAM_CHANGE, channel), value);
+		return MidiMessage(MakeCommand(MessageType::MIDI_PROGRAM_CHANGE, channel), value);
 	}
 
 	inline MidiMessage MakePitchBend(uint8_t channel, int value)
 	{
-		return MidiMessage(MakeCommand(MIDI_PITCH_BEND, channel), value & 0x7F, (uint8_t)((value >> 7) & 0x7F)); 
+		return MidiMessage(MakeCommand(MessageType::MIDI_PITCH_BEND, channel), value & 0x7F, (uint8_t)((value >> 7) & 0x7F)); 
 	}
 
 	inline MidiMessage MakePitchBend(uint8_t channel, uint8_t lsb, uint8_t msb)
 	{
-		return MidiMessage(MakeCommand(MIDI_PITCH_BEND, channel), lsb, msb);
+		return MidiMessage(MakeCommand(MessageType::MIDI_PITCH_BEND, channel), lsb, msb);
 	}
 
 	inline MidiMessage MakePolyPressure(uint8_t channel, uint8_t note, uint8_t value)
 	{
-		return MidiMessage(MakeCommand(MIDI_POLY_PRESSURE, channel), note, value);
+		return MidiMessage(MakeCommand(MessageType::MIDI_POLY_PRESSURE, channel), note, value);
 	}
 
 	inline MidiMessage MakeAftertouch(uint8_t channel, uint8_t value)
 	{
-		return MidiMessage(MakeCommand(MIDI_AFTERTOUCH, channel), value);
+		return MidiMessage(MakeCommand(MessageType::MIDI_AFTERTOUCH, channel), value);
 	}
 
-	//////////////////////////
-	// MIDI Real-Time Event //
-	//////////////////////////
+	///////////////////////
+	// MIDI Player Event //
+	///////////////////////
 
 	struct MidiPlayerEvent
 	{
@@ -172,9 +201,7 @@ namespace mm
 
 		MidiPlayerEvent(double t, uint8_t b1, uint8_t b2, uint8_t b3, int track) : timestamp(t), trackIdx(track)
 		{
-			msg.byte1 = b1;
-			msg.byte2 = b2;
-			msg.byte3 = b3;
+			msg.data = {b1, b2, b3};
 		}
 		
 		MidiPlayerEvent & operator= (const MidiPlayerEvent & rhs)
@@ -195,9 +222,9 @@ namespace mm
 		return ss << "[" << int(v.msg.byte1) << ", " << int(v.msg.byte2) << ", " << int(v.msg.byte3) << "]";
 	}
 
-	///////////////////////////////
-	// MIDI Events (for Parsing) //
-	///////////////////////////////
+	//////////////////////////////////////
+	// MIDI Track Events (file parsing) //
+	//////////////////////////////////////
 
 	enum MIDI_EventType 
 	{

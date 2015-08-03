@@ -1,12 +1,11 @@
 #pragma comment(user, "license")
 
 #include "port_manager.h"
+using namespace mm;
 
 // Statics
 std::shared_ptr<RtMidiOut> PortManager::outputDevice;
 std::shared_ptr<RtMidiIn> PortManager::inputDevice;
-
-using namespace mm;
 
 void PortManager::PrintPortList(PortType t) 
 {

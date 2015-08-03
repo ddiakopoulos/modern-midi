@@ -6,6 +6,7 @@
 #define MODERNMIDI_MIDI_OUTPUT_H
 
 #include "modernmidi.h"
+#include "midi_message.h"
 #include "rtmidi/RtMidi.h"
 
 namespace mm
@@ -15,6 +16,9 @@ class MidiOutput
 {
 	std::unique_ptr<RtMidiOut> outputDevice;
 	bool attached = false;
+
+	bool sendRaw(std::vector<unsigned char> & msg);
+
 public:
 
 	MidiOutput(const std::string & name);
@@ -25,7 +29,8 @@ public:
 	bool openVirtualPort(std::string portName);
 	void closePort();
 	
-	bool sendMessage(const std::vector<uint8_t> & msg);
+	bool send(const std::vector<uint8_t> & msg);
+	bool send(const mm::MidiMessage & msg);
 
 	RtMidiOut * getOutputDevice() { return outputDevice.get(); }
 
