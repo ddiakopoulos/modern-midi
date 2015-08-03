@@ -10,6 +10,9 @@
 #include "rtmidi/RtMidi.h"
 #include <functional>
 
+namespace mm
+{
+
 class MidiInput
 {
 	std::unique_ptr<RtMidiIn> inputDevice;
@@ -33,5 +36,7 @@ public:
 
 	std::function<void (const mm::MidiMessage msg)> messageCallback;
 };
+
+}
 
 #endif

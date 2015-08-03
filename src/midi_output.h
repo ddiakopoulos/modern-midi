@@ -8,6 +8,9 @@
 #include "modernmidi.h"
 #include "rtmidi/RtMidi.h"
 
+namespace mm
+{
+
 class MidiOutput
 {
 	std::unique_ptr<RtMidiOut> outputDevice;
@@ -28,5 +31,7 @@ public:
 
 	mm::MidiDeviceInfo info;
 };
+
+}
 
 #endif

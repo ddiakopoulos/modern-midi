@@ -6,168 +6,166 @@
 #include "midi_utils.h"
 #include "timer.h"
 
-namespace mm 
+using namespace mm;
+
+MidiSequencePlayer::MidiSequencePlayer() : shouldSequence(false)
 {
-    MidiSequencePlayer::MidiSequencePlayer() : shouldSequence(false)
-	{
 
-	}
+}
 	
-	MidiSequencePlayer::~MidiSequencePlayer()
+MidiSequencePlayer::~MidiSequencePlayer()
+{
+	shouldSequence = false;
+
+	if (sequencerThread.joinable())
+		sequencerThread.join();
+}
+
+void MidiSequencePlayer::preprocessSequence()
+{
+	ticksPerBeat = internalSequence.ticksPerBeat > 0 ? internalSequence.ticksPerBeat : 100.0f;
+	beatsPerMinute = internalSequence.startingTempo > 0 ? internalSequence.startingTempo : 120.0f;
+	msPerTick = 60000.0 / beatsPerMinute /  ticksPerBeat;
+
+	// Not used right now 
+	double totalSequenceTicks = internalSequence.getEndTime();
+	std::cout << "Total Sequence Ticks: " << totalSequenceTicks << std::endl;
+
+	playTimeSeconds = float((totalSequenceTicks * msPerTick) / 1000.0);
+
+	std::cout << "Play time in seconds " << playTimeSeconds << std::endl;
+
+	//@todo: sanity check tracks
+
+	// Look for tempo event, assume we only have one
+	for (const auto track : internalSequence.tracks)
 	{
-		shouldSequence = false;
-
-		if (sequencerThread.joinable())
-			sequencerThread.join();
-	}
-
-	void MidiSequencePlayer::preprocessSequence()
-	{
-		ticksPerBeat = internalSequence.ticksPerBeat > 0 ? internalSequence.ticksPerBeat : 100.0f;
-		beatsPerMinute = internalSequence.startingTempo > 0 ? internalSequence.startingTempo : 120.0f;
-		msPerTick = 60000.0 / beatsPerMinute /  ticksPerBeat;
-
-		// Not used right now 
-		double totalSequenceTicks = internalSequence.getEndTime();
-		std::cout << "Total Sequence Ticks: " << totalSequenceTicks << std::endl;
-
-		playTimeSeconds = float((totalSequenceTicks * msPerTick) / 1000.0);
-
-		std::cout << "Play time in seconds " << playTimeSeconds << std::endl;
-
-		//@todo: sanity check tracks
-
-		// Look for tempo event, assume we only have one
-		for (const auto track : internalSequence.tracks)
+		for (const auto mEvt : track.events)
 		{
-			for (const auto mEvt : track.events)
+			if (mEvt->eventType == MIDI_EventSetTempo)
 			{
-				if (mEvt->eventType == MIDI_EventSetTempo)
-				{
-					std::cout << "Found tempo!" << std::endl;
-					SetTempoEvent * ste = (SetTempoEvent *) mEvt.get();
-					beatsPerMinute = float(60000000.0 / double (ste->microsecondsPerBeat));
-					msPerTick = 60000.0 / beatsPerMinute /  ticksPerBeat;
-				}
-				else if (mEvt->eventType == MIDI_EventTimeSignature)
-				{
-					std::cout << "Found time signature!";
-					TimeSignatureEvent * tse = (TimeSignatureEvent *) mEvt.get();
-					std::cout << "Numerator: " << tse->numerator; 
-				}
+				std::cout << "Found tempo!" << std::endl;
+				SetTempoEvent * ste = (SetTempoEvent *) mEvt.get();
+				beatsPerMinute = float(60000000.0 / double (ste->microsecondsPerBeat));
+				msPerTick = 60000.0 / beatsPerMinute /  ticksPerBeat;
+			}
+			else if (mEvt->eventType == MIDI_EventTimeSignature)
+			{
+				std::cout << "Found time signature!";
+				TimeSignatureEvent * tse = (TimeSignatureEvent *) mEvt.get();
+				std::cout << "Numerator: " << tse->numerator; 
 			}
 		}
+	}
 
-		// Preprocess tracks into flat vector with timestamps
-		int trackIdx = 0;
-		for (const auto track : internalSequence.tracks)
+	// Preprocess tracks into flat vector with timestamps
+	int trackIdx = 0;
+	for (const auto track : internalSequence.tracks)
+	{
+		double localElapsedTicks = 0;
+		// Events in track
+		for (const auto mEvt : track.events)
 		{
-			double localElapsedTicks = 0;
-			// Events in track
-			for (const auto mEvt : track.events)
-			{
-				localElapsedTicks += mEvt->deltatime;
-				double timestamp = ticksToSeconds(localElapsedTicks);
-				addTimestampedEvent(eventList, trackIdx, timestamp, mEvt.get());
-			}	
-			trackIdx++;
-		}
-
+			localElapsedTicks += mEvt->deltatime;
+			double timestamp = ticksToSeconds(localElapsedTicks);
+			addTimestampedEvent(eventList, trackIdx, timestamp, mEvt.get());
+		}	
+		trackIdx++;
 	}
 
-	void MidiSequencePlayer::loadSequence(MidiSequence s)
-	{
-		// Copy sequence locally
-		internalSequence = s;
-		preprocessSequence();
-	}
+}
 
-	void MidiSequencePlayer::start()
-	{
-		if (sequencerThread.joinable()) 
-			sequencerThread.join();
+void MidiSequencePlayer::loadSequence(MidiSequence s)
+{
+	// Copy sequence locally
+	internalSequence = s;
+	preprocessSequence();
+}
 
-		shouldSequence = true;
-		sequencerThread = std::thread(&MidiSequencePlayer::run, this);
+void MidiSequencePlayer::start()
+{
+	if (sequencerThread.joinable()) 
+		sequencerThread.join();
+
+	shouldSequence = true;
+	sequencerThread = std::thread(&MidiSequencePlayer::run, this);
 
 #if defined(MM_PLATFORM_WINDOWS)
-		HANDLE threadHandle = sequencerThread.native_handle();
-		auto err = SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
-		if (err == 0)
-		{
-			std::cerr << "SetThreadPriority() failed: " << GetLastError() << std::endl;
-		}
+	HANDLE threadHandle = sequencerThread.native_handle();
+	auto err = SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
+	if (err == 0)
+	{
+		std::cerr << "SetThreadPriority() failed: " << GetLastError() << std::endl;
+	}
 
-		err = SetThreadAffinityMask(threadHandle, 1);
-		if (err == 0)
-		{
-			std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
-		}
+	err = SetThreadAffinityMask(threadHandle, 1);
+	if (err == 0)
+	{
+		std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
+	}
 #endif
-		sequencerThread.detach();
+	sequencerThread.detach();
 
-		if (startedEvent)
-			startedEvent();
-	}
+	if (startedEvent)
+		startedEvent();
+}
 	
-	void MidiSequencePlayer::run()
+void MidiSequencePlayer::run()
+{
+	double lastTime = 0;
+	size_t eventCursor = 0;
+
+	PlatformTimer timer;
+	timer.start();
+
+	while (eventCursor < eventList.size())
 	{
-		double lastTime = 0;
-		size_t eventCursor = 0;
+		// Debugging:  
+		//std::cout << "Event Delta in MS: " << nextTime - lastTime << std::endl;
 
-		PlatformTimer timer;
-		timer.start();
+		auto outputMsg = eventList[eventCursor];
 
-		while (eventCursor < eventList.size())
+		// Spin until next loop 
+		while ( (timer.running_time_ms()) <= (outputMsg.timestamp))
 		{
-			// Debugging:  
-			//std::cout << "Event Delta in MS: " << nextTime - lastTime << std::endl;
-
-			auto outputMsg = eventList[eventCursor];
-
-			// Spin until next loop 
-			while ( (timer.running_time_ms()) <= (outputMsg.timestamp))
-			{
-				// Spinny spin spin. continue? 
-			}
-
-			// Exit? 
-			if (shouldSequence == false) 
-				break;
-
-			eventQueue.push(outputMsg);
-
-			lastTime = outputMsg.timestamp;
-			eventCursor++;
+			// Spinny spin spin. continue? 
 		}
 
-		timer.stop(); 
+		// Exit? 
+		if (shouldSequence == false) 
+			break;
 
-		if (loop && shouldSequence == true) 
-			run();
+		eventQueue.push(outputMsg);
+
+		lastTime = outputMsg.timestamp;
+		eventCursor++;
+	}
+
+	timer.stop(); 
+
+	if (loop && shouldSequence == true) 
+		run();
 		
-		if (stoppedEvent)
-			stoppedEvent();
+	if (stoppedEvent)
+		stoppedEvent();
 
-	}
+}
 
-	void MidiSequencePlayer::stop()
-	{
-		shouldSequence = false;
-	}
+void MidiSequencePlayer::stop()
+{
+	shouldSequence = false;
+}
 	
-	void MidiSequencePlayer::addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, MidiTrackEvent * ev)
+void MidiSequencePlayer::addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, MidiTrackEvent * ev)
+{
+	if (ev->eventType == MIDI_EventChannel)
 	{
-		if (ev->eventType == MIDI_EventChannel)
-		{
-			ChannelEvent * ce = (ChannelEvent *) ev;
-			list.push_back(MidiPlayerEvent(now, ce->midiCommand, ce->param1, ce->param2, track));
-		}
+		ChannelEvent * ce = (ChannelEvent *) ev;
+		list.push_back(MidiPlayerEvent(now, ce->midiCommand, ce->param1, ce->param2, track));
 	}
+}
 
-	float MidiSequencePlayer::length() const
-	{
-		return playTimeSeconds;
-	}
-	
-} // mm
+float MidiSequencePlayer::length() const
+{
+	return playTimeSeconds;
+}

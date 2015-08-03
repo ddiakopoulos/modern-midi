@@ -9,6 +9,9 @@
 #include "rtmidi/RtMidi.h"
 #include <assert.h>
 
+namespace mm
+{
+
 class PortManager
 {
 	static std::shared_ptr<RtMidiOut> outputDevice;
@@ -75,5 +78,7 @@ public:
 	static std::string GetPortName(mm::PortType t, uint32_t portNumber);
 
 };
+
+}
 
 #endif
