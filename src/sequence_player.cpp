@@ -30,9 +30,7 @@ void MidiSequencePlayer::preprocessSequence()
 	// Not used right now 
 	double totalSequenceTicks = internalSequence.getEndTime();
 	std::cout << "Total Sequence Ticks: " << totalSequenceTicks << std::endl;
-
 	playTimeSeconds = float((totalSequenceTicks * msPerTick) / 1000.0);
-
 	std::cout << "Play time in seconds " << playTimeSeconds << std::endl;
 
 	//@todo: sanity check tracks
@@ -44,14 +42,12 @@ void MidiSequencePlayer::preprocessSequence()
 		{
 			if (mEvt->eventType == MIDI_EventSetTempo)
 			{
-				std::cout << "Found tempo!" << std::endl;
 				SetTempoEvent * ste = (SetTempoEvent *) mEvt.get();
 				beatsPerMinute = float(60000000.0 / double (ste->microsecondsPerBeat));
 				msPerTick = 60000.0 / beatsPerMinute /  ticksPerBeat;
 			}
 			else if (mEvt->eventType == MIDI_EventTimeSignature)
 			{
-				std::cout << "Found time signature!";
 				TimeSignatureEvent * tse = (TimeSignatureEvent *) mEvt.get();
 				std::cout << "Numerator: " << tse->numerator; 
 			}
@@ -120,18 +116,14 @@ void MidiSequencePlayer::run()
 
 	while (eventCursor < eventList.size())
 	{
-		// Debugging:  
-		//std::cout << "Event Delta in MS: " << nextTime - lastTime << std::endl;
-
 		auto outputMsg = eventList[eventCursor];
 
 		// Spin until next loop 
 		while ( (timer.running_time_ms()) <= (outputMsg.timestamp))
 		{
-			// Spinny spin spin. continue? 
+			// Spinny spin spin.
 		}
 
-		// Exit? 
 		if (shouldSequence == false) 
 			break;
 
@@ -148,7 +140,6 @@ void MidiSequencePlayer::run()
 		
 	if (stoppedEvent)
 		stoppedEvent();
-
 }
 
 void MidiSequencePlayer::stop()

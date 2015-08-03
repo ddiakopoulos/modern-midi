@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\circular_buffer.h" />
     <ClInclude Include="..\src\concurrent_queue.h" />
+    <ClInclude Include="..\src\midi_event.h" />
     <ClInclude Include="..\src\modernmidi.h" />
     <ClInclude Include="..\src\midi_input.h" />
     <ClInclude Include="..\src\midi_output.h" />

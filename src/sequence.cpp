@@ -18,7 +18,7 @@ namespace mm
 			uint8_t b = *dataStart++;
 			if (b & 0x80) 
 			{
-				result += (b & 0x7f);
+				result += (b & 0x7F);
 				result <<= 7;
 			} 
 			else 
@@ -35,7 +35,7 @@ namespace mm
 		return result;
 	}
 	
-	int readInt24(uint8_t const*& dataStart)
+	int readInt24(uint8_t const *& dataStart)
 	{
 		int result = int(*dataStart++) << 16;
 		result += int(*dataStart++) << 8;
@@ -43,7 +43,7 @@ namespace mm
 		return result;
 	}
 	
-	int readInt32(uint8_t const*& dataStart)
+	int readInt32(uint8_t const *& dataStart)
 	{
 		int result = int(*dataStart++) << 24;
 		result += int(*dataStart++) << 16;

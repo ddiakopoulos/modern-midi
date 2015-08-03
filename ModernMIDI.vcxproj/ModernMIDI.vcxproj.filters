@@ -67,6 +67,9 @@
     <ClInclude Include="..\src\sequence_player.h">
       <Filter>lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\midi_event.h">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="third_party">

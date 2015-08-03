@@ -7,6 +7,7 @@
 
 #include "modernmidi.h"
 #include "midi_message.h"
+#include "midi_event.h"
 
 namespace mm 
 {
