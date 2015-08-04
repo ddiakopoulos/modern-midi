@@ -125,29 +125,32 @@ namespace mm
         
         unsigned char operator [] (int i)
         {
-            //@tofix -- add assert
-            return data[i];
+            return data.at(i);
         }
         
-        bool isMeta()
+        unsigned char operator [] (int i) const
         {
-            if (data[0] != 0xFF) return false;
-            return true;
+            return data.at(i);
         }
         
-        uint8_t getMetaSubtype()
+        bool isMetaEvent() const
         {
-            if (!isMeta()) return -1;
+            return data[0] == 0xFF;
+        }
+        
+        uint8_t getMetaEventSubtype() const
+        {
+            if (!isMetaEvent()) return -1;
             return data[1];
         }
         
-        MessageType getMessageType()
+        uint8_t getMessageType() const
         {
-            if (MessageType(data[0]) >= MessageType::SYSTEM_EXCLUSIVE) { return MessageType(data[0] & 0xFF); }
-            else { return MessageType(data[0] & 0xF0); }
+            if (data[0] >= uint8_t(MessageType::SYSTEM_EXCLUSIVE)) { return data[0] & 0xFF; }
+            else { return data[0] & 0xF0; }
         }
         
-        uint32_t messageSize() { return data.size(); }
+        size_t messageSize() const { return data.size(); }
         
         double timestamp = 0;
         std::vector<unsigned char> data;

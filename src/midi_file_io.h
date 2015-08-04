@@ -105,12 +105,19 @@ namespace mm
         outdata.push_back(bytes[4]);
     }
     
+    struct TrackEvent
+    {
+        MidiMessage m;
+        int tick = 0;
+        int track = 0;
+    };
+    
     struct MidiFile
     {
         int numTracks = 0;
         int ticksPerQuarterNote = 240;
         
-        std::vector<MidiTrack> tracks;
+        std::vector<std::vector<TrackEvent>> tracks;
         
         int getNumTracks() { return numTracks; }
         int getTicksPerQuarterNote() { return ticksPerQuarterNote; }
@@ -140,17 +147,21 @@ namespace mm
             
             uint8_t endoftrack[4] = {0x0, 0xFF, 0x2F, 0x00};
             
-            for (auto & track : tracks)
+            for (auto & event_list : tracks)
             {
-                for (auto & event : track.events)
+                
+                for (auto & event : event_list)
                 {
+                    
+                    const auto & msg = event.m;
+                    
                     // Suppress end-of-track meta messages (one will be added
                     // automatically after all track data has been written).
-                    if (event.isEndOfTrack()) continue;
+                    if (msg.getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
                     
                     write_variable_length(event.tick, trackRawData);
                     
-                    if ((event.getMessageType() == 0xf0) || (event.getMessageType() == 0xf7))
+                    if ((msg.getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event.m.getMessageType() == uint8_t(MessageType::EOX)))
                     {
                         // 0xf0 == Complete sysex message (0xf0 is part of the raw MIDI).
                         // 0xf7 == Raw byte message (0xf7 not part of the raw MIDI).
@@ -159,52 +170,55 @@ namespace mm
                         // In other words, when creating a 0xf0 or 0xf7 MIDI message,
                         // do not insert the VLV byte length yourself, as this code will
                         // do it for you automatically.
-                        trackRawData.emplace_back(event[0]); // 0xf0 or 0xf7;
+                        trackRawData.emplace_back(msg.data[0]); // 0xf0 or 0xf7;
                         
-                        write_variable_length(event.size() - 1, trackRawData);
+                        write_variable_length(msg.messageSize() - 1, trackRawData);
                         
-                        for (int k = 1; k < event.size(); k++)
+                        for (int k = 1; k < msg.messageSize(); k++)
                         {
-                            trackRawData.emplace_back(event[k]);
+                            trackRawData.emplace_back(msg[k]);
                         }
                     }
                     
                     else
                     {
                         // Non-sysex type of message, so just output the bytes of the message:
-                        for (int k = 0; k < event.size(); k++)
+                        for (int k = 0; k < msg.messageSize(); k++)
                         {
-                            trackRawData.emplace_back(event[k]);
+                            trackRawData.emplace_back(msg[k]);
                         }
                     }
                     
                 }
-                
-                auto size = trackRawData.size();
-                
-                if ((size < 3) || !((trackRawData[size - 3] == 0xFF) && (trackRawData[size - 2] == 0x2F)))
-                {
-                    trackRawData.emplace_back(endoftrack[0]);
-                    trackRawData.emplace_back(endoftrack[1]);
-                    trackRawData.emplace_back(endoftrack[2]);
-                    trackRawData.emplace_back(endoftrack[3]);
-                }
-                
-                // Write the track ID marker "MTrk":
-                out << 'M';
-                out << 'T';
-                out << 'r';
-                out << 'k';
-                
-                // Then size of the MIDI data to follow:
-                write_uint32_be(out, trackRawData.size());
-                
-                // Now the data
-                out.write((char*) trackRawData.data(), trackRawData.size());
             }
-        }	
+                
+            auto size = trackRawData.size();
+            
+            if ((size < 3) || !((trackRawData[size - 3] == 0xFF) && (trackRawData[size - 2] == 0x2F)))
+            {
+                trackRawData.emplace_back(endoftrack[0]);
+                trackRawData.emplace_back(endoftrack[1]);
+                trackRawData.emplace_back(endoftrack[2]);
+                trackRawData.emplace_back(endoftrack[3]);
+            }
+            
+            // Write the track ID marker "MTrk":
+            out << 'M';
+            out << 'T';
+            out << 'r';
+            out << 'k';
+            
+            // Then size of the MIDI data to follow:
+            write_uint32_be(out, trackRawData.size());
+            
+            // Now the data
+            out.write((char*) trackRawData.data(), trackRawData.size());
+            
+            // ???
+            return true;
+        }
         
-    };    
+    };
     
 } // mm
 
