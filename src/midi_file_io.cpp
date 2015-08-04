@@ -98,7 +98,6 @@ void MidiFile::write(std::ostream & out)
                     trackRawData.emplace_back((*msg)[k]);
                 }
             }
-
         }
     }
                 
@@ -119,6 +118,7 @@ void MidiFile::write(std::ostream & out)
     out << 'k';
             
     // Then size of the MIDI data to follow:
+
     write_uint32_be(out, trackRawData.size());
             
     // Now the data

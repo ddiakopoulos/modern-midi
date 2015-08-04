@@ -67,7 +67,7 @@ namespace mm
         PATCH_NAME 			= 0x08,
         DEVICE_NAME 		= 0x09,
         END_OF_TRACK 		= 0x2F,
-        TEMP_OCHANGE 		= 0x51,
+        TEMPO_CHANGE 		= 0x51,
         SMPTE_OFFSET 		= 0x54,
         TIME_SIGNATURE 		= 0x58,
         KEY_SIGNATURE 		= 0x59,
@@ -97,8 +97,10 @@ namespace mm
 	   {
 		  if (buffer[i] != 0)
 			 flag = 1;
+
 		  if (flag) 
 			 buffer[i] |= 0x80;
+
 		  if (length == -1 && buffer[i] >= 0x80) 
 			 length = 4-i;
 	   }
@@ -253,7 +255,32 @@ namespace mm
     {
         return MidiMessage(0xFF, 0x2F, 0, 0.0);
     }
-    
+
+	inline MidiMessage MakeTextMetaEvent(MetaEventType textType, std::string text)
+	{
+		std::vector<uint8_t> message;
+
+		std::vector<uint8_t> size = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+		int length = text.size();
+		int varLength =  make_variable_length(size, length);
+
+		message.resize(2 + varLength + length);
+		message[0] = 0xFF;	// set meta field
+		message[1] = (uint8_t) textType & 0x7F; // set meta subtype
+
+		for (int i = 0; i < varLength; i++)
+			message[2 + i] = size[i]; // set meta length
+
+		for (int i = 0; i < length; i++) 
+			message[2 + varLength + i] = text.data()[i]; // set data
+
+		MidiMessage m;
+		m.data.resize(message.size());
+		memcpy(m.data.data(), message.data(), message.size());
+		return m;
+	}
+
     ///////////////
     // Utilities //
     ///////////////

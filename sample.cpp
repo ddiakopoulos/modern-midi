@@ -32,6 +32,7 @@ int main(int argc, char *argv[], char *envp[])
     MidiFile myFile;
 
     myFile.addTrack();
+	myFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTextMetaEvent(MetaEventType::TRACK_NAME, "test")));
     myFile.addEvent(120, 0, std::make_shared<MidiMessage>(MakeNoteOn(1, 60, 96)));
 	myFile.addEvent(360, 0, std::make_shared<MidiMessage>(MakeNoteOff(1, 60, 0)));
    
