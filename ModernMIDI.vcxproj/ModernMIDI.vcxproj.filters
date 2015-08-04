@@ -70,6 +70,9 @@
     <ClInclude Include="..\src\midi_event.h">
       <Filter>lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\midi_file_io.h">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="third_party">
