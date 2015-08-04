@@ -26,7 +26,7 @@ namespace mm
         POLY_PRESSURE      = 0xA0,
         CONTROL_CHANGE     = 0xB0,
         PROGRAM_CHANGE     = 0xC0,
-        AFTERTOUCH		    = 0xD0,
+        AFTERTOUCH		   = 0xD0,
         PITCH_BEND         = 0xE0,
         
         // System Common Messages
@@ -56,25 +56,26 @@ namespace mm
     
     enum class MetaEventType : uint8_t
     {
-        SEQUENCE_NUMBER = 0x00,
-        TEXT = 0x01,
-        COPYRIGHT = 0x02,
-        TRACK_NAME = 0x03,
-        INSTRUMENT = 0x04,
-        LYRIC = 0x05,
-        MARKER = 0x06,
-        CUE = 0x07,
-        PATCH_NAME = 0x08,
-        DEVICE_NAME = 0x09,
-        END_OF_TRACK = 0x2F,
-        TEMP_OCHANGE = 0x51,
-        SMPTE_OFFSET = 0x54,
-        TIME_SIGNATURE = 0x58,
-        KEY_SIGNATURE = 0x59,
-        PROPRIETARY = 0x7F,
-        CHANNELPREFIX = 0x20,
-        MIDIPORT = 0x21,
-        UNKNOWN = 0xFF
+        SEQUENCE_NUMBER 	= 0x00,
+        TEXT 				= 0x01,
+        COPYRIGHT 			= 0x02,
+        TRACK_NAME 			= 0x03,
+        INSTRUMENT 			= 0x04,
+        LYRIC 				= 0x05,
+        MARKER 				= 0x06,
+        CUE 				= 0x07,
+        PATCH_NAME 			= 0x08,
+        DEVICE_NAME 		= 0x09,
+        END_OF_TRACK 		= 0x2F,
+        TEMP_OCHANGE 		= 0x51,
+        SMPTE_OFFSET 		= 0x54,
+        TIME_SIGNATURE 		= 0x58,
+        KEY_SIGNATURE 		= 0x59,
+        PROPRIETARY 		= 0x7F,
+        // Deprecated Messages
+        CHANNELPREFIX 		= 0x20,
+        MIDIPORT 			= 0x21,
+        UNKNOWN 			= 0xFF
     };
     
     // Channels are indexed @ 1 to 16 (not 0-15)
