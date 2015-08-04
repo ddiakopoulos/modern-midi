@@ -19,6 +19,7 @@
 #include "midi_output.h"
 #include "midi_message.h"
 #include "midi_event.h"
+#include "midi_file_io.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
