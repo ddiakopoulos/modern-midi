@@ -112,9 +112,14 @@ namespace mm
         int track = 0;
     };
     
+    // void sortTrack(vector<MFEvent>& trackData);
+    //If in absolute time, sort particular track into correct time order.
+    // void sortTracks(void);
+    // If in absolute time, sort tracks into correct time order.
+    
     struct MidiFile
     {
-        int ticksPerQuarterNote = 240;
+        int ticksPerQuarterNote = 120;
         
         std::vector<std::vector<TrackEvent>> tracks;
         
@@ -133,7 +138,7 @@ namespace mm
             // 2. Header size is always 6
             write_uint32_be(out, 6);
             
-            // 3. MIDI file format, type 0, 1, or 2
+            // 3. MIDI file format, type 0 or 1
             write_uint16_be(out, (getNumTracks() == 1) ? 0 : 1);
             
             // 4. write out the number of tracks.
@@ -144,20 +149,20 @@ namespace mm
             
             std::vector<uint8_t> trackRawData;
             
+            //@tofix, create end of track msg
             uint8_t endoftrack[4] = {0x0, 0xFF, 0x2F, 0x00};
             
             for (auto & event_list : tracks)
             {
-                
                 for (auto & event : event_list)
                 {
-                    
                     const auto & msg = event.m;
                     
                     // Suppress end-of-track meta messages (one will be added
                     // automatically after all track data has been written).
                     if (msg.getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
                     
+                    std::cout << "Tick: " << int (event.tick) << std::endl;
                     write_variable_length(event.tick, trackRawData);
                     
                     if ((msg.getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event.m.getMessageType() == uint8_t(MessageType::EOX)))
@@ -175,6 +180,7 @@ namespace mm
                         
                         for (int k = 1; k < msg.messageSize(); k++)
                         {
+                            std::cout << "Sysex Write: " << int (msg[k]) << std::endl;
                             trackRawData.emplace_back(msg[k]);
                         }
                     }
@@ -184,6 +190,7 @@ namespace mm
                         // Non-sysex type of message, so just output the bytes of the message:
                         for (int k = 0; k < msg.messageSize(); k++)
                         {
+                            std::cout << "Writing: " << int (msg[k]) << std::endl;
                             trackRawData.emplace_back(msg[k]);
                         }
                     }

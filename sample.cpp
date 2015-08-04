@@ -38,9 +38,9 @@ int main(int argc, char *argv[], char *envp[])
     e1.track = 1;
     
     TrackEvent e2;
-    e1.m = MakeNoteOff(1, 60, 0);
-    e1.tick = 240;
-    e1.track = 1;
+    e2.m = MakeNoteOff(1, 60, 0);
+    e2.tick = 360;
+    e2.track = 1;
     
     myFile.tracks.push_back({e1, e2});
     
