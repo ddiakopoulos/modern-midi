@@ -99,7 +99,6 @@ bool MidiOutput::sendRaw(std::vector<unsigned char> msg)
 	return true;
 }
 
-
 bool MidiOutput::send(const std::vector<uint8_t> & msg)
 {
 	return sendRaw(static_cast<std::vector<unsigned char>>(msg));

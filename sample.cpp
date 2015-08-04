@@ -13,6 +13,7 @@
 #include <map>
 #include <type_traits>
 #include <array>
+#include <fstream>
 
 #include "modernmidi.h"
 #include "port_manager.h"
@@ -28,6 +29,35 @@ using namespace mm;
 
 int main(int argc, char *argv[], char *envp[])
 {
+    
+    MidiFile myFile;
+    
+    TrackEvent e1;
+    e1.m = MakeNoteOn(1, 60, 96);
+    e1.tick = 120;
+    e1.track = 1;
+    
+    TrackEvent e2;
+    e1.m = MakeNoteOff(1, 60, 0);
+    e1.tick = 240;
+    e1.track = 1;
+    
+    myFile.tracks.push_back({e1, e2});
+    
+    std::fstream output("test.mid", std::ios::out);
+    
+    if (!output.is_open())
+    {
+        std::cerr << "couldn't open... " << std::endl;
+    }
+    
+    auto status = myFile.write(output);
+    
+    output.close();
+    
+    std::cout << "Done!" << std::endl;
+
+    /*
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
 	//auto name = PortManager::GetPortName(mm::PortType::TYPE_OUTPUT, 1);
 
@@ -55,13 +85,11 @@ int main(int argc, char *argv[], char *envp[])
 	int centerNote = 0;
 	int mode = 5;
 
-	/*
-	if (transpose)
-	{
-			progressionState = (progressionState + 1) % 12; 
-			baseNote = centerNote + progression[progressionState];
-	}
-	*/
+	//if (transpose)
+	//{
+	//		progressionState = (progressionState + 1) % 12;
+	//		baseNote = centerNote + progression[progressionState];
+	//}
 
 	int transposedNote = 0;
 	int scaleIndexToUse = transposedNote % 12;
@@ -96,6 +124,8 @@ int main(int argc, char *argv[], char *envp[])
 
 		std::this_thread::sleep_for(std::chrono::microseconds(16 * 8333)); // 120 bpm
 	}
-
+     
+    */
+    
 	return 0;
 }
