@@ -17,7 +17,7 @@ class MidiOutput
 	std::unique_ptr<RtMidiOut> outputDevice;
 	bool attached = false;
 
-	bool sendRaw(std::vector<unsigned char> & msg);
+	bool sendRaw(std::vector<unsigned char> msg);
 
 public:
 

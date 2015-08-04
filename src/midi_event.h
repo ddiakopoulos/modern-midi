@@ -39,7 +39,7 @@ namespace mm
 
 	template<class C, class R> std::basic_ostream<C, R> & operator << (std::basic_ostream<C, R> & ss, const MidiPlayerEvent & v) 
 	{
-		return ss << "[" << int(v.msg.byte1) << ", " << int(v.msg.byte2) << ", " << int(v.msg.byte3) << "]";
+		return ss << "[" << int(v.msg.data[0]) << ", " << int(v.msg.data[1]) << ", " << int(v.msg.data[2]) << "]";
 	}
 
 	//////////////////////////////////////
