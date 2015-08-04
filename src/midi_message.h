@@ -78,6 +78,45 @@ namespace mm
         UNKNOWN 			= 0xFF
     };
     
+	inline uint32_t make_variable_length(std::vector<uint8_t> & buffer, uint64_t number) 
+	{
+		uint64_t value = number;
+
+	   if (value >= (1 << 28)) 
+		   throw std::runtime_error("meta too large");
+
+	   buffer[0] = (value >> 21) & 0x7F;
+	   buffer[1] = (value >> 14) & 0x7F;
+	   buffer[2] = (value >>  7) & 0x7F;
+	   buffer[3] = (value >>  0) & 0x7F;
+
+	   int flag = 0;
+	   int length = -1;
+
+	   for (int i = 0; i < 3; i++) 
+	   {
+		  if (buffer[i] != 0)
+			 flag = 1;
+		  if (flag) 
+			 buffer[i] |= 0x80;
+		  if (length == -1 && buffer[i] >= 0x80) 
+			 length = 4-i;
+	   }
+
+	   if (length == -1) 
+		  length = 1;
+
+	   if (length < 4) 
+		  for (int i = 0; i < length; i++) 
+			 buffer[i] = buffer[4 - length + i];
+
+	   return length;
+	}
+
+	//////////////////
+    // MidiMessage  //
+    //////////////////
+
     // Channels are indexed @ 1 to 16 (not 0-15)
     struct MidiMessage
     {
@@ -153,6 +192,7 @@ namespace mm
         size_t messageSize() const { return data.size(); }
         
         double timestamp = 0;
+
         std::vector<unsigned char> data;
     };
     
@@ -160,6 +200,8 @@ namespace mm
     // Message Factories //
     ///////////////////////
     
+	// Channel Events
+
     inline uint8_t MakeCommand(const MessageType type, const int channel)
     {
         return (uint8_t) ((uint8_t) type | mm::clamp<uint8_t> (channel, 0, channel - 1));
@@ -203,6 +245,13 @@ namespace mm
     inline MidiMessage MakeAftertouch(uint8_t channel, uint8_t value)
     {
         return MidiMessage(MakeCommand(MessageType::AFTERTOUCH, channel), value);
+    }
+
+	// Meta Events
+
+	inline MidiMessage MakeEndOfTrackMetaEvent()
+    {
+        return MidiMessage(0xFF, 0x2F, 0, 0.0);
     }
     
     ///////////////

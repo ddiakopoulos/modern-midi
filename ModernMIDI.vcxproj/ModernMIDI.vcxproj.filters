@@ -26,6 +26,9 @@
       <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="..\sample.cpp" />
+    <ClCompile Include="..\src\midi_file_io.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\third_party\RtMidi\RtMidi.h">

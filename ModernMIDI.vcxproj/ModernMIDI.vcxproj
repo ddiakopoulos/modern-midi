@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\sample.cpp" />
+    <ClCompile Include="..\src\midi_file_io.cpp" />
     <ClCompile Include="..\src\midi_input.cpp" />
     <ClCompile Include="..\src\midi_output.cpp" />
     <ClCompile Include="..\src\port_manager.cpp" />

@@ -35,7 +35,7 @@ public:
 		loop = newState;
 	}
 
-	float length() const; // length of the contained song in seconds
+	float length() const; // length of the song in seconds
 		
 	double ticksToSeconds(double ticks)
 	{

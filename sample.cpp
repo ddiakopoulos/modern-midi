@@ -29,21 +29,12 @@ using namespace mm;
 
 int main(int argc, char *argv[], char *envp[])
 {
-    
     MidiFile myFile;
-    
-    TrackEvent e1;
-    e1.m = MakeNoteOn(1, 60, 96);
-    e1.tick = 120;
-    e1.track = 1;
-    
-    TrackEvent e2;
-    e2.m = MakeNoteOff(1, 60, 0);
-    e2.tick = 360;
-    e2.track = 1;
-    
-    myFile.tracks.push_back({e1, e2});
-    
+
+    myFile.addTrack();
+    myFile.addEvent(120, 0, std::make_shared<MidiMessage>(MakeNoteOn(1, 60, 96)));
+	myFile.addEvent(360, 0, std::make_shared<MidiMessage>(MakeNoteOff(1, 60, 0)));
+   
     std::fstream output("test.mid", std::ios::out);
     
     if (!output.is_open())
@@ -51,12 +42,13 @@ int main(int argc, char *argv[], char *envp[])
         std::cerr << "couldn't open... " << std::endl;
     }
     
-    auto status = myFile.write(output);
+    myFile.write(output);
     
     output.close();
     
     std::cout << "Done!" << std::endl;
 
+	std::this_thread::sleep_for(std::chrono::seconds(10));
     /*
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
 	//auto name = PortManager::GetPortName(mm::PortType::TYPE_OUTPUT, 1);
