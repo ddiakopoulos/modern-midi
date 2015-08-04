@@ -114,12 +114,11 @@ namespace mm
     
     struct MidiFile
     {
-        int numTracks = 0;
         int ticksPerQuarterNote = 240;
         
         std::vector<std::vector<TrackEvent>> tracks;
         
-        int getNumTracks() { return numTracks; }
+        int getNumTracks() { return tracks.size(); }
         int getTicksPerQuarterNote() { return ticksPerQuarterNote; }
         
         int write(std::ostream & out)
