@@ -123,12 +123,12 @@ namespace mm
             return 0;
         }
         
-        unsigned char operator [] (int i)
+        unsigned char operator [] (size_t i)
         {
             return data.at(i);
         }
         
-        unsigned char operator [] (int i) const
+        unsigned char operator [] (size_t i) const
         {
             return data.at(i);
         }

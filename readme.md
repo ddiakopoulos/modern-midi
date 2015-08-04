@@ -5,8 +5,17 @@ templates! cpp11!
 ## todo
 - [X] build message factories
 - [X] rename MidiRtMessage + fix
-- [X] (cross platform) thread priority 
+- [X] cross platform thread priority 
 - [X] cross-platform timer
+- [ ] Flesh out MidiFile struct
+- [ ] MidiFile sanity checks before writing (1 track, enough events, etc)
+- [ ] Test multiple tracks
+- [ ] Midi timing utilities
+- [ ] Write all common meta events
+- [ ] Sort tracks
+- [ ] Convert Nick's midi parster to new message type
+- [ ] Nuke events
+- [ ] Take a look at mem mgmt
 
 - tick2frame, second2tick, frame2tick
 - bpm utilities 

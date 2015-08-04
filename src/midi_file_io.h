@@ -17,8 +17,7 @@ namespace mm
     {
         union { uint8_t bytes[2]; uint16_t v; } data;
         data.v = value;
-        out << data.bytes[1];
-        out << data.bytes[0];
+        out << data.bytes[1]; out << data.bytes[0];
         return out;
     }
     
@@ -26,8 +25,7 @@ namespace mm
     {
         union { uint8_t bytes[2]; int16_t v; } data;
         data.v = value;
-        out << data.bytes[1];
-        out << data.bytes[0];
+        out << data.bytes[1]; out << data.bytes[0];
         return out;
     }
     
@@ -35,10 +33,8 @@ namespace mm
     {
         union { uint8_t bytes[4]; uint32_t v; } data;
         data.v = value;
-        out << data.bytes[3];
-        out << data.bytes[2];
-        out << data.bytes[1];
-        out << data.bytes[0];
+        out << data.bytes[3]; out << data.bytes[2];
+        out << data.bytes[1]; out << data.bytes[0];
         return out;
     }
     
@@ -46,37 +42,28 @@ namespace mm
     {
         union { uint8_t bytes[4]; int32_t v; } data;
         data.v = value;
-        out << data.bytes[3];
-        out << data.bytes[2];
-        out << data.bytes[1];
-        out << data.bytes[0];
+        out << data.bytes[3]; out << data.bytes[2];
+        out << data.bytes[1]; out << data.bytes[0];
         return out;
-        
     }
     
-    inline std::ostream & write_float_be(std::ostream& out, float value)
+    inline std::ostream & write_float_be(std::ostream & out, float value)
     {
         union { uint8_t bytes[4]; float v; } data;
         data.v = value;
-        out << data.bytes[3];
-        out << data.bytes[2];
-        out << data.bytes[1];
-        out << data.bytes[0];
+        out << data.bytes[3]; out << data.bytes[2];
+        out << data.bytes[1]; out << data.bytes[0];
         return out;
     }
     
-    inline std::ostream & write_double_be(std::ostream& out, double value)
+    inline std::ostream & write_double_be(std::ostream & out, double value)
     {
         union { uint8_t bytes[8]; double v; } data;
         data.v = value;
-        out << data.bytes[7];
-        out << data.bytes[6];
-        out << data.bytes[5];
-        out << data.bytes[4];
-        out << data.bytes[3];
-        out << data.bytes[2];
-        out << data.bytes[1];
-        out << data.bytes[0];
+        out << data.bytes[7]; out << data.bytes[6];
+        out << data.bytes[5]; out << data.bytes[4];
+        out << data.bytes[3]; out << data.bytes[2];
+        out << data.bytes[1]; out << data.bytes[0];
         return out;
     }
     
@@ -87,11 +74,11 @@ namespace mm
     {
         uint8_t bytes[5] = {0};
         
-        bytes[0] = (uint8_t)(((uint32_t)aValue >> 28) & 0x7f);  // most significant 5 bits
-        bytes[1] = (uint8_t)(((uint32_t)aValue >> 21) & 0x7f);  // next largest 7 bits
-        bytes[2] = (uint8_t)(((uint32_t)aValue >> 14) & 0x7f);
-        bytes[3] = (uint8_t)(((uint32_t)aValue >> 7)  & 0x7f);
-        bytes[4] = (uint8_t)(((uint32_t)aValue)       & 0x7f);  // least significant 7 bits
+        bytes[0] = (uint8_t) (((uint32_t) aValue >> 28) & 0x7f);  // most significant 5 bits
+        bytes[1] = (uint8_t) (((uint32_t) aValue >> 21) & 0x7f);  // next largest 7 bits
+        bytes[2] = (uint8_t) (((uint32_t) aValue >> 14) & 0x7f);
+        bytes[3] = (uint8_t) (((uint32_t) aValue >> 7)  & 0x7f);
+        bytes[4] = (uint8_t) (((uint32_t) aValue)       & 0x7f);  // least significant 7 bits
         
         int start = 0;
         while (start < 5 && bytes[start] == 0)
@@ -128,7 +115,6 @@ namespace mm
         
         int write(std::ostream & out)
         {
-            
             // 1. The characters "MThd"
             out << 'M';
             out << 'T';
@@ -152,6 +138,9 @@ namespace mm
             //@tofix, create end of track msg
             uint8_t endoftrack[4] = {0x0, 0xFF, 0x2F, 0x00};
             
+            // Debugging:
+            uint64_t elapsedTicks = 0;
+            
             for (auto & event_list : tracks)
             {
                 for (auto & event : event_list)
@@ -162,7 +151,11 @@ namespace mm
                     // automatically after all track data has been written).
                     if (msg.getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
                     
-                    std::cout << "Tick: " << int (event.tick) << std::endl;
+                    // Debugging
+                    std::cout << "[Tick] # " << int (event.tick) << std::endl;
+                    elapsedTicks += event.tick;
+                    std::cout << "[Elapsed] # " <<  elapsedTicks << std::endl;
+                    
                     write_variable_length(event.tick, trackRawData);
                     
                     if ((msg.getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event.m.getMessageType() == uint8_t(MessageType::EOX)))
@@ -178,9 +171,9 @@ namespace mm
                         
                         write_variable_length(msg.messageSize() - 1, trackRawData);
                         
-                        for (int k = 1; k < msg.messageSize(); k++)
+                        for (size_t k = 1; k < msg.messageSize(); k++)
                         {
-                            std::cout << "Sysex Write: " << int (msg[k]) << std::endl;
+                            std::cout << "[Sysex] Write: " << int (msg[k]) << std::endl;
                             trackRawData.emplace_back(msg[k]);
                         }
                     }
@@ -188,9 +181,9 @@ namespace mm
                     else
                     {
                         // Non-sysex type of message, so just output the bytes of the message:
-                        for (int k = 0; k < msg.messageSize(); k++)
+                        for (size_t k = 0; k < msg.messageSize(); k++)
                         {
-                            std::cout << "Writing: " << int (msg[k]) << std::endl;
+                            std::cout << "[Msg] Write: " << int (msg[k]) << std::endl;
                             trackRawData.emplace_back(msg[k]);
                         }
                     }
