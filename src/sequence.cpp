@@ -52,6 +52,16 @@ namespace mm
 		return result;
 	}
 	
+    // [] Bad file name
+    // [] bad header
+    // [] unknown header type
+    // [] bad header size
+    // [] bad type
+    // [] bad tmecode
+    // [] header too short
+    // [] track too short
+    // [] event too short
+    
 	MidiTrackEvent * parseEvent(uint8_t const*& dataStart, uint8_t lastEventTypeByte)
 	{
 		uint8_t eventTypeByte = *dataStart++;

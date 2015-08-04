@@ -103,7 +103,7 @@ namespace mm
     //If in absolute time, sort particular track into correct time order.
     // void sortTracks(void);
     // If in absolute time, sort tracks into correct time order.
-    
+
     struct MidiFile
     {
         int ticksPerQuarterNote = 120;
