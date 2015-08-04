@@ -75,10 +75,14 @@ namespace mm
 		virtual ~MidiTrackEvent() { }
 		MIDI_EventType eventType;
 		int deltatime = 0;
+        int track = 0;
+        double seconds = 0;
 	};
     
     #define DECLARE_MIDI_EVENT(ev) struct ev ## Event : public MidiTrackEvent { ev ## Event() : MidiTrackEvent(MIDI_Event ## ev) { }
-        
+    
+    // @tofix, events are a type of message (subclass)
+    
     DECLARE_MIDI_EVENT(SequenceNumber) int number; };
     DECLARE_MIDI_EVENT(Text) std::string text; };
     DECLARE_MIDI_EVENT(CopyrightNotice) std::string text; };
