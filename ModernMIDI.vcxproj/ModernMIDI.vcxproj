@@ -144,11 +144,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\sample.cpp" />
-    <ClCompile Include="..\src\midi_file_io.cpp" />
+    <ClCompile Include="..\src\midi_file_writer.cpp" />
     <ClCompile Include="..\src\midi_input.cpp" />
     <ClCompile Include="..\src\midi_output.cpp" />
     <ClCompile Include="..\src\port_manager.cpp" />
-    <ClCompile Include="..\src\sequence.cpp" />
+    <ClCompile Include="..\src\midi_file_reader.cpp" />
     <ClCompile Include="..\src\sequence_player.cpp" />
     <ClCompile Include="..\src\midi_utils.cpp" />
     <ClCompile Include="..\src\music_theory.cpp" />
@@ -158,12 +158,12 @@
     <ClInclude Include="..\src\circular_buffer.h" />
     <ClInclude Include="..\src\concurrent_queue.h" />
     <ClInclude Include="..\src\midi_event.h" />
-    <ClInclude Include="..\src\midi_file_io.h" />
+    <ClInclude Include="..\src\midi_file_writer.h" />
     <ClInclude Include="..\src\modernmidi.h" />
     <ClInclude Include="..\src\midi_input.h" />
     <ClInclude Include="..\src\midi_output.h" />
     <ClInclude Include="..\src\port_manager.h" />
-    <ClInclude Include="..\src\sequence.h" />
+    <ClInclude Include="..\src\midi_file_reader.h" />
     <ClInclude Include="..\src\sequence_player.h" />
     <ClInclude Include="..\src\midi_message.h" />
     <ClInclude Include="..\src\midi_utils.h" />

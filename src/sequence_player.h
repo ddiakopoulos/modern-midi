@@ -8,7 +8,7 @@
 #include "modernmidi.h"
 #include "concurrent_queue.h"
 #include "midi_message.h"
-#include "sequence.h"
+#include "midi_file_reader.h"
 
 #include <functional>
 #include <thread>
@@ -26,7 +26,7 @@ public:
 	MidiSequencePlayer();
 	~MidiSequencePlayer();
 		
-	void loadSequence(MidiSequence sequence);
+	void loadSequence(MidiFileReader sequence); //@omgfix
 	void start();
 	void stop();
 
@@ -78,7 +78,7 @@ private:
 	std::atomic<bool> shouldSequence;
 	bool loop = false;
 
-	MidiSequence internalSequence;
+	MidiFileReader internalSequence;
 };
 
 } // mm

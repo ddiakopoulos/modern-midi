@@ -92,15 +92,15 @@ inline void write_variable_length(uint32_t aValue, std::vector<uint8_t> & outdat
     outdata.push_back(bytes[4]);
 }
     
-class MidiFile
+class MidiFileWriter
 {
 	std::vector<MidiTrack> tracks;
 	int ticksPerQuarterNote = 120;
 
 public:
 
-	MidiFile();
-	~MidiFile();
+	MidiFileWriter();
+	~MidiFileWriter();
 
 	int getNumTracks() { return tracks.size(); }
 	int getTicksPerQuarterNote() { return ticksPerQuarterNote; }

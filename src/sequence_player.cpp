@@ -74,7 +74,7 @@ void MidiSequencePlayer::preprocessSequence()
 
 }
 
-void MidiSequencePlayer::loadSequence(MidiSequence s)
+void MidiSequencePlayer::loadSequence(MidiFileReader s)
 {
 	// Copy sequence locally
 	internalSequence = s;

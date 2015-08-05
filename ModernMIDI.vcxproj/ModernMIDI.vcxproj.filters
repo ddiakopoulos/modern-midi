@@ -19,15 +19,15 @@
     <ClCompile Include="..\src\port_manager.cpp">
       <Filter>lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sequence.cpp">
-      <Filter>lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\sequence_player.cpp">
       <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="..\sample.cpp" />
-    <ClCompile Include="..\src\midi_file_io.cpp">
-      <Filter>lib</Filter>
+    <ClCompile Include="..\src\midi_file_reader.cpp">
+      <Filter>lib\file_io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\midi_file_writer.cpp">
+      <Filter>lib\file_io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,17 +64,17 @@
     <ClInclude Include="..\src\port_manager.h">
       <Filter>lib</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sequence.h">
-      <Filter>lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\sequence_player.h">
       <Filter>lib</Filter>
     </ClInclude>
     <ClInclude Include="..\src\midi_event.h">
       <Filter>lib</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\midi_file_io.h">
-      <Filter>lib</Filter>
+    <ClInclude Include="..\src\midi_file_reader.h">
+      <Filter>lib\file_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_file_writer.h">
+      <Filter>lib\file_io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +89,9 @@
     </Filter>
     <Filter Include="third_party\rtmidi">
       <UniqueIdentifier>{3ab7d7de-927d-4bfc-aded-01e8da95059a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\file_io">
+      <UniqueIdentifier>{ea3488b0-55ba-433a-95df-546381f1f475}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

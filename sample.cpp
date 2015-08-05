@@ -20,8 +20,9 @@
 #include "midi_output.h"
 #include "midi_message.h"
 #include "midi_event.h"
-#include "midi_file_io.h"
-#include "sequence.h"
+
+#include "midi_file_reader.h"
+#include "midi_file_writer.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -59,7 +60,7 @@ using namespace mm;
 
 int main(int argc, char *argv[], char *envp[])
 {
-    MidiFile myFile;
+    MidiFileWriter myFile;
 
     myFile.addTrack();
 	myFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTextMetaEvent(MetaEventType::TRACK_NAME, "test")));
@@ -79,10 +80,8 @@ int main(int argc, char *argv[], char *envp[])
     
     std::cout << "Done!" << std::endl;
 
-	MidiSequence loadedFile;
-	loadedFile.parse(readFile("debug.mid"));
-
-	loadedFile;
+	MidiFileReader reader;
+	reader.parse(readFile("debug.mid"));
 
 	std::this_thread::sleep_for(std::chrono::seconds(10));
     /*

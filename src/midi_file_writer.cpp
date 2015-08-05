@@ -1,23 +1,23 @@
-#include "midi_file_io.h"
+#include "midi_file_writer.h"
 
 using namespace mm;
 
-MidiFile::MidiFile()
+MidiFileWriter::MidiFileWriter()
 {
 
 }
 
-MidiFile::~MidiFile()
+MidiFileWriter::~MidiFileWriter()
 {
 
 }
 
-void MidiFile::addTrack()
+void MidiFileWriter::addTrack()
 {
 	tracks.emplace_back(MidiTrack());
 }
 
-void MidiFile::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
+void MidiFileWriter::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
 {
 	if (track > tracks.size()) 
 		throw std::invalid_argument("track exceeds availble tracks");
@@ -25,7 +25,7 @@ void MidiFile::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
 	tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
 }
 
-void MidiFile::write(std::ostream & out)
+void MidiFileWriter::write(std::ostream & out)
 {
     // 1. The characters "MThd"
     out << 'M';
