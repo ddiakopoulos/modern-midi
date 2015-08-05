@@ -284,10 +284,14 @@ namespace mm
 
 			MessageType runningEvent = MessageType::NOT_CHANNEL;
 
+			uint64_t runningTicks = 0;
+
 			while (dataPtr < dataEnd) 
 			{
 				auto tick = read_variable_length(dataPtr);
-				auto ev = std::shared_ptr<TrackEvent>(parseEvent(tick, i, dataPtr, runningEvent));
+				runningTicks += tick;
+
+				auto ev = std::shared_ptr<TrackEvent>(parseEvent(runningTicks, i, dataPtr, runningEvent));
 
 				if (ev->m->isMetaEvent() == false)
 				{
