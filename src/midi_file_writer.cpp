@@ -2,15 +2,9 @@
 
 using namespace mm;
 
-MidiFileWriter::MidiFileWriter()
-{
+MidiFileWriter::MidiFileWriter() { }
 
-}
-
-MidiFileWriter::~MidiFileWriter()
-{
-
-}
+MidiFileWriter::~MidiFileWriter() { }
 
 void MidiFileWriter::addTrack()
 {
@@ -27,29 +21,16 @@ void MidiFileWriter::addEvent(int tick, int track, std::shared_ptr<MidiMessage> 
 
 void MidiFileWriter::write(std::ostream & out)
 {
-    // 1. The characters "MThd"
-    out << 'M';
-    out << 'T';
-    out << 'h';
-    out << 'd';
-            
-    // 2. Header size is always 6
+    // MIDI File Header
+    out << 'M'; out << 'T'; out << 'h'; out << 'd';
     write_uint32_be(out, 6);
-            
-    // 3. MIDI file format, type 0 or 1
     write_uint16_be(out, (getNumTracks() == 1) ? 0 : 1);
-            
-    // 4. write out the number of tracks.
     write_uint16_be(out, getNumTracks());
-            
-    // 5. write out the number of ticks per quarternote. (avoiding SMTPE for now)
     write_uint16_be(out, getTicksPerQuarterNote());
             
     std::vector<uint8_t> trackRawData;
 
-    auto eot = MakeEndOfTrackMetaEvent();
-            
-    // Debugging:
+    //@tofix - Debugging Only:
     uint64_t elapsedTicks = 0;
             
     for (auto & event_list : tracks)
@@ -102,7 +83,8 @@ void MidiFileWriter::write(std::ostream & out)
     }
                 
     auto size = trackRawData.size();
-            
+    auto eot = MakeEndOfTrackMetaEvent();
+    
     if ((size < 3) || !((trackRawData[size - 3] == 0xFF) && (trackRawData[size - 2] == 0x2F)))
     {
 		trackRawData.emplace_back(0x0); // tick
@@ -112,15 +94,7 @@ void MidiFileWriter::write(std::ostream & out)
     }
             
     // Write the track ID marker "MTrk":
-    out << 'M';
-    out << 'T';
-    out << 'r';
-    out << 'k';
-            
-    // Then size of the MIDI data to follow:
-
+    out << 'M'; out << 'T'; out << 'r'; out << 'k';
     write_uint32_be(out, trackRawData.size());
-            
-    // Now the data
     out.write((char*) trackRawData.data(), trackRawData.size());
 }
