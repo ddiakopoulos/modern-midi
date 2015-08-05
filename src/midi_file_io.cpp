@@ -14,7 +14,7 @@ MidiFile::~MidiFile()
 
 void MidiFile::addTrack()
 {
-	tracks.emplace_back(std::vector<TrackEvent>());
+	tracks.emplace_back(MidiTrack());
 }
 
 void MidiFile::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
@@ -22,7 +22,7 @@ void MidiFile::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
 	if (track > tracks.size()) 
 		throw std::invalid_argument("track exceeds availble tracks");
 
-	tracks[track].emplace_back(tick, track, m);
+	tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
 }
 
 void MidiFile::write(std::ostream & out)
@@ -56,20 +56,20 @@ void MidiFile::write(std::ostream & out)
     {
         for (auto & event : event_list)
         {
-            const auto msg = event.m;
+            const auto msg = event->m;
                     
             // Suppress end-of-track meta messages (one will be added
             // automatically after all track data has been written).
             if (msg->getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
                     
             // Debugging
-            std::cout << "[Tick] # " << int (event.tick) << std::endl;
-            elapsedTicks += event.tick;
+            std::cout << "[Tick] # " << int (event->tick) << std::endl;
+            elapsedTicks += event->tick;
             std::cout << "[Elapsed] # " <<  elapsedTicks << std::endl;
                     
-            write_variable_length(event.tick, trackRawData);
+            write_variable_length(event->tick, trackRawData);
                     
-            if ((msg->getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event.m->getMessageType() == uint8_t(MessageType::EOX)))
+            if ((msg->getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event->m->getMessageType() == uint8_t(MessageType::EOX)))
             {
                 // 0xf0 == Complete sysex message (0xf0 is part of the raw MIDI).
                 // 0xf7 == Raw byte message (0xf7 not part of the raw MIDI).

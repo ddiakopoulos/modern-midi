@@ -42,75 +42,26 @@ namespace mm
 		return ss << "[" << int(v.msg.data[0]) << ", " << int(v.msg.data[1]) << ", " << int(v.msg.data[2]) << "]";
 	}
 
-	//////////////////////////////////////
-	// MIDI Track Events (file parsing) //
-	//////////////////////////////////////
+	///////////////////////
+	// MIDI Track Events //
+	///////////////////////
 
-	enum MIDI_EventType 
+	struct TrackEvent
 	{
-		MIDI_EventSequenceNumber, 
-		MIDI_EventText, 
-		MIDI_EventCopyrightNotice,
-		MIDI_EventTrackName, 
-		MIDI_EventInstrumentName,
-		MIDI_EventLyrics,
-		MIDI_EventMarker,
-		MIDI_EventCuePoint,
-		MIDI_EventMidiChannelPrefix,
-		MIDI_EventEndOfTrack,
-		MIDI_EventSetTempo, 
-		MIDI_EventSmpteOffset,
-		MIDI_EventTimeSignature, 
-		MIDI_EventKeySignature, 
-		MIDI_EventSequencerSpecific,
-		MIDI_EventUnknown,
-		MIDI_EventSysEx,
-		MIDI_EventDividedSysEx,
-		MIDI_EventChannel
+		int tick = 0;
+		int track = 0;
+		std::shared_ptr<MidiMessage> m;
+		TrackEvent(int tick, int track, std::shared_ptr<MidiMessage> m) : tick(tick), track(track), m(m) { }
+		TrackEvent(TrackEvent && r) { *this = std::move(r); }
+		TrackEvent & operator = (TrackEvent && r) { tick = r.tick; track = r.track; m = std::move(r.m); return *this; }
+		virtual ~TrackEvent() {};
 	};
-	
-	struct MidiTrackEvent 
-	{
-		MidiTrackEvent(MIDI_EventType s) : eventType(s) { }
-		virtual ~MidiTrackEvent() { }
-		MIDI_EventType eventType;
-		int deltatime = 0;
-        int track = 0;
-        double seconds = 0;
-	};
-    
-    #define DECLARE_MIDI_EVENT(ev) struct ev ## Event : public MidiTrackEvent { ev ## Event() : MidiTrackEvent(MIDI_Event ## ev) { }
-    
-    // @tofix, events are a type of message (subclass)
-    
-    DECLARE_MIDI_EVENT(SequenceNumber) int number; };
-    DECLARE_MIDI_EVENT(Text) std::string text; };
-    DECLARE_MIDI_EVENT(CopyrightNotice) std::string text; };
-    DECLARE_MIDI_EVENT(TrackName) std::string text; };
-    DECLARE_MIDI_EVENT(InstrumentName) std::string text; };
-    DECLARE_MIDI_EVENT(Lyrics) std::string text; };
-    DECLARE_MIDI_EVENT(Marker) std::string text; };
-    DECLARE_MIDI_EVENT(CuePoint) std::string text; };
-    DECLARE_MIDI_EVENT(MidiChannelPrefix) int channel; };
-    DECLARE_MIDI_EVENT(EndOfTrack) };
-    DECLARE_MIDI_EVENT(SetTempo) int microsecondsPerBeat; }; // Otherwise known as microsecondsPerQuaterNote
-    DECLARE_MIDI_EVENT(SmpteOffset) int framerate; int hour; int min; int sec; int frame; int subframe; };
-    DECLARE_MIDI_EVENT(TimeSignature) int numerator; int denominator; int metronome; int thirtyseconds; };
-    DECLARE_MIDI_EVENT(KeySignature) int key; int scale; };
-    DECLARE_MIDI_EVENT(SequencerSpecific) ~SequencerSpecificEvent() { delete[] data; } uint8_t * data; };
-    DECLARE_MIDI_EVENT(Unknown) ~UnknownEvent() { delete[] data; } uint8_t * data; };
-    DECLARE_MIDI_EVENT(SysEx) ~SysExEvent() { delete[] data; } uint8_t * data; };
-    DECLARE_MIDI_EVENT(DividedSysEx) ~DividedSysExEvent() { delete[] data; } uint8_t * data; };
-    DECLARE_MIDI_EVENT(Channel) uint8_t midiCommand; uint8_t param1; uint8_t param2; };
 
 	////////////////
 	// MIDI Track //
 	////////////////
 
-	struct MidiTrack
-	{
-		std::vector<std::shared_ptr<MidiTrackEvent>> events;
-	};
+	typedef std::vector<std::shared_ptr<TrackEvent>> MidiTrack;
 	
 } // mm
 

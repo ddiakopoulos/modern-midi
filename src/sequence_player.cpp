@@ -34,13 +34,14 @@ void MidiSequencePlayer::preprocessSequence()
 	std::cout << "Play time in seconds " << playTimeSeconds << std::endl;
 
 	//@todo: sanity check tracks
-
+	
+	/*
 	// Look for tempo event, assume we only have one
 	for (const auto track : internalSequence.tracks)
 	{
-		for (const auto mEvt : track.events)
+		for (const auto mEvt : track)
 		{
-			if (mEvt->eventType == MIDI_EventSetTempo)
+			if (mEvt.eventType == MIDI_EventSetTempo)
 			{
 				SetTempoEvent * ste = (SetTempoEvent *) mEvt.get();
 				beatsPerMinute = float(60000000.0 / double (ste->microsecondsPerBeat));
@@ -53,16 +54,18 @@ void MidiSequencePlayer::preprocessSequence()
 			}
 		}
 	}
+	*/
 
 	// Preprocess tracks into flat vector with timestamps
 	int trackIdx = 0;
 	for (const auto track : internalSequence.tracks)
 	{
 		double localElapsedTicks = 0;
+
 		// Events in track
-		for (const auto mEvt : track.events)
+		for (const auto mEvt : track)
 		{
-			localElapsedTicks += mEvt->deltatime;
+			localElapsedTicks += mEvt->tick;
 			double timestamp = ticksToSeconds(localElapsedTicks);
 			addTimestampedEvent(eventList, trackIdx, timestamp, mEvt.get());
 		}	
@@ -147,12 +150,11 @@ void MidiSequencePlayer::stop()
 	shouldSequence = false;
 }
 	
-void MidiSequencePlayer::addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, MidiTrackEvent * ev)
+void MidiSequencePlayer::addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, TrackEvent * ev)
 {
-	if (ev->eventType == MIDI_EventChannel)
+	if (ev->m->isMetaEvent() == false)
 	{
-		ChannelEvent * ce = (ChannelEvent *) ev;
-		list.push_back(MidiPlayerEvent(now, ce->midiCommand, ce->param1, ce->param2, track));
+		list.push_back(MidiPlayerEvent(now, ev->m->data[0], ev->m->data[1], ev->m->data[2], track));
 	}
 }
 

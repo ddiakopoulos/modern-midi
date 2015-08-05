@@ -21,9 +21,39 @@
 #include "midi_message.h"
 #include "midi_event.h"
 #include "midi_file_io.h"
+#include "sequence.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
+
+std::vector<uint8_t> readFile(std::string pathToFile)
+{
+	std::cout << "[Debug] Open: " << pathToFile << std::endl;
+    
+    FILE * file = fopen(pathToFile.c_str(), "rb");
+    
+    if (!file)
+    {
+        throw std::runtime_error("file not found");
+    }
+    
+    fseek(file, 0, SEEK_END);
+    size_t lengthInBytes = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    
+    // Allocate temporary buffer
+    std::vector<uint8_t> fileBuffer(lengthInBytes);
+    
+    size_t elementsRead = fread(fileBuffer.data(), 1, lengthInBytes, file);
+    
+    if (elementsRead == 0 || fileBuffer.size() < 64)
+        throw std::runtime_error("error reading file or file too small");
+
+	fclose(file);
+
+	// Copy out to user 
+	return fileBuffer;
+}
 
 using namespace mm;
 
@@ -48,6 +78,11 @@ int main(int argc, char *argv[], char *envp[])
     output.close();
     
     std::cout << "Done!" << std::endl;
+
+	MidiSequence loadedFile;
+	loadedFile.parse(readFile("debug.mid"));
+
+	loadedFile;
 
 	std::this_thread::sleep_for(std::chrono::seconds(10));
     /*
@@ -119,6 +154,8 @@ int main(int argc, char *argv[], char *envp[])
 	}
      
     */
+
+
     
 	return 0;
 }

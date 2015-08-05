@@ -3,19 +3,18 @@
 #include "modernmidi.h"
 #include "sequence.h"
 #include "midi_message.h"
-#include <cmath>
+#include <algorithm>
 
 namespace mm 
 {
-	// read a MIDI-style variable-length integer
-	// (big-endian value in groups of 7 bits,
-	// with top bit set to signify that another byte follows)
-	int readVarInt(uint8_t const*& dataStart)
+	// Read a MIDI-style variable-length integer (big-endian value in groups of 7 bits,
+	// with top bit set to signify that another byte follows). 
+	uint32_t read_variable_length(uint8_t const *& data)
 	{
-		int result = 0;
+		uint32_t result = 0;
 		while (true) 
 		{
-			uint8_t b = *dataStart++;
+			uint8_t b = *data++;
 			if (b & 0x80) 
 			{
 				result += (b & 0x7F);
@@ -28,258 +27,195 @@ namespace mm
 		}
 	}
 	
-	int readInt16(uint8_t const * & dataStart)
+	void read_bytes(std::vector<unsigned char> & buffer, uint8_t const *& data, int num)
 	{
-		int result = int( * dataStart++) << 8;
-		result += int( * dataStart++);
-		return result;
-	}
-	
-	int readInt24(uint8_t const *& dataStart)
-	{
-		int result = int(*dataStart++) << 16;
-		result += int(*dataStart++) << 8;
-		result += int(*dataStart++);
-		return result;
-	}
-	
-	int readInt32(uint8_t const *& dataStart)
-	{
-		int result = int(*dataStart++) << 24;
-		result += int(*dataStart++) << 16;
-		result += int(*dataStart++) << 8;
-		result += int(*dataStart++);
-		return result;
-	}
-	
-    // [] Bad file name
-    // [] bad header
-    // [] unknown header type
-    // [] bad header size
-    // [] bad type
-    // [] bad tmecode
-    // [] header too short
-    // [] track too short
-    // [] event too short
-    
-	MidiTrackEvent * parseEvent(uint8_t const*& dataStart, uint8_t lastEventTypeByte)
-	{
-		uint8_t eventTypeByte = *dataStart++;
-		
-		if ((eventTypeByte & 0xf0) == 0xf0) 
+		for (int i = 0; i < num; ++i)
 		{
-			/* system / meta event */
-			if (eventTypeByte == 0xff) 
+			buffer.push_back(uint8_t(*data++));
+		}
+	}
+
+	uint16_t read_uint16_be(uint8_t const *& data)
+	{
+		uint16_t result = int(*data++) << 8;
+		result += int(*data++);
+		return result;
+	}
+	
+	uint32_t read_uint24_be(uint8_t const *& data)
+	{
+		uint32_t result = int(*data++) << 16;
+		result += int(*data++) << 8;
+		result += int(*data++);
+		return result;
+	}
+	
+	uint32_t read_uint32_be(uint8_t const *& data)
+	{
+		uint32_t result = int(*data++) << 24;
+		result += int(*data++) << 16;
+		result += int(*data++) << 8;
+		result += int(*data++);
+		return result;
+	}
+	
+	// Parse Validators
+    // [ ] Bad file name
+    // [ ] bad header
+    // [ ] unknown header type
+    // [ ] bad header size
+    // [ ] bad type
+    // [ ] bad tmecode
+    // [ ] header too short
+    // [ ] track too short
+    // [ ] event too short
+    
+	TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, MessageType lastEventTypeByte)
+	{
+		MessageType type = (MessageType) *dataStart++;
+		
+		auto m = std::make_shared<MidiMessage>();
+		TrackEvent * event = new TrackEvent(tick, track, m);
+
+		if (((uint8_t) type & 0xF) == 0xF) 
+		{
+			// Meta event 
+			if ((uint8_t) type == 0xFF) 
 			{
-				/* meta event */
-				uint8_t subtypeByte = *dataStart++;
-				int length = readVarInt(dataStart);
-				switch(subtypeByte) 
+				MetaEventType subtype = (MetaEventType) *dataStart++;
+				int length = read_variable_length(dataStart); 
+
+				event->m->data = std::vector<unsigned char>(std::max(length, 3), 0);
+				event->m->data[0] = (uint8_t) type;
+				event->m->data[1] = (uint8_t) subtype;
+				event->m->data[2] = length;
+
+				switch(subtype) 
 				{
-					case 0x00: 
+					case MetaEventType::SEQUENCE_NUMBER: 
 					{
 						if (length != 2) throw std::runtime_error("Expected length for sequenceNumber event is 2");
-						SequenceNumberEvent* event = new SequenceNumberEvent();
-						event->number = * (uint16_t*) dataStart;
-						dataStart += 2;
+						read_bytes(event->m->data, dataStart, 2);
 						return event;
 					}
-					case 0x01: 
+					case MetaEventType::TEXT: 
+					case MetaEventType::COPYRIGHT: 
+					case MetaEventType::TRACK_NAME: 
+					case MetaEventType::INSTRUMENT: 
+					case MetaEventType::LYRIC: 
+					case MetaEventType::MARKER: 
+					case MetaEventType::CUE: 						
 					{
-						TextEvent* event = new TextEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
+						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
-					case 0x02: 
-					{
-						CopyrightNoticeEvent* event = new CopyrightNoticeEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
-						return event;
-					}
-					case 0x03: 
-					{
-						TrackNameEvent* event = new TrackNameEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
-						return event;
-					}
-					case 0x04: 
-					{
-						InstrumentNameEvent* event = new InstrumentNameEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
-						return event;
-					}
-					case 0x05: 
-					{
-						LyricsEvent* event = new LyricsEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
-						return event;
-					}
-					case 0x06: 
-					{
-						MarkerEvent* event = new MarkerEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
-						return event;
-					}
-					case 0x07: 
-					{
-						CuePointEvent* event = new CuePointEvent();
-						event->text.assign((char*) dataStart, length);
-						dataStart += length;
-						return event;
-					}
-					case 0x20: 
-					{
-						if (length != 1) throw std::runtime_error("Expected length for midiChannelPrefix event is 1");
-						MidiChannelPrefixEvent* event = new MidiChannelPrefixEvent();
-						event->channel = *(uint8_t*) dataStart;
-						++dataStart;
-						return event;
-					}
-					case 0x2f: 
+					
+					case MetaEventType::END_OF_TRACK: 
 					{
 						if (length != 0) throw std::runtime_error("Expected length for endOfTrack event is 0");
-						EndOfTrackEvent* event = new EndOfTrackEvent();
 						return event;
 					}
-					case 0x51: 
+					case MetaEventType::TEMPO_CHANGE: 
 					{
 						if (length != 3) throw std::runtime_error("Expected length for setTempo event is 3");
-						SetTempoEvent* event = new SetTempoEvent();
-						event->microsecondsPerBeat = readInt24(dataStart);
+						event->m->data[3] = read_uint24_be(dataStart);
 						return event;
 					}
-					case 0x54: 
+					case MetaEventType::SMPTE_OFFSET: 
 					{
 						if (length != 5) throw std::runtime_error("Expected length for smpteOffset event is 5");
-						SmpteOffsetEvent* event = new SmpteOffsetEvent();
-						uint8_t hourByte = *dataStart++;
-						switch (hourByte & 0x60) 
-						{
-							case 0x00: event->framerate = 24; break;
-							case 0x20: event->framerate = 25; break;
-							case 0x40: event->framerate = 29; break;
-							case 0x60: event->framerate = 30; break;
-						}
-						event->hour = hourByte & 0x1f;
-						event->min = int(*dataStart++);
-						event->sec = int(*dataStart++);
-						event->frame = int(*dataStart++);
-						event->subframe = int(*dataStart++);
+						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
-					case 0x58: 
+					case MetaEventType::TIME_SIGNATURE: 
 					{
 						if (length != 4) throw std::runtime_error("Expected length for timeSignature event is 4");
-						TimeSignatureEvent* event = new TimeSignatureEvent();
-						event->numerator = int(*dataStart++);
-						event->denominator = int(powf(2.0f, float(*dataStart++)));
-						event->metronome = int(*dataStart++);
-						event->thirtyseconds = int(*dataStart++);
+						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
-					case 0x59: 
+					case MetaEventType::KEY_SIGNATURE: 
 					{
 						if (length != 2) throw std::runtime_error("Expected length for keySignature event is 2");
-						KeySignatureEvent* event = new KeySignatureEvent();
-						event->key = int(*dataStart++);
-						event->scale = int(*dataStart++);
+						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
-					case 0x7f: 
+					case MetaEventType::PROPRIETARY: 
 					{
-						SequencerSpecificEvent* event = new SequencerSpecificEvent();
-						event->data = new uint8_t[length];
-						memcpy(event->data, dataStart, length);
-						dataStart += length;
+						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
 				}
 
-				UnknownEvent* event = new UnknownEvent();
-				event->data = new uint8_t[length];
-				memcpy(event->data, dataStart, length);
-				dataStart += length;
+				// Unknown events? 
+				read_bytes(event->m->data, dataStart, length);
 				return event;
 			}
 
-			else if (eventTypeByte == 0xf0) 
+			else if (type == MessageType::SYSTEM_EXCLUSIVE) 
 			{
-				int length = readVarInt(dataStart);
-				SysExEvent* event = new SysExEvent();
-				event->data = new uint8_t[length];
-				memcpy(event->data, dataStart, length);
-				dataStart += length;
+				int length = read_variable_length(dataStart);
+				read_bytes(event->m->data, dataStart, length);
 				return event;
 			}
 
-			else if (eventTypeByte == 0xf7) 
+			else if (type == MessageType::EOX)
 			{
-				int length = readVarInt(dataStart);
-				DividedSysExEvent* event = new DividedSysExEvent();
-				event->data = new uint8_t[length];
-				memcpy(event->data, dataStart, length);
-				dataStart += length;
+				int length = read_variable_length(dataStart);
+				read_bytes(event->m->data, dataStart, length);
 				return event;
 			}
 			else 
 			{
-				throw std::runtime_error("Unrecognised MIDI event type byte"); // eventTypeByte;
+				throw std::runtime_error("Unrecognised MIDI event type byte");
 			}
 		}
+
+		// Channel events
 		else 
 		{
-			// channel event
-			ChannelEvent * event = new ChannelEvent();
-			int param1;
+			event->m->data = std::vector<unsigned char>(3, 0);
+			event->m->data[0] = (uint8_t) type;
 
 			// Running status... 
-			if ((eventTypeByte & 0x80) == 0) 
+			if (((uint8_t) type & 0x80) == 0) 
 			{
-				// running status - reuse lastEventTypeByte as the event type.
+				// Reuse lastEventTypeByte as the event type.
 				// eventTypeByte is actually the first parameter
-				param1 = eventTypeByte;
-				eventTypeByte = lastEventTypeByte;
+				event->m->data[0] = (uint8_t) type;
+				type = lastEventTypeByte;
 			}
-
 			else 
 			{
-				param1 = int(*dataStart++);
-				lastEventTypeByte = eventTypeByte;
+				event->m->data[1] = uint8_t(*dataStart++);
+				lastEventTypeByte = type;
 			}
 
-			event->midiCommand = eventTypeByte;
-			event->param1 = param1;
-			event->param2 = 0xff;  // don't transmit this value (@tofix ??)
+			// Just in case
+			event->m->data[2] = 0xFF;
 
-			switch (eventTypeByte & 0xf0)
+			switch (MessageType((uint8_t) type & 0xF0))
 			{
-				case 0x80: // note off
-				event->param2 = int(*dataStart++);
-				return event;
-				case 0x90: // note on
-					event->param2 = int(*dataStart++); // velocity
+				case MessageType::NOTE_OFF:
+					event->m->data[2] = uint8_t(*dataStart++);
 					return event;
-				case 0xa0: // after touch
-					event->param2 = int(*dataStart++); // amount
+				case MessageType::NOTE_ON:
+					event->m->data[2] = uint8_t(*dataStart++);
 					return event;
-				case 0xb0: // controller
-					event->param2 = int(*dataStart++); // amount
+				case MessageType::POLY_PRESSURE:
+					event->m->data[2] = uint8_t(*dataStart++);
 					return event;
-				case 0xc0: // program change
-				return event;
-				case 0xd0: // channel after touch
-				return event;
-				case 0xe0: // pitch bend
-				event->param2 = int(*dataStart++);
-				return event;
+				case MessageType::CONTROL_CHANGE:
+					event->m->data[2] = uint8_t(*dataStart++);
+					return event;
+				case MessageType::PROGRAM_CHANGE:
+					return event;
+				case MessageType::AFTERTOUCH:
+					return event;
+				case MessageType::PITCH_BEND: 
+					event->m->data[2] = uint8_t(*dataStart++);
+					return event;
 				default:
-				throw std::runtime_error("Unrecognised MIDI event type");
+					throw std::runtime_error("Unrecognised MIDI event type");
 			}
 		}
 		throw std::runtime_error("Unparsed event");
@@ -304,8 +240,8 @@ namespace mm
 	{
 		const uint8_t * dataPtr = buffer.data();
 		
-		int headerId = readInt32(dataPtr);
-		int headerLength = readInt32(dataPtr);
+		int headerId = read_uint32_be(dataPtr);
+		int headerLength = read_uint32_be(dataPtr);
 
 		if (headerId != 'MThd' || headerLength != 6) 
 		{
@@ -313,9 +249,10 @@ namespace mm
 			return;
 		}
 		
-		readInt16(dataPtr); // format type... 
-		int trackCount = readInt16(dataPtr);
-		int timeDivision = readInt16(dataPtr);
+		read_uint16_be(dataPtr); //@tofix format type -> save for later eventually 
+
+		int trackCount = read_uint16_be(dataPtr);
+		int timeDivision = read_uint16_be(dataPtr);
 		
 		// CBB: deal with the SMPTE style time coding
 		// timeDivision is described here http://www.sonicspot.com/guide/midifiles.html
@@ -335,35 +272,29 @@ namespace mm
 		{
 			MidiTrack track;
 
-			headerId = readInt32(dataPtr);
-			headerLength = readInt32(dataPtr);
+			headerId = read_uint32_be(dataPtr);
+			headerLength = read_uint32_be(dataPtr);
 
 			if (headerId != 'MTrk') 
 			{
-				std::cerr << "Bad .mid file - couldn't find track" << std::endl;
-				return;
+				throw std::runtime_error("Bad .mid file - couldn't find track header");
 			}
 
 			uint8_t const * dataEnd = dataPtr + headerLength;
 
-			uint8_t runningEvent = 0;
+			MessageType runningEvent = MessageType::NOT_CHANNEL;
 
 			while (dataPtr < dataEnd) 
 			{
-				int duration = readVarInt(dataPtr);
+				auto tick = read_variable_length(dataPtr);
+				auto ev = std::shared_ptr<TrackEvent>(parseEvent(tick, i, dataPtr, runningEvent));
 
-				auto ev = std::shared_ptr<MidiTrackEvent>(parseEvent(dataPtr, runningEvent));
-
-				ev->deltatime = duration;
-
-				ChannelEvent * ce = dynamic_cast<ChannelEvent*>(ev.get());
-				if (ce)
+				if (ev->m->isMetaEvent() == false)
 				{
-					runningEvent = ce->midiCommand;
+					runningEvent = MessageType(ev->m->data[0]);
 				}
 				
-				// Double check
-				track.events.push_back(ev);
+				track.push_back(ev);
 			}
 
 			tracks.push_back(track);
@@ -378,10 +309,9 @@ namespace mm
 		for (const auto t : tracks)
 		{
 			double localLength = 0;
-			auto events = t.events;
-			for (const auto e : events)
+			for (const auto e : t)
 			{
-				localLength += e->deltatime;
+				localLength += e->tick;
 			}
 
 			if (localLength > totalLength) 

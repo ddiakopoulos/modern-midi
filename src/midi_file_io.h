@@ -92,17 +92,9 @@ inline void write_variable_length(uint32_t aValue, std::vector<uint8_t> & outdat
     outdata.push_back(bytes[4]);
 }
     
-struct TrackEvent
-{
-    int tick = 0;
-    int track = 0;
-	std::shared_ptr<MidiMessage> m;
-	TrackEvent(int tick, int track, std::shared_ptr<MidiMessage> m) : tick(tick), track(track), m(m) { }
-};
- 
 class MidiFile
 {
-	std::vector<std::vector<TrackEvent>> tracks;
+	std::vector<MidiTrack> tracks;
 	int ticksPerQuarterNote = 120;
 
 public:

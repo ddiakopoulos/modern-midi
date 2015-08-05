@@ -64,7 +64,7 @@ private:
 
 	void run();
 
-	void addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, MidiTrackEvent * ev);
+	void addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, TrackEvent * ev);
 
 	float beatsPerMinute;
 	double ticksPerBeat;
