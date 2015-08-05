@@ -42,7 +42,6 @@ std::vector<uint8_t> readFile(std::string pathToFile)
     size_t lengthInBytes = ftell(file);
     fseek(file, 0, SEEK_SET);
     
-    // Allocate temporary buffer
     std::vector<uint8_t> fileBuffer(lengthInBytes);
     
     size_t elementsRead = fread(fileBuffer.data(), 1, lengthInBytes, file);
@@ -51,8 +50,7 @@ std::vector<uint8_t> readFile(std::string pathToFile)
         throw std::runtime_error("error reading file or file too small");
 
 	fclose(file);
-
-	// Copy out to user 
+    
 	return fileBuffer;
 }
 
@@ -84,6 +82,7 @@ int main(int argc, char *argv[], char *envp[])
 	reader.parse(readFile("debug.mid"));
 
 	std::this_thread::sleep_for(std::chrono::seconds(10));
+    
     /*
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
 	//auto name = PortManager::GetPortName(mm::PortType::TYPE_OUTPUT, 1);

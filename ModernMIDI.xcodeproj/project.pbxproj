@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08264DD61B726EB4004BE7B2 /* midi_file_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08264DD21B726EB4004BE7B2 /* midi_file_reader.cpp */; };
+		08264DD71B726EB4004BE7B2 /* midi_file_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08264DD41B726EB4004BE7B2 /* midi_file_writer.cpp */; };
 		08567C701B6D68D700EB6C0D /* RtMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */; };
 		08567C841B6D68E200EB6C0D /* midi_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C741B6D68E200EB6C0D /* midi_input.cpp */; };
 		08567C851B6D68E200EB6C0D /* midi_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C771B6D68E200EB6C0D /* midi_output.cpp */; };
@@ -14,7 +16,6 @@
 		08567C871B6D68E200EB6C0D /* music_theory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C7B1B6D68E200EB6C0D /* music_theory.cpp */; };
 		08567C881B6D68E200EB6C0D /* port_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C7D1B6D68E200EB6C0D /* port_manager.cpp */; };
 		08567C891B6D68E200EB6C0D /* sequence_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C801B6D68E200EB6C0D /* sequence_player.cpp */; };
-		08567C8A1B6D68E200EB6C0D /* sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C821B6D68E200EB6C0D /* sequence.cpp */; };
 		08567C8C1B6D68EC00EB6C0D /* sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C8B1B6D68EC00EB6C0D /* sample.cpp */; };
 		08567C8E1B6D801A00EB6C0D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08567C8D1B6D801A00EB6C0D /* CoreFoundation.framework */; };
 		08567C901B6D801E00EB6C0D /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08567C8F1B6D801E00EB6C0D /* CoreMIDI.framework */; };
@@ -36,7 +37,10 @@
 /* Begin PBXFileReference section */
 		08264DCD1B70720A004BE7B2 /* midi_event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = midi_event.h; path = src/midi_event.h; sourceTree = SOURCE_ROOT; };
 		08264DCE1B70720A004BE7B2 /* modernmidi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = modernmidi.h; path = src/modernmidi.h; sourceTree = SOURCE_ROOT; };
-		08264DCF1B7073B7004BE7B2 /* midi_file_io.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = midi_file_io.h; path = src/midi_file_io.h; sourceTree = SOURCE_ROOT; };
+		08264DD21B726EB4004BE7B2 /* midi_file_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_file_reader.cpp; path = src/midi_file_reader.cpp; sourceTree = SOURCE_ROOT; };
+		08264DD31B726EB4004BE7B2 /* midi_file_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_file_reader.h; path = src/midi_file_reader.h; sourceTree = SOURCE_ROOT; };
+		08264DD41B726EB4004BE7B2 /* midi_file_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_file_writer.cpp; path = src/midi_file_writer.cpp; sourceTree = SOURCE_ROOT; };
+		08264DD51B726EB4004BE7B2 /* midi_file_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_file_writer.h; path = src/midi_file_writer.h; sourceTree = SOURCE_ROOT; };
 		08567C601B6D684A00EB6C0D /* ModernMIDI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ModernMIDI; sourceTree = BUILT_PRODUCTS_DIR; };
 		08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RtMidi.cpp; path = third_party/rtmidi/RtMidi.cpp; sourceTree = "<group>"; };
 		08567C6F1B6D68D700EB6C0D /* RtMidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RtMidi.h; path = third_party/rtmidi/RtMidi.h; sourceTree = "<group>"; };
@@ -56,8 +60,6 @@
 		08567C7F1B6D68E200EB6C0D /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = src/timer.h; sourceTree = SOURCE_ROOT; };
 		08567C801B6D68E200EB6C0D /* sequence_player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sequence_player.cpp; path = src/sequence_player.cpp; sourceTree = SOURCE_ROOT; };
 		08567C811B6D68E200EB6C0D /* sequence_player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sequence_player.h; path = src/sequence_player.h; sourceTree = SOURCE_ROOT; };
-		08567C821B6D68E200EB6C0D /* sequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sequence.cpp; path = src/sequence.cpp; sourceTree = SOURCE_ROOT; };
-		08567C831B6D68E200EB6C0D /* sequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sequence.h; path = src/sequence.h; sourceTree = SOURCE_ROOT; };
 		08567C8B1B6D68EC00EB6C0D /* sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sample.cpp; sourceTree = SOURCE_ROOT; };
 		08567C8D1B6D801A00EB6C0D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		08567C8F1B6D801E00EB6C0D /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
@@ -78,6 +80,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08264DD01B726E8A004BE7B2 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				08567C711B6D68E200EB6C0D /* circular_buffer.h */,
+				08567C721B6D68E200EB6C0D /* concurrent_queue.h */,
+				08567C7F1B6D68E200EB6C0D /* timer.h */,
+			);
+			name = util;
+			sourceTree = "<group>";
+		};
+		08264DD11B726E91004BE7B2 /* file_io */ = {
+			isa = PBXGroup;
+			children = (
+				08264DD21B726EB4004BE7B2 /* midi_file_reader.cpp */,
+				08264DD31B726EB4004BE7B2 /* midi_file_reader.h */,
+				08264DD41B726EB4004BE7B2 /* midi_file_writer.cpp */,
+				08264DD51B726EB4004BE7B2 /* midi_file_writer.h */,
+			);
+			name = file_io;
+			sourceTree = "<group>";
+		};
 		08567C571B6D684A00EB6C0D = {
 			isa = PBXGroup;
 			children = (
@@ -118,13 +141,12 @@
 		08567C6B1B6D68B400EB6C0D /* library */ = {
 			isa = PBXGroup;
 			children = (
-				08567C711B6D68E200EB6C0D /* circular_buffer.h */,
-				08567C721B6D68E200EB6C0D /* concurrent_queue.h */,
+				08264DD01B726E8A004BE7B2 /* util */,
+				08264DD11B726E91004BE7B2 /* file_io */,
 				08567C741B6D68E200EB6C0D /* midi_input.cpp */,
 				08567C751B6D68E200EB6C0D /* midi_input.h */,
 				08567C761B6D68E200EB6C0D /* midi_message.h */,
 				08567C771B6D68E200EB6C0D /* midi_output.cpp */,
-				08264DCF1B7073B7004BE7B2 /* midi_file_io.h */,
 				08567C781B6D68E200EB6C0D /* midi_output.h */,
 				08264DCD1B70720A004BE7B2 /* midi_event.h */,
 				08264DCE1B70720A004BE7B2 /* modernmidi.h */,
@@ -134,11 +156,8 @@
 				08567C7C1B6D68E200EB6C0D /* music_theory.h */,
 				08567C7D1B6D68E200EB6C0D /* port_manager.cpp */,
 				08567C7E1B6D68E200EB6C0D /* port_manager.h */,
-				08567C7F1B6D68E200EB6C0D /* timer.h */,
 				08567C801B6D68E200EB6C0D /* sequence_player.cpp */,
 				08567C811B6D68E200EB6C0D /* sequence_player.h */,
-				08567C821B6D68E200EB6C0D /* sequence.cpp */,
-				08567C831B6D68E200EB6C0D /* sequence.h */,
 			);
 			name = library;
 			sourceTree = "<group>";
@@ -220,10 +239,11 @@
 				08567C851B6D68E200EB6C0D /* midi_output.cpp in Sources */,
 				08567C8C1B6D68EC00EB6C0D /* sample.cpp in Sources */,
 				08567C891B6D68E200EB6C0D /* sequence_player.cpp in Sources */,
+				08264DD61B726EB4004BE7B2 /* midi_file_reader.cpp in Sources */,
 				08567C881B6D68E200EB6C0D /* port_manager.cpp in Sources */,
 				08567C861B6D68E200EB6C0D /* midi_utils.cpp in Sources */,
+				08264DD71B726EB4004BE7B2 /* midi_file_writer.cpp in Sources */,
 				08567C871B6D68E200EB6C0D /* music_theory.cpp in Sources */,
-				08567C8A1B6D68E200EB6C0D /* sequence.cpp in Sources */,
 				08567C841B6D68E200EB6C0D /* midi_input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
