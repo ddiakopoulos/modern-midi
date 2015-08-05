@@ -123,27 +123,10 @@ namespace mm
     // Channels are indexed @ 1 to 16 (not 0-15)
     struct MidiMessage
     {
-        uint32_t size;
-        
-        MidiMessage()
-        {
-            data = {0, 0, 0};
-        }
-        
-        MidiMessage(const uint8_t b1, const uint8_t b2, const uint8_t b3, const double ts = 0) : timestamp(ts)
-        {
-            data = {b1, b2, b3};
-        }
-        
-        MidiMessage(const uint8_t b1, const  uint8_t b2, const double ts = 0) : timestamp(ts)
-        {
-            data = {b1, b2};
-        }
-        
-        MidiMessage(const MidiMessage & rhs)
-        {
-            *this = rhs;
-        }
+        MidiMessage() { data = {0, 0, 0}; }
+        MidiMessage(const uint8_t b1, const uint8_t b2, const uint8_t b3, const double ts = 0) : timestamp(ts) { data = {b1, b2, b3}; }
+        MidiMessage(const uint8_t b1, const  uint8_t b2, const double ts = 0) : timestamp(ts) { data = {b1, b2}; }
+        MidiMessage(const MidiMessage & rhs) { *this = rhs; }
         
         MidiMessage & operator = (const MidiMessage & rhs)
         {
@@ -165,20 +148,11 @@ namespace mm
             return 0;
         }
         
-        unsigned char operator [] (size_t i)
-        {
-            return data.at(i);
-        }
+        unsigned char operator [] (size_t i) {  return data.at(i); }
         
-        unsigned char operator [] (size_t i) const
-        {
-            return data.at(i);
-        }
+        unsigned char operator [] (size_t i) const { return data.at(i); }
         
-        bool isMetaEvent() const
-        {
-            return data[0] == 0xFF;
-        }
+        bool isMetaEvent() const { return data[0] == 0xFF; }
         
         uint8_t getMetaEventSubtype() const
         {
