@@ -94,7 +94,7 @@ namespace mm
 				{
 					case MetaEventType::SEQUENCE_NUMBER: 
 					{
-						if (length != 2) throw std::runtime_error("Expected length for sequenceNumber event is 2");
+						if (length != 2) throw std::invalid_argument("Expected length for SEQUENCE_NUMBER event is 2");
 						read_bytes(event->m->data, dataStart, 2);
 						return event;
 					}
@@ -112,30 +112,30 @@ namespace mm
 					
 					case MetaEventType::END_OF_TRACK: 
 					{
-						if (length != 0) throw std::runtime_error("Expected length for endOfTrack event is 0");
+						if (length != 0) throw std::invalid_argument("Expected length for END_OF_TRACK event is 0");
 						return event;
 					}
 					case MetaEventType::TEMPO_CHANGE: 
 					{
-						if (length != 3) throw std::runtime_error("Expected length for setTempo event is 3");
+						if (length != 3) throw std::invalid_argument("Expected length for TEMPO_CHANGE event is 3");
 						event->m->data[3] = read_uint24_be(dataStart);
 						return event;
 					}
 					case MetaEventType::SMPTE_OFFSET: 
 					{
-						if (length != 5) throw std::runtime_error("Expected length for smpteOffset event is 5");
+						if (length != 5) throw std::invalid_argument("Expected length for SMPTE_OFFSET event is 5");
 						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
 					case MetaEventType::TIME_SIGNATURE: 
 					{
-						if (length != 4) throw std::runtime_error("Expected length for timeSignature event is 4");
+						if (length != 4) throw std::invalid_argument("Expected length for TIME_SIGNATURE event is 4");
 						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
 					case MetaEventType::KEY_SIGNATURE: 
 					{
-						if (length != 2) throw std::runtime_error("Expected length for keySignature event is 2");
+						if (length != 2) throw std::invalid_argument("Expected length for KEY_SIGNATURE event is 2");
 						read_bytes(event->m->data, dataStart, length);
 						return event;
 					}
