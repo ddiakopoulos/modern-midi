@@ -73,9 +73,6 @@ namespace mm
         TIME_SIGNATURE 		= 0x58,
         KEY_SIGNATURE 		= 0x59,
         PROPRIETARY 		= 0x7F,
-        // Deprecated Messages
-        CHANNELPREFIX 		= 0x20,
-        MIDIPORT 			= 0x21,
         UNKNOWN 			= 0xFF
     };
     
@@ -237,8 +234,8 @@ namespace mm
 
 		std::vector<uint8_t> size = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-		int length = text.size();
-		int varLength =  make_variable_length(size, length);
+		auto length = text.size();
+		auto varLength =  make_variable_length(size, length);
 
 		message.resize(2 + varLength + length);
 		message[0] = 0xFF;	// set meta field

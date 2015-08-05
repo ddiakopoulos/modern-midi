@@ -53,7 +53,9 @@ TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, Message
 				case MetaEventType::INSTRUMENT: 
 				case MetaEventType::LYRIC: 
 				case MetaEventType::MARKER: 
-				case MetaEventType::CUE: 						
+				case MetaEventType::CUE:
+                case MetaEventType::PATCH_NAME:
+                case MetaEventType::DEVICE_NAME:
 				{
 					read_bytes(event->m->data, dataStart, length);
 					return event;
@@ -93,11 +95,14 @@ TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, Message
 					read_bytes(event->m->data, dataStart, length);
 					return event;
 				}
+                case MetaEventType::UNKNOWN:
+                default:
+                {
+                    // Unknown events?
+                    read_bytes(event->m->data, dataStart, length);
+                    return event;
+                }
 			}
-
-			// Unknown events? 
-			read_bytes(event->m->data, dataStart, length);
-			return event;
 		}
 
 		else if (type == MessageType::SYSTEM_EXCLUSIVE) 
@@ -167,7 +172,6 @@ TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, Message
 				throw std::runtime_error("Unrecognised MIDI event type");
 		}
 	}
-	throw std::runtime_error("Unparsed event");
 }
 
 MidiFileReader::MidiFileReader() : tracks(0), ticksPerBeat(240), startingTempo(120)
@@ -228,7 +232,7 @@ void MidiFileReader::parseInternal(const std::vector<uint8_t> & buffer)
 
 		MessageType runningEvent = MessageType::INVALID;
 
-		uint64_t absoluteTickCount = 0;
+		int absoluteTickCount = 0;
 
 		while (dataPtr < dataEnd) 
 		{
