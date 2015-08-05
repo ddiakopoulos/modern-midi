@@ -226,7 +226,7 @@ void MidiFileReader::parseInternal(const std::vector<uint8_t> & buffer)
 
 		uint8_t const * dataEnd = dataPtr + headerLength;
 
-		MessageType runningEvent = MessageType::NOT_CHANNEL;
+		MessageType runningEvent = MessageType::INVALID;
 
 		uint64_t absoluteTickCount = 0;
 

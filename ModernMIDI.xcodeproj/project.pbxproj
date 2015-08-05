@@ -101,6 +101,19 @@
 			name = file_io;
 			sourceTree = "<group>";
 		};
+		08264DD81B727070004BE7B2 /* realtime_io */ = {
+			isa = PBXGroup;
+			children = (
+				08567C741B6D68E200EB6C0D /* midi_input.cpp */,
+				08567C751B6D68E200EB6C0D /* midi_input.h */,
+				08567C771B6D68E200EB6C0D /* midi_output.cpp */,
+				08567C781B6D68E200EB6C0D /* midi_output.h */,
+				08567C7D1B6D68E200EB6C0D /* port_manager.cpp */,
+				08567C7E1B6D68E200EB6C0D /* port_manager.h */,
+			);
+			name = realtime_io;
+			sourceTree = "<group>";
+		};
 		08567C571B6D684A00EB6C0D = {
 			isa = PBXGroup;
 			children = (
@@ -143,19 +156,14 @@
 			children = (
 				08264DD01B726E8A004BE7B2 /* util */,
 				08264DD11B726E91004BE7B2 /* file_io */,
-				08567C741B6D68E200EB6C0D /* midi_input.cpp */,
-				08567C751B6D68E200EB6C0D /* midi_input.h */,
+				08264DD81B727070004BE7B2 /* realtime_io */,
 				08567C761B6D68E200EB6C0D /* midi_message.h */,
-				08567C771B6D68E200EB6C0D /* midi_output.cpp */,
-				08567C781B6D68E200EB6C0D /* midi_output.h */,
 				08264DCD1B70720A004BE7B2 /* midi_event.h */,
 				08264DCE1B70720A004BE7B2 /* modernmidi.h */,
 				08567C791B6D68E200EB6C0D /* midi_utils.cpp */,
 				08567C7A1B6D68E200EB6C0D /* midi_utils.h */,
 				08567C7B1B6D68E200EB6C0D /* music_theory.cpp */,
 				08567C7C1B6D68E200EB6C0D /* music_theory.h */,
-				08567C7D1B6D68E200EB6C0D /* port_manager.cpp */,
-				08567C7E1B6D68E200EB6C0D /* port_manager.h */,
 				08567C801B6D68E200EB6C0D /* sequence_player.cpp */,
 				08567C811B6D68E200EB6C0D /* sequence_player.h */,
 			);

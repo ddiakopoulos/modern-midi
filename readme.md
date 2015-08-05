@@ -1,41 +1,32 @@
-# midi
+# ModernMIDI
 
-templates! cpp11! 
+It's got templates! And c++11! 
 
-## todo
+### ToDo
 - [X] build message factories
 - [X] rename MidiRtMessage + fix
 - [X] cross platform thread priority 
 - [X] cross-platform timer
-- [ ] Flesh out MidiFile struct
+- [X] Flesh out MidiFile struct
+- [X] Convert Nick's midi parster to new message type
+- [X] Nuke events
+- [X] Initial file writing support
 - [ ] MidiFile sanity checks before writing (1 track, enough events, etc)
-- [ ] Test multiple tracks
+- [ ] Sanity checks while reading (see todo list embedded in file)
+- [ ] Test multiple tracks (reading + writing)
 - [ ] Midi timing utilities
+- [ ] Sort tracks (out of order timed events)
 - [ ] Write all common meta events
-- [ ] Sort tracks
-- [ ] Convert Nick's midi parster to new message type
-- [ ] Nuke events
+- [ ] Link note pairs (on/off)
+- [ ] Refactor scales/chords
+- [ ] Tempo/BPM/ticks/timing (absolute vs relative)
 - [ ] Take a look at mem mgmt
+- [ ] Time map => ticks relative to overall file with several tempo events
 
-- tick2frame, second2tick, frame2tick
-- bpm utilities 
-- generate scales
-- tuning conversions
-- midi clock generator
-- euclidean rhythm generator
-- write midi files
-- controller remapping
-
-https://github.com/dliganov/Chaotic-DAW/blob/0d5c204887a43669ed86a52925571b52829a19a3/rosic/basics/GlobalFunctions.h
-https://github.com/dliganov/Chaotic-DAW/blob/0d5c204887a43669ed86a52925571b52829a19a3/Awful_utils_common.h
-
-https://github.com/ptarabbia/midiFileWriter/blob/master/midiFileWriter.cpp
-
-https://github.com/perttu606/midi-clock
-
-https://github.com/ahiijny/SynthTest/blob/7d4c473395cbdad6bdc6cac57249bcc73a6a1327/MidiManipulationClasses/MidiWriter.cpp
-
-https://github.com/mynameisntrick/musikinformatik/blob/0ee302c79b370ae9124e0aab907756efb72c59d1/TestMidi/Midi/MidiMessage.h
-https://github.com/mynameisntrick/musikinformatik/blob/0ee302c79b370ae9124e0aab907756efb72c59d1/TestMidi/Midi/Binasc.h
-https://github.com/craigsapp/improv/blob/master/include/MidiFile.h
-https://github.com/craigsapp/midifile -> write routine is pretty legit 
+### Longer Term
+- [ ] Other helpful concepts, like tuning systems
+- [ ] Controller remapping (keyboards, other midi devices)
+- [ ] Virtual midi driver for Windows
+- [ ] MIDI clock source/generator
+- [ ] SMPTE support
+- [ ] Better SysEx test 

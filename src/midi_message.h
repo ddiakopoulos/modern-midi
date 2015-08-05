@@ -20,7 +20,7 @@ namespace mm
     
     enum class MessageType : uint8_t
     {
-		NOT_CHANNEL		   = 0x0,
+		INVALID             = 0x0,
         // Standard Message
         NOTE_OFF           = 0x80,
         NOTE_ON            = 0x90,

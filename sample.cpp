@@ -58,6 +58,8 @@ using namespace mm;
 
 int main(int argc, char *argv[], char *envp[])
 {
+    
+    // Write Test
     MidiFileWriter myFile;
 
     myFile.addTrack();
@@ -78,6 +80,7 @@ int main(int argc, char *argv[], char *envp[])
     
     std::cout << "Done!" << std::endl;
 
+    // Read Test
 	MidiFileReader reader;
 	reader.parse(readFile("debug.mid"));
 

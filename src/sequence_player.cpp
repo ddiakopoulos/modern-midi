@@ -122,7 +122,7 @@ void MidiSequencePlayer::run()
 		auto outputMsg = eventList[eventCursor];
 
 		// Spin until next loop 
-		while ( (timer.running_time_ms()) <= (outputMsg.timestamp))
+		while ((timer.running_time_ms()) <= (outputMsg.timestamp))
 		{
 			// Spinny spin spin.
 		}
