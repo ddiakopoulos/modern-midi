@@ -19,6 +19,14 @@ void MidiFileWriter::addEvent(int tick, int track, std::shared_ptr<MidiMessage> 
 	tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
 }
 
+void MidiFileWriter::addEvent(int track, std::shared_ptr<TrackEvent> m)
+{
+    if (track > tracks.size())
+        throw std::invalid_argument("track exceeds availble tracks");
+    
+    tracks[track].push_back(m);
+}
+
 void MidiFileWriter::write(std::ostream & out)
 {
     // MIDI File Header

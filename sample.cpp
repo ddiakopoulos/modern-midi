@@ -59,6 +59,36 @@ using namespace mm;
 int main(int argc, char *argv[], char *envp[])
 {
     
+    MidiFileReader reader;
+    reader.useAbsoluteTicks = false;
+    reader.parse(readFile("midifonts.mid"));
+    
+    // Track = 0 meta, Track 27 = debug
+    
+    MidiFileWriter theLetterA;
+    theLetterA.setTicksPerQuarterNote(480);
+    
+    theLetterA.addTrack();
+
+    auto aTrack = reader.tracks[1];
+    
+    for (int i = 0; i < aTrack.size(); i++)
+    {
+        auto event = aTrack[i];
+        if (event->m->isNoteOnOrOff())
+        {
+            theLetterA.addEvent(0, event);
+        }
+    }
+    
+    std::fstream output("loopback_a.mid", std::ios::out);
+    theLetterA.write(output);
+    
+    output.close();
+
+    
+    /*
+     
     // Write Test
     MidiFileWriter myFile;
 
@@ -86,7 +116,8 @@ int main(int argc, char *argv[], char *envp[])
 
 	std::this_thread::sleep_for(std::chrono::seconds(10));
     
-    /*
+    // ============================
+    
 	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
 	//auto name = PortManager::GetPortName(mm::PortType::TYPE_OUTPUT, 1);
 

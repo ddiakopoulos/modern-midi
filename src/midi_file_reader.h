@@ -64,7 +64,6 @@ inline uint32_t read_uint32_be(uint8_t const *& data)
 class MidiFileReader 
 {
 	void parseInternal(const std::vector<uint8_t> & buffer);
-
 public:
 
 	MidiFileReader();
@@ -76,7 +75,9 @@ public:
 		
 	float ticksPerBeat; // precision (number of ticks distinguishable per second)
 	float startingTempo;
-
+    
+    bool useAbsoluteTicks = false;
+    
 	std::vector<MidiTrack> tracks;
 };
 

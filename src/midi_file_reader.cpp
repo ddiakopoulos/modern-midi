@@ -174,7 +174,7 @@ TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, Message
 	}
 }
 
-MidiFileReader::MidiFileReader() : tracks(0), ticksPerBeat(240), startingTempo(120)
+MidiFileReader::MidiFileReader() : tracks(0), ticksPerBeat(120), startingTempo(120)
 {
 		
 }
@@ -232,14 +232,22 @@ void MidiFileReader::parseInternal(const std::vector<uint8_t> & buffer)
 
 		MessageType runningEvent = MessageType::INVALID;
 
-		int absoluteTickCount = 0;
+		int tickCount = 0;
 
 		while (dataPtr < dataEnd) 
 		{
 			auto tick = read_variable_length(dataPtr);
-			absoluteTickCount += tick;
+            
+            if (useAbsoluteTicks)
+            {
+                tickCount += tick;
+            }
+            else
+            {
+                tickCount = tick;
+            }
 
-			auto ev = std::shared_ptr<TrackEvent>(parseEvent(absoluteTickCount, i, dataPtr, runningEvent));
+			auto ev = std::shared_ptr<TrackEvent>(parseEvent(tickCount, i, dataPtr, runningEvent));
 
 			if (ev->m->isMetaEvent() == false)
 			{

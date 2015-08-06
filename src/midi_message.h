@@ -163,6 +163,12 @@ namespace mm
             else { return data[0] & 0xF0; }
         }
         
+        bool isNoteOnOrOff() const
+        {
+            const auto status = getMessageType();
+            return (status == (uint8_t) MessageType::NOTE_ON) || (status == (uint8_t) MessageType::NOTE_OFF);
+        }
+        
         size_t messageSize() const { return data.size(); }
         
         double timestamp = 0;

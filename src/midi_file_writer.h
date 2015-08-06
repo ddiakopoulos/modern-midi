@@ -106,6 +106,10 @@ public:
 	int getTicksPerQuarterNote() { return ticksPerQuarterNote; }
 
 	void addEvent(int tick, int track, std::shared_ptr<MidiMessage> m);
+    void addEvent(int track, std::shared_ptr<TrackEvent> m);
+    
+    void setTicksPerQuarterNote(int tpqn) { ticksPerQuarterNote = tpqn; }
+    
 	void addTrack(); 
 
 	void write(std::ostream & out); 
