@@ -2371,7 +2371,10 @@ void MidiOutWinMM :: sendMessage( std::vector<unsigned char> *message )
     }
 
     // Unprepare the buffer and MIDIHDR.
-    while ( MIDIERR_STILLPLAYING == midiOutUnprepareHeader( data->outHandle, &sysex, sizeof (MIDIHDR) ) ) Sleep( 1 );
+    while ( MIDIERR_STILLPLAYING == midiOutUnprepareHeader( data->outHandle, &sysex, sizeof (MIDIHDR) ) )
+	{
+		Sleep( 1 );
+	}
     free( buffer );
   }
   else { // Channel or system message.

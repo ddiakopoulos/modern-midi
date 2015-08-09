@@ -85,8 +85,8 @@ void MidiOutput::closePort()
 
 bool MidiOutput::sendRaw(std::vector<unsigned char> msg)
 {
-	if (!outputDevice) throw std::runtime_error("output device not initialized");
-	if (!attached) throw std::runtime_error("interface not bound to a port");
+	//if (!outputDevice) throw std::runtime_error("output device not initialized");
+	//if (!attached) throw std::runtime_error("interface not bound to a port");
 	try 
 	{
 		outputDevice->sendMessage(&msg);

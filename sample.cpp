@@ -24,6 +24,8 @@
 #include "midi_file_reader.h"
 #include "midi_file_writer.h"
 
+#include "sequence_player.h"
+
 std::random_device rd;
 std::mt19937 gen(rd());
 
@@ -56,138 +58,133 @@ std::vector<uint8_t> readFile(std::string pathToFile)
 
 using namespace mm;
 
+
+std::vector<int> NameToIndices(const std::string & name)
+{
+	std::vector<int> indices;
+
+	for (auto & c : name) 
+	{
+		if (c == 'a') indices.push_back(0);
+		if (c == 'b') indices.push_back(1);
+		if (c == 'c') indices.push_back(2);
+		if (c == 'd') indices.push_back(3);
+		if (c == 'e') indices.push_back(4);
+		if (c == 'f') indices.push_back(5);
+		if (c == 'g') indices.push_back(6);
+		if (c == 'h') indices.push_back(7);
+		if (c == 'i') indices.push_back(8);
+		if (c == 'j') indices.push_back(9);
+		if (c == 'k') indices.push_back(10);
+		if (c == 'l') indices.push_back(11);
+		if (c == 'm') indices.push_back(12);
+		if (c == 'n') indices.push_back(13);
+		if (c == 'o') indices.push_back(14);
+		if (c == 'p') indices.push_back(15);
+		if (c == 'q') indices.push_back(16);
+		if (c == 'r') indices.push_back(17);
+		if (c == 's') indices.push_back(18);
+		if (c == 't') indices.push_back(19);
+		if (c == 'u') indices.push_back(20);
+		if (c == 'v') indices.push_back(21);
+		if (c == 'w') indices.push_back(22);
+		if (c == 'x') indices.push_back(23);
+		if (c == 'y') indices.push_back(24);
+		if (c == 'z') indices.push_back(25);
+	}
+
+	return indices;
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
-    
     MidiFileReader reader;
     reader.useAbsoluteTicks = false;
     reader.parse(readFile("midifonts.mid"));
-    
-    // Track = 0 meta, Track 27 = debug
-    
-    MidiFileWriter theLetterA;
-    theLetterA.setTicksPerQuarterNote(480);
-    
-    theLetterA.addTrack();
 
-    auto aTrack = reader.tracks[1];
-    
-    for (int i = 0; i < aTrack.size(); i++)
-    {
-        auto event = aTrack[i];
-        if (event->m->isNoteOnOrOff())
-        {
-            theLetterA.addEvent(0, event);
-        }
-    }
-    
-    std::fstream output("loopback_a.mid", std::ios::out);
-    theLetterA.write(output);
-    
-    output.close();
+	std::vector<MidiTrack> letters;
 
-    
-    /*
-     
-    // Write Test
-    MidiFileWriter myFile;
-
-    myFile.addTrack();
-	myFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTextMetaEvent(MetaEventType::TRACK_NAME, "test")));
-    myFile.addEvent(120, 0, std::make_shared<MidiMessage>(MakeNoteOn(1, 60, 96)));
-	myFile.addEvent(360, 0, std::make_shared<MidiMessage>(MakeNoteOff(1, 60, 0)));
-   
-    std::fstream output("test.mid", std::ios::out);
-    
-    if (!output.is_open())
-    {
-        std::cerr << "couldn't open... " << std::endl;
-    }
-    
-    myFile.write(output);
-    
-    output.close();
-    
-    std::cout << "Done!" << std::endl;
-
-    // Read Test
-	MidiFileReader reader;
-	reader.parse(readFile("debug.mid"));
-
-	std::this_thread::sleep_for(std::chrono::seconds(10));
-    
-    // ============================
-    
-	PortManager::PrintPortList(mm::PortType::TYPE_OUTPUT);
-	//auto name = PortManager::GetPortName(mm::PortType::TYPE_OUTPUT, 1);
-
-	std::vector<std::vector<int>> scales = 
+	// Map 0-26 = A through Z
+	for (int i = 1; i < 27; i++)
 	{
-		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-		{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 },
-		{ 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 1, 0 },
-		{ 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 0, -1 },
-		{ 0, 1, 0, 1, 0, -1, 1, 0, 1, 0, -1, 1 },
-		{ 0, -1, 1, 0, -1, 0, 1, 0, -1, 1, 0, -1 },
-		{ 0, 1, 0, 0, -1, 0, 1, 0, 1, 0, 0, -1 },
-		{ 0, 0, -1, 0, -1, 0, 1, 0, 0, -1, 0, -1 },
-		{ 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 },
-		{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, -1 },
-		{ 0, 0, -1, 0, -1, 0, 0, -1, 0, -1, 0, -1 },
-		{ 0, 0, -1, 1, 0, 0, 1, 0, 0, -1, 1, 0 },
-		{ 0, 1, 0, 0, -1, 0, 0, -1, 0, -1, 0, -1}
-	};
-
-	std::vector<int> progression = {0, -5, 2, -3, 4, -1, 6, 1, -4, 3, -2, 5};
-
-	int progressionState = 0; 
-	int baseNote = 0;
-	int centerNote = 0;
-	int mode = 5;
-
-	//if (transpose)
-	//{
-	//		progressionState = (progressionState + 1) % 12;
-	//		baseNote = centerNote + progression[progressionState];
-	//}
-
-	int transposedNote = 0;
-	int scaleIndexToUse = transposedNote % 12;
-	int modifier = scales[5][scaleIndexToUse];
-    
-    auto msg = mm::MakeNoteOn(2, 60, 127);
-
-	MidiOutput hiduino("hiduino device");
-	bool success = hiduino.openPort(1);
-
-    
-	uint8_t scaleIdx = 0;
-
-	auto randomScaleDegree = std::uniform_int_distribution<int>(1, 7);
-
-	for (int i = 0; i < 128; i++)
-	{
-		if (i % 4 == 0)
-		{
-			hiduino.send(MakeNoteOn(1, scaleIdx, 1));
-		}
-
-		if (i % 8 == 0)
-		{
-			hiduino.send(MakeNoteOn(1, uint8_t(randomScaleDegree(gen)), 1));
-		}
-
-		if (i % 16 == 0)
-		{
-			scaleIdx++;
-		}
-
-		std::this_thread::sleep_for(std::chrono::microseconds(16 * 8333)); // 120 bpm
+		letters.push_back(reader.tracks[i]);
 	}
-     
-    */
+
+	auto trackIndices = NameToIndices("juliusrosenberg");
+
+	trackIndices.size();
+
+	std::vector<MidiTrack> dimitriName;
+	for (auto idx : trackIndices)
+	{
+		dimitriName.push_back(letters[idx]);
+	}
+
+	dimitriName.size();
+
+	PortManager::PrintPortList(TYPE_OUTPUT);
+
+	std::vector<MidiTrack> testSequence;
+	
+	MidiTrack t;
+
+	for (int w = 0; w < 128; w++)
+	{
+		for (int i = 0; i < 12; i++)
+		{
+			auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60 + i, 80));
+			auto te = std::make_shared<TrackEvent>(0, 0, msg);
+			t.push_back(te);
+		}
+
+		auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 62, 80));
+		auto te = std::make_shared<TrackEvent>(480, 0, msg); // with delta ticks... 
+		t.push_back(te);
+
+		for (int i = 0; i < 12; i++)
+		{
+			auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60 + i, 80));
+			auto te = std::make_shared<TrackEvent>(0, 0, msg); // with delta ticks... 
+			t.push_back(te);
+		}
+
+		msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 62, 80));
+		te = std::make_shared<TrackEvent>(480, 0, msg); // with delta ticks... 
+		t.push_back(te);
+
+		for (int i = 0; i < 12; i++)
+		{
+			auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60 + i, 80));
+			auto te = std::make_shared<TrackEvent>(0, 0, msg);
+			t.push_back(te);
+		}
+
+	}
+
+	testSequence.push_back(t);
+		
+	MidiOutput dripper("mio");
+	bool success = dripper.openPort(1);
+
+	MidiSequencePlayer player(dripper);
+
+	if (success)
+	{
+		player.loadSequence(dimitriName);
+
+		player.eventCallback = [&](const MidiPlayerEvent ev)
+		{
+			//dripper.send(*ev.msg.get());
+		};
+
+		player.start();
+	}
+
+	while(true)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
 
 
-    
 	return 0;
 }
