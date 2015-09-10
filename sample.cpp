@@ -20,6 +20,7 @@
 #include "midi_output.h"
 #include "midi_message.h"
 #include "midi_event.h"
+#include "midi_input.h"
 
 #include "midi_file_reader.h"
 #include "midi_file_writer.h"
@@ -159,23 +160,42 @@ int main(int argc, char *argv[], char *envp[])
 	MidiOutput dripper("mio");
 	MidiSequencePlayer player(dripper);
 
-	bool success = dripper.openPort(1);
+	MidiInput trigger("mio");
 
+	bool success = dripper.openPort(1);
+	bool triggerSuccess = trigger.openPort(1);
+
+	auto start_installation = [&]()
+	{
+		// Turn lights on 
+		dripper.send(MakeProgramChange(1, 124));
+		auto random_name_sequence = choose_random_name(nameList);
+		std::cout << "Selected Name: " << names[g_lastIdx] << std::endl;
+		player.loadSequence(random_name_sequence);
+		player.start();
+	};
+
+	// Input Callback
+	trigger.messageCallback = [&](const mm::MidiMessage msg)
+	{
+		std::cout << "Msg.data1: " << msg.data[1] << std::endl;
+		if (msg.isNoteOnOrOff() && msg.data[1] == 64)
+		{
+			start_installation();
+		}
+	};
+
+	// Stopped Event
+	player.stoppedEvent = [&]()
+	{
+		// turn lights off
+		dripper.send(MakeProgramChange(1, 125));
+	};
+
+	// Initial
 	if (success)
 	{
-		dripper.send(MakeProgramChange(1, 124));
-
-		auto random_name = choose_random_name(nameList);
-		std::cout << "Selected Name: " << names[g_lastIdx] << std::endl;
-		player.loadSequence(random_name);
-
-		player.stoppedEvent = [&]()
-		{
-			player.loadSequence(choose_random_name(nameList));
-			dripper.send(MakeProgramChange(1, 125));
-		};
-
-		player.start();
+		start_installation();
 	}
 
 	while(true)

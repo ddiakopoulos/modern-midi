@@ -107,8 +107,7 @@ void MidiSequencePlayer::run()
 
 		while((timer.running_time_s()) <= (outputMsg.timestamp))
 		{
-			continue;
-			// Spinny spin spin.
+			continue; // Spinny spin spin.
 		}
 
 		output.send(*outputMsg.msg);
@@ -126,7 +125,11 @@ void MidiSequencePlayer::run()
 		run();
 		
 	if (stoppedEvent)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 		stoppedEvent();
+	}
+		
 }
 
 void MidiSequencePlayer::stop()
