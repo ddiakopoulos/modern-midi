@@ -96,8 +96,30 @@ std::vector<int> generate_string_track_indicies(const std::string & name)
 	return indices;
 }
 
+std::vector<std::string> parse_text_file(const std::string & path)
+{
+	std::vector<std::string> names;
+	std::string newLine;
+	std::ifstream infile(path, std::ios_base::in);
+	while (getline(infile, newLine, '\n'))
+		names.push_back(newLine);
+
+	std::cout << "Read " << names.size() << " names.\n";
+
+	return names;
+}
+
+std::vector<MidiTrack> choose_random_name(std::vector<std::vector<MidiTrack>> & list)
+{
+	std::uniform_int_distribution<uint32_t> distribution(0, list.size() - 1);
+	auto idx = distribution(gen);
+	return list[idx];
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
+
+
     MidiFileReader reader;
     reader.useAbsoluteTicks = false;
     reader.parse(read_file_binary("midifonts.mid"));
@@ -111,6 +133,10 @@ int main(int argc, char *argv[], char *envp[])
 	}
 
 	auto letterIndicies = generate_string_track_indicies("juliusrosenberg");
+
+	parse_text_file("dripper_names.txt");
+
+	std::vector<std::vector<MidiTrack>> nameList;
 
 	std::vector<MidiTrack> dimitriName;
 	for (auto idx : letterIndicies)
@@ -128,6 +154,12 @@ int main(int argc, char *argv[], char *envp[])
 	if (success)
 	{
 		player.loadSequence(dimitriName);
+
+		player.stoppedEvent = [&]()
+		{
+			player.loadSequence(choose_random_name(nameList));
+		};
+
 		player.start();
 	}
 
