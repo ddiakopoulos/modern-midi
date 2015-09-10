@@ -46,12 +46,12 @@ void MidiSequencePlayer::loadSequence(const std::vector<MidiTrack> & tracks)
 			if (m->m->getMessageType() == (uint8_t) MessageType::NOTE_ON) addTimestampedEvent(trackIdx, deltaTimestampInSeconds, m); // already checks if non-meta message
 		}
 
-		std::cout << "Track Idx: " << trackIdx << std::endl;
-		std::cout << "Local Elapsed Ticks " << localElapsedTicks << std::endl;
+		//std::cout << "Track Idx: " << trackIdx << std::endl;
+		//std::cout << "Local Elapsed Ticks " << localElapsedTicks << std::endl;
 		trackIdx++;
 	}
 
-	std::cout << "Event List Size: " << eventList.size() << std::endl;
+	std::cout << "[New Sequence] Event List Size: " << eventList.size() << std::endl;
 }
 
 void MidiSequencePlayer::start()

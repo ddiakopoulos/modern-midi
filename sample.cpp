@@ -104,7 +104,7 @@ std::vector<std::string> parse_text_file(const std::string & path)
 	while (getline(infile, newLine, '\n'))
 		names.push_back(newLine);
 
-	std::cout << "Read " << names.size() << " names.\n";
+	std::cout << "#### Read " << names.size() << " names!\n";
 
 	return names;
 }
@@ -113,36 +113,42 @@ std::vector<MidiTrack> choose_random_name(std::vector<std::vector<MidiTrack>> & 
 {
 	std::uniform_int_distribution<uint32_t> distribution(0, list.size() - 1);
 	auto idx = distribution(gen);
+	std::cout << "new random idx: " << idx << std::endl;
 	return list[idx];
+}
+
+std::vector<std::vector<MidiTrack>> build_name_list(const std::vector<std::string> & names, const std::vector<MidiTrack> & letters)
+{
+	std::vector<std::vector<MidiTrack>> list;
+
+	for (const auto name : names)
+	{
+		std::vector<MidiTrack> newName;
+		auto lettersInName = generate_string_track_indicies(name);
+		for (const auto l : lettersInName)
+		{
+			newName.push_back(letters[l]);
+		}
+		list.push_back(newName);
+	}
+	return list;
 }
 
 int main(int argc, char *argv[], char *envp[])
 {
-
-
     MidiFileReader reader;
     reader.useAbsoluteTicks = false;
     reader.parse(read_file_binary("midifonts.mid"));
 
 	std::vector<MidiTrack> letters;
-
 	// Map 0-26 = A through Z
 	for (int i = 1; i < 27; i++)
 	{
 		letters.push_back(reader.tracks[i]);
 	}
 
-	auto letterIndicies = generate_string_track_indicies("juliusrosenberg");
-
-	parse_text_file("dripper_names.txt");
-
-	std::vector<std::vector<MidiTrack>> nameList;
-
-	std::vector<MidiTrack> dimitriName;
-	for (auto idx : letterIndicies)
-	{
-		dimitriName.push_back(letters[idx]);
-	}
+	auto names = parse_text_file("dripper_names.txt");
+	std::vector<std::vector<MidiTrack>> nameList = build_name_list(names, letters);
 
 	PortManager::PrintPortList(TYPE_OUTPUT);
 		
@@ -153,7 +159,8 @@ int main(int argc, char *argv[], char *envp[])
 
 	if (success)
 	{
-		player.loadSequence(dimitriName);
+		auto random_name = choose_random_name(nameList);
+		player.loadSequence(random_name);
 
 		player.stoppedEvent = [&]()
 		{
