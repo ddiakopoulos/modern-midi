@@ -156,14 +156,15 @@ int main(int argc, char *argv[], char *envp[])
 	std::cout << "#### Complete size of name list: " << nameList.size() << std::endl;
 
 	PortManager::PrintPortList(TYPE_OUTPUT);
-		
+	PortManager::PrintPortList(TYPE_INPUT);
+
 	MidiOutput dripper("mio");
 	MidiSequencePlayer player(dripper);
 
 	MidiInput trigger("mio");
 
 	bool success = dripper.openPort(1);
-	bool triggerSuccess = trigger.openPort(1);
+	bool triggerSuccess = trigger.openPort(0);
 
 	auto start_installation = [&]()
 	{
@@ -179,7 +180,7 @@ int main(int argc, char *argv[], char *envp[])
 	trigger.messageCallback = [&](const mm::MidiMessage msg)
 	{
 		std::cout << "Msg.data1: " << msg.data[1] << std::endl;
-		if (msg.isNoteOnOrOff() && msg.data[1] == 64)
+		if (msg.getMessageType() == (uint8_t) MessageType::NOTE_ON && msg.data[1] == 60)
 		{
 			start_installation();
 		}
@@ -195,7 +196,7 @@ int main(int argc, char *argv[], char *envp[])
 	// Initial
 	if (success)
 	{
-		start_installation();
+		//start_installation();
 	}
 
 	while(true)
