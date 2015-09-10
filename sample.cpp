@@ -109,11 +109,14 @@ std::vector<std::string> parse_text_file(const std::string & path)
 	return names;
 }
 
+int g_lastIdx = 0;
+
 std::vector<MidiTrack> choose_random_name(std::vector<std::vector<MidiTrack>> & list)
 {
 	std::uniform_int_distribution<uint32_t> distribution(0, list.size() - 1);
 	auto idx = distribution(gen);
 	std::cout << "new random idx: " << idx << std::endl;
+	g_lastIdx = idx;
 	return list[idx];
 }
 
@@ -160,12 +163,16 @@ int main(int argc, char *argv[], char *envp[])
 
 	if (success)
 	{
+		dripper.send(MakeProgramChange(1, 124));
+
 		auto random_name = choose_random_name(nameList);
+		std::cout << "Selected Name: " << names[g_lastIdx] << std::endl;
 		player.loadSequence(random_name);
 
 		player.stoppedEvent = [&]()
 		{
 			player.loadSequence(choose_random_name(nameList));
+			dripper.send(MakeProgramChange(1, 125));
 		};
 
 		player.start();
