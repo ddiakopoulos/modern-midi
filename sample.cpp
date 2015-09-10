@@ -149,6 +149,7 @@ int main(int argc, char *argv[], char *envp[])
 
 	auto names = parse_text_file("dripper_names.txt");
 	std::vector<std::vector<MidiTrack>> nameList = build_name_list(names, letters);
+	std::cout << "#### Complete size of name list: " << nameList.size() << std::endl;
 
 	PortManager::PrintPortList(TYPE_OUTPUT);
 		
