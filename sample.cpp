@@ -29,7 +29,7 @@
 std::random_device rd;
 std::mt19937 gen(rd());
 
-std::vector<uint8_t> readFile(std::string pathToFile)
+std::vector<uint8_t> read_file_binary(std::string pathToFile)
 {
 	std::cout << "[Debug] Open: " << pathToFile << std::endl;
     
@@ -59,7 +59,7 @@ std::vector<uint8_t> readFile(std::string pathToFile)
 using namespace mm;
 
 
-std::vector<int> NameToIndices(const std::string & name)
+std::vector<int> generate_string_track_indicies(const std::string & name)
 {
 	std::vector<int> indices;
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[], char *envp[])
 {
     MidiFileReader reader;
     reader.useAbsoluteTicks = false;
-    reader.parse(readFile("midifonts.mid"));
+    reader.parse(read_file_binary("midifonts.mid"));
 
 	std::vector<MidiTrack> letters;
 
@@ -110,81 +110,31 @@ int main(int argc, char *argv[], char *envp[])
 		letters.push_back(reader.tracks[i]);
 	}
 
-	auto trackIndices = NameToIndices("juliusrosenberg");
-
-	trackIndices.size();
+	auto letterIndicies = generate_string_track_indicies("juliusrosenberg");
 
 	std::vector<MidiTrack> dimitriName;
-	for (auto idx : trackIndices)
+	for (auto idx : letterIndicies)
 	{
 		dimitriName.push_back(letters[idx]);
 	}
 
-	dimitriName.size();
-
 	PortManager::PrintPortList(TYPE_OUTPUT);
-
-	std::vector<MidiTrack> testSequence;
-	
-	MidiTrack t;
-
-	for (int w = 0; w < 128; w++)
-	{
-		for (int i = 0; i < 12; i++)
-		{
-			auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60 + i, 80));
-			auto te = std::make_shared<TrackEvent>(0, 0, msg);
-			t.push_back(te);
-		}
-
-		auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 62, 80));
-		auto te = std::make_shared<TrackEvent>(480, 0, msg); // with delta ticks... 
-		t.push_back(te);
-
-		for (int i = 0; i < 12; i++)
-		{
-			auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60 + i, 80));
-			auto te = std::make_shared<TrackEvent>(0, 0, msg); // with delta ticks... 
-			t.push_back(te);
-		}
-
-		msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 62, 80));
-		te = std::make_shared<TrackEvent>(480, 0, msg); // with delta ticks... 
-		t.push_back(te);
-
-		for (int i = 0; i < 12; i++)
-		{
-			auto msg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60 + i, 80));
-			auto te = std::make_shared<TrackEvent>(0, 0, msg);
-			t.push_back(te);
-		}
-
-	}
-
-	testSequence.push_back(t);
 		
 	MidiOutput dripper("mio");
-	bool success = dripper.openPort(1);
-
 	MidiSequencePlayer player(dripper);
+
+	bool success = dripper.openPort(1);
 
 	if (success)
 	{
 		player.loadSequence(dimitriName);
-
-		player.eventCallback = [&](const MidiPlayerEvent ev)
-		{
-			//dripper.send(*ev.msg.get());
-		};
-
 		player.start();
 	}
 
 	while(true)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
-
 
 	return 0;
 }

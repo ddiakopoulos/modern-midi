@@ -53,6 +53,14 @@ public:
 		return (int) ticks;
 	}
 
+	void reset()
+	{
+		eventList.clear();
+		eventCursor = 0;
+		startTime = 0;
+		playTimeSeconds = 0;
+	}
+
 	std::function<void ()> startedEvent;
 	std::function<void ()> stoppedEvent;
 

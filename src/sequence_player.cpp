@@ -24,43 +24,16 @@ MidiSequencePlayer::~MidiSequencePlayer()
 
 void MidiSequencePlayer::loadSequence(const std::vector<MidiTrack> & tracks)
 {
-	//@tofix - set these params from midi track
+	reset();
+
 	ticksPerBeat = 480.0; //internalTracks.ticksPerBeat > 0 ? internalSequence.ticksPerBeat : 100.0f;
 	beatsPerMinute = 100; //internalSequence.startingTempo > 0 ? internalSequence.startingTempo : 120.0f;
 	msPerTick = 60000.0 / beatsPerMinute / ticksPerBeat;
 
-	// Not used right now 
-	//double totalSequenceTicks = internalSequence.getEndTime();
-	//std::cout << "Total Sequence Ticks: " << totalSequenceTicks << std::endl;
-	//playTimeSeconds = float((totalSequenceTicks * msPerTick) / 1000.0);
-	//std::cout << "Play time in seconds " << playTimeSeconds << std::endl;
-
-	//@todo: sanity check tracks
-	
-	/*
-	// Look for tempo event, assume we only have one
-	for (const auto track : internalSequence.tracks)
-	{
-		for (const auto mEvt : track)
-		{
-			if (mEvt.eventType == MIDI_EventSetTempo)
-			{
-				SetTempoEvent * ste = (SetTempoEvent *) mEvt.get();
-				beatsPerMinute = float(60000000.0 / double (ste->microsecondsPerBeat));
-				msPerTick = 60000.0 / beatsPerMinute /  ticksPerBeat;
-			}
-			else if (mEvt->eventType == MIDI_EventTimeSignature)
-			{
-				TimeSignatureEvent * tse = (TimeSignatureEvent *) mEvt.get();
-				std::cout << "Numerator: " << tse->numerator; 
-			}
-		}
-	}
-	*/
-
-	// Preprocess tracks into flat vector with timestamps
 	int trackIdx = 0;
+
 	std::cout << "Track Size: " << tracks.size() << std::endl;
+
 	for (const auto t : tracks)
 	{
 		double localElapsedTicks = 0;
@@ -103,7 +76,7 @@ void MidiSequencePlayer::start()
 		std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
 	}
 #endif
-	sequencerThread.detach();
+	//sequencerThread.detach();
 
 	if (startedEvent)
 		startedEvent();
@@ -122,6 +95,7 @@ void MidiSequencePlayer::run()
 	{
 		auto outputMsg = eventList[eventCursor];
 
+		// Pause between letters (new idx)
 		if (outputMsg.trackIdx != lastTrack)
 		{
 			lastTrack = outputMsg.trackIdx;
@@ -137,22 +111,10 @@ void MidiSequencePlayer::run()
 			// Spinny spin spin.
 		}
 
-		//std::vector<unsigned char> msg;
-		//msg = { (unsigned char) outputMsg.msg.get()->data[0], (unsigned char) outputMsg.msg.get()->data[1], (unsigned char) outputMsg.msg.get()->data[2]};
-		//output.outputDevice->sendMessage(&msg);
-
 		output.send(*outputMsg.msg);
-		//std::cout << "Cursor: " << eventCursor << "\tTimer: " << timer.running_time_s() << "\t\tTS: " << outputMsg.timestamp << std::endl;
-
-		//
-
-		//if (eventCallback) 
-		//	eventCallback(outputMsg);
 
 		if (shouldSequence == false) 
 			break;
-
-		//eventQueue.push(outputMsg);
 
 		lastTime = outputMsg.timestamp;
 		eventCursor++;
