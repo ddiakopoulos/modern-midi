@@ -11,12 +11,14 @@
 
 namespace mm 
 {
+    const std::vector<int> circle_of_fifths = {0,7,2,9,4,11,6,1,8,3,10,5};
+    
 	// The number of scales encoded in this module
 	int scaleCount();
 
 	// The name of the indexed scale. If out of range, "Unknown" is returned.
-	char const * const scaleName(int scale);
-
+    std::string name_for_scale_index(int scale);
+    
 	// The notes of the indexed scale. If out of range, all the notes will
 	// be written to 0xff. The return value is the number of notes in the scale
 	//
@@ -32,7 +34,7 @@ namespace mm
 	int chordsCount();
 
 	// The name of the indexed chords. If out of range, "Unknown" is returned.
-	char const*const chordName(int scale);
+	std::string name_for_chord_index(int scale);
 
 	// The notes of the indexed chord. If out of range, all the notes will
 	// be written to 0xff. The return value is the number of notes in the chord
@@ -45,17 +47,9 @@ namespace mm
 	//
 	// If inversion was non-zero, be careful that the adjusted notes are not out
 	// of range. MIDI notes range from 0 to 127.
+    
 	int chord(int index, uint8_t notes[9]);
 	int chord(int index, uint8_t notes[9], int inversion);
-
-	// Returns a reference to an array containing the circle of fifths
-	// Notes are zero based. The usual MIDI range caveats apply.
-	uint8_t (&cirlceOfFifths())[12];
-
-	// Returns a reference to an array containing bools indicating where
-	// the black keys are on a piano keyboard. The 0th index indicates C.
-	// blackKeys()[n % 12] answers the question for any note.
-	bool (&blackKeys())[12];
 
 } // mm
 

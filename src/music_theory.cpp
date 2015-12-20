@@ -1,14 +1,15 @@
 #pragma comment(user, "license")
 
 #include "music_theory.h"
+#include <array>
 
 namespace mm 
 {
 	
     struct Scale
     {
-        char const*const name;
-        uint8_t notes[9];
+        std::string name;
+        std::array<int, 9> notes;
     };
 
     const int sc = 59;
@@ -16,7 +17,8 @@ namespace mm
     // This table is found at http,//www.manythings.org/music/pianotheory/
     // When it was obtained on 2012 Nov 24, it was dual licenced under GPL and CC-0.
     // In this instance, the CC-0 license has been selected.
-    Scale scales[sc] = {
+    Scale scales[sc] =
+    {
         "Aeolian",              0,2,3,5, 7, 8,10,     0xff,0xff,
         "Altered",              0,1,3,4, 6, 8,10,     0xff,0xff,
         "Altered b7",           0,1,3,4, 6, 8, 9,     0xff,0xff,
@@ -80,11 +82,10 @@ namespace mm
         
     int scaleCount() { return sc; }
         
-    char const*const scaleName(int scale)
+    std::string name_for_scale_index(int scale)
     {
         if (scale < 0 || scale >= sc)
             return "Unknown";
-            
         return scales[scale].name;
     }
         
@@ -111,8 +112,8 @@ namespace mm
 
     struct Chord
     {
-        char const*const name;
-        uint8_t notes[8];
+        std::string name;
+        std::array<int, 8> notes;
     };
         
     const int cc = 42;
@@ -167,11 +168,10 @@ namespace mm
         
     int chordCount() { return cc; }
         
-    char const*const chordName(int index)
+    std::string name_for_chord_index(int index)
     {
         if (index < 0 || index >= cc)
             return "Unknown";
-            
         return chords[index].name;
     }
         
@@ -207,20 +207,6 @@ namespace mm
             notes[i] = (notes[i] + inversion) % 12;
 
         return n;
-    }
-        
-    uint8_t (&cirlceOfFifths())[12]
-    {
-        static uint8_t fifths[12] = {0,7,2,9,4,11,6,1,8,3,10,5};
-        return fifths;
-    }
-        
-    bool (&blackKeys())[12]
-    {
-        const bool b = true;
-        const bool w = false;
-        static bool keys[12] = {w,b,w,b,w,w,b,w,b,w,b,w};
-        return keys;
     }
 
 } // mm
