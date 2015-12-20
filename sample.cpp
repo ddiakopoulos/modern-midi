@@ -162,7 +162,22 @@ void ExampleOpenMIDIInput()
 
 void ExampleOpenMIDIOutput()
 {
+    // Initialize an output device. The string identifer is for human-readability
+    // and does not find or open a device by that handle.
+    MidiOutput exampleOutput("example");
     
+    // Attempt to open an output device by port number. This method may throw internally
+    // and will pretty-print the exception message on failure.
+    bool success = exampleOutput.openPort(0);
+    
+    if (success)
+    {
+        // The MidiOutput API is simple and either takes a vector of bytes
+        // or a ModernMIDI message type:
+        exampleOutput.send(MakeProgramChange(1, 88));
+    }
+    
+    exampleOutput.closePort();
 }
 
 void ExampleReadWriteFile()
