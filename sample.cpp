@@ -82,7 +82,39 @@ using namespace mm;
 
 void ExampleConstructMessages()
 {
+    // The library implements factory functions to construct common message types:
+    MidiMessage msg0 = MakeNoteOn(1, 60, 127);
+    MidiMessage msg1 = MakeNoteOff(1, 60, 127);
+    MidiMessage msg2 = MakeTextMetaEvent(MetaEventType::LYRIC, "ModernMIDI");
     
+    // MidiMessage will directly take bytes, but doesn't ensure that you've created a valid message...
+    MidiMessage invalidMessage = MidiMessage(0, 255, 128, 0.0);
+    
+    // Use the array operator to access MIDI bytes directly
+    if (invalidMessage[1] == 255)
+    {
+        // True!
+    }
+    
+    if (msg0.isNoteOnOrOff())
+    {
+        // True!
+    }
+    
+    if (msg1.getMessageType() == (uint8_t) MessageType::NOTE_OFF)
+    {
+        // True!
+    }
+    
+    if (msg2.isMetaEvent())
+    {
+        // True!
+    }
+    
+    if (msg0.getChannel() == 1)
+    {
+        // True! ModernMIDI 1-indexes MIDI channels (1-16, not 0-15)
+    }
 }
 
 void ExampleQueryMIDIDevices()
