@@ -44,6 +44,19 @@ MidiSequencePlayer::~MidiSequencePlayer()
         sequencerThread.join();
 }
 
+double MidiSequencePlayer::ticksToSeconds(int ticks)
+{
+    double beats = (double) ticks / ticksPerBeat;
+    double seconds = beats / (beatsPerMinute / 60.0);
+    return seconds;
+}
+
+int MidiSequencePlayer::secondsToTicks(float seconds)
+{
+    double ticksPerSecond = (beatsPerMinute * ticksPerBeat) / 60.0;
+    double ticks = ticksPerSecond * seconds;
+    return (int) ticks;
+}
 
 void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPerBeat, double beatsPerMinute)
 {
@@ -62,10 +75,6 @@ void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPe
         double deltaTimestampInSeconds = ticksToSeconds(localElapsedTicks);
         if (m->m->getMessageType() == (uint8_t) MessageType::NOTE_ON) addTimestampedEvent(0, deltaTimestampInSeconds, m); // already checks if non-meta message
     }
-
-    //std::cout << "Track Idx: " << trackIdx << std::endl;
-    //std::cout << "Local Elapsed Ticks " << localElapsedTicks << std::endl;
-    
 }
 
 void MidiSequencePlayer::loadMultipleTracks(const std::vector<MidiTrack> & tracks, double ticksPerBeat, double beatsPerMinute)
@@ -118,7 +127,7 @@ void MidiSequencePlayer::run()
 
         while((timer.running_time_s()) <= (outputMsg.timestamp))
         {
-            continue; // Spinny spin spin.
+            continue;
         }
 
         output.send(*outputMsg.msg);
@@ -144,15 +153,28 @@ void MidiSequencePlayer::stop()
     shouldSequence = false;
 }
     
-void MidiSequencePlayer::addTimestampedEvent(int track, double now, std::shared_ptr<TrackEvent> ev)
+void MidiSequencePlayer::addTimestampedEvent(int track, double when, std::shared_ptr<TrackEvent> ev)
 {
     if (ev->m->isMetaEvent() == false)
     {
-        eventList.push_back(MidiPlayerEvent(now, ev->m, track));
+        eventList.push_back(MidiPlayerEvent(when, ev->m, track));
     }
 }
 
 float MidiSequencePlayer::length() const
 {
     return playTimeSeconds;
+}
+
+void MidiSequencePlayer::setLooping(bool newState)
+{
+    loop = newState;
+}
+
+void MidiSequencePlayer::reset()
+{
+    eventList.clear();
+    eventCursor = 0;
+    startTime = 0;
+    playTimeSeconds = 0;
 }
