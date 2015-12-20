@@ -182,7 +182,74 @@ void ExampleOpenMIDIOutput()
 
 void ExampleReadWriteFile()
 {
+    MidiFileReader reader;
     
+    // Midi track events are always encoded with a delta value (time in ticks between
+    // events), so the user of this library has the ability to treat the value
+    // as a true delta or a running counter of elapsed ticks.
+    reader.useAbsoluteTicks = false;
+    
+    try
+    {
+        // One of the asset files is a font file that encodes the letters A through Z
+        // as note on + note off events for use in an installation.
+        reader.parse(readFile("assets/midifonts.mid"));
+    }
+    catch (const std::exception & e)
+    {
+        std::cout << "Parsing Error: " << e.what() << std::endl;
+    }
+    
+    // Track 0 = meta; Track 1 = A; ... ; Track 26 = Z; Track 27 = debug
+    
+    // Look for tempo event, assume we only have one
+    // Note: this is a little broken at the moment...
+    for (const auto track : reader.tracks)
+    {
+        for (const auto e : track)
+        {
+            auto msg = *e->m.get();
+            
+            if (!msg.isMetaEvent()) continue;
+            
+            if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TEMPO_CHANGE)
+            {
+                double microsecondsPerBeat = msg[0];
+                double beatsPerMinute = float(60000000.0 / double (microsecondsPerBeat));
+                double msPerTick = 60000.0 / beatsPerMinute / reader.ticksPerBeat;
+            }
+            else if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TIME_SIGNATURE)
+            {
+                std::cout << "Time Signature: " << (int) msg[1] << " / " << (int) msg[2] << std::endl; // Numerator / Denominator
+            }
+        }
+    }
+    
+    // We're going to take track 1 from midifonts.mid and write it back out
+    // as a separate file. The file will contain the letter A.
+    MidiFileWriter theLetterA;
+    
+    // We can use a value that we found in the file (see the tempo loop above), or supply our own
+    theLetterA.setTicksPerQuarterNote(480);
+    
+    // Add an initial empty track (indexed at location 0)
+    theLetterA.addTrack();
+    
+    // It's useful to know the underlying types when parsing data,
+    // but a helper typedefs are provided
+    MidiTrack aTrack = reader.tracks[1]; // Where MidiTrack is actually std::vector<std::shared_ptr<TrackEvent>>
+    
+    for (int i = 0; i < aTrack.size(); i++)
+    {
+        std::shared_ptr<TrackEvent> event = aTrack[i];
+        if (event->m->isNoteOnOrOff())
+            theLetterA.addEvent(0, event);
+    }
+    
+    // Write back to disk
+    std::fstream output("assets/loopback.mid", std::ios::out);
+    theLetterA.write(output);
+    output.close();
 }
 
 void ExampleSequencePlayer()
