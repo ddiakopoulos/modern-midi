@@ -280,8 +280,6 @@ void ExampleSequencePlayer()
             player.loadSingleTrack(programmaticTrack);
         }
         
-        player.start();
-        
         // Started Event Callback
         player.startedEvent = [&]()
         {
@@ -293,6 +291,8 @@ void ExampleSequencePlayer()
         {
             std::cout << "Notification that the MidiSequencePlayer has stopped..." << std::endl;
         };
+        
+        player.start();
     }
 }
 
