@@ -57,11 +57,6 @@ namespace mm
 	// blackKeys()[n % 12] answers the question for any note.
 	bool (&blackKeys())[12];
 
-	// Given a number of steps, and the number of beats that occurs during those
-	// steps, fill in the result array with a pattern where those beats are
-	// evenly distributed according to Bjorklund's algorithm.
-	void rhythm(int steps, int beats, std::vector<uint8_t>& result);
-
 } // mm
 
 #endif
