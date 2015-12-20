@@ -23,21 +23,8 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <time.h>
 #include <chrono>
-#include <functional>
-#include <algorithm>
-#include <functional>
 #include <random>
-#include <vector>
-#include <thread>
-#include <iostream>
-#include <fstream>
-#include <mutex>
-#include <cassert>
-#include <map>
-#include <type_traits>
-#include <array>
 #include <fstream>
 
 #include "modernmidi.h"
@@ -206,10 +193,10 @@ void ExampleReadWriteFile()
         std::cout << "Parsing Error: " << e.what() << std::endl;
     }
     
-    // Track 0 = meta; Track 1 = A; … ; Track 26 = Z; Track 27 = debug
+    // midifonts.mid track layout:
+    // [Track 0 = meta // Track 1 = A //  …  // Track 26 = Z // Track 27 = debug]
     
     // Look for tempo event, assume we only have one
-    // Note: this is a little broken at the moment…
     for (const auto track : reader.tracks)
     {
         for (const auto e : track)
