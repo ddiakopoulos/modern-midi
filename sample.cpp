@@ -11,7 +11,7 @@
  this list of conditions and the following disclaimer in the documentation
  and/or other materials provided with the distribution.
  
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
@@ -40,27 +40,27 @@
 #include <array>
 #include <fstream>
 
-#include "modernmidi.h"
-#include "port_manager.h"
-#include "midi_input.h"
-#include "midi_output.h"
-#include "midi_message.h"
-#include "midi_event.h"
-#include "midi_file_reader.h"
-#include "midi_file_writer.h"
-#include "sequence_player.h"
+#include “modernmidi.h”
+#include “port_manager.h”
+#include “midi_input.h”
+#include “midi_output.h”
+#include “midi_message.h”
+#include “midi_event.h”
+#include “midi_file_reader.h”
+#include “midi_file_writer.h”
+#include “sequence_player.h”
 
 std::random_device rd;
 std::mt19937 gen(rd());
 
 std::vector<uint8_t> readFile(std::string pathToFile)
 {
-    std::cout << "[Debug] Open: " << pathToFile << std::endl;
+    std::cout << “[Debug] Open: “ << pathToFile << std::endl;
     
-    FILE * file = fopen(pathToFile.c_str(), "rb");
+    FILE * file = fopen(pathToFile.c_str(), “rb”);
     
     if (!file)
-        throw std::runtime_error("file not found");
+        throw std::runtime_error(“file not found”);
     
     fseek(file, 0, SEEK_END);
     size_t lengthInBytes = ftell(file);
@@ -71,7 +71,7 @@ std::vector<uint8_t> readFile(std::string pathToFile)
     size_t elementsRead = fread(fileBuffer.data(), 1, lengthInBytes, file);
     
     if (elementsRead == 0 || fileBuffer.size() < 64)
-        throw std::runtime_error("error reading file or file too small");
+        throw std::runtime_error(“error reading file or file too small”);
     
     fclose(file);
     
@@ -85,9 +85,9 @@ void ExampleConstructMessages()
     // The library implements factory functions to construct common message types:
     MidiMessage msg0 = MakeNoteOn(1, 60, 127);
     MidiMessage msg1 = MakeNoteOff(1, 60, 127);
-    MidiMessage msg2 = MakeTextMetaEvent(MetaEventType::LYRIC, "ModernMIDI");
+    MidiMessage msg2 = MakeTextMetaEvent(MetaEventType::LYRIC, “ModernMIDI”);
     
-    // MidiMessage will directly take bytes, but doesn't ensure that you've created a valid message...
+    // MidiMessage will directly take bytes, but doesn’t ensure that you’ve created a valid message…
     MidiMessage invalidMessage = MidiMessage(0, 255, 128, 0.0);
     
     // Use the array operator to access MIDI bytes directly
@@ -123,7 +123,7 @@ void ExampleQueryMIDIDevices()
     PortManager::PrintPortList(PortType::TYPE_OUTPUT);
     PortManager::PrintPortList(PortType::TYPE_INPUT);
     
-    // Both functions come with parsable counterparts
+    // Both functions come with parseable counterparts
     std::vector<std::string> outputList = PortManager::GetPortList(PortType::TYPE_OUTPUT);
     std::vector<std::string> inputList = PortManager::GetPortList(PortType::TYPE_INPUT);
     
@@ -134,9 +134,9 @@ void ExampleQueryMIDIDevices()
 
 void ExampleOpenMIDIInput()
 {
-    // Initialize an input device. The string identifer is for human-readability
+    // Initialize an input device. The string identifier is for human-readability
     // and does not find or open a device by that handle.
-    MidiInput exampleInput("example");
+    MidiInput exampleInput(“example”);
     
     // Attempt to open an input device by port number. This method may throw internally
     // and will pretty-print the exception message on failure.
@@ -145,14 +145,14 @@ void ExampleOpenMIDIInput()
     // Attempt to open an input device by port name. This function is particularly
     // useful because most operating systems do not guarantee that port numbers
     // remain static across reboots:
-    // bool success = exampleInput.openPort("midi-device-name");
+    // bool success = exampleInput.openPort(“midi-device-name”);
     
     if (success)
     {
         // Attach an input callback to the device to accept incoming messages
         exampleInput.messageCallback = [&](const mm::MidiMessage msg)
         {
-            std::cout << "Data: " << (int) msg.data[0] << ", " << (int) msg.data[1] << ", " <<(int) msg.data[2] << std::endl;
+            std::cout << “Data: “ << (int) msg.data[0] << “, “ << (int) msg.data[1] << “, “ <<(int) msg.data[2] << std::endl;
         };
     }
     
@@ -162,9 +162,9 @@ void ExampleOpenMIDIInput()
 
 void ExampleOpenMIDIOutput()
 {
-    // Initialize an output device. The string identifer is for human-readability
+    // Initialize an output device. The string identifier is for human-readability
     // and does not find or open a device by that handle.
-    MidiOutput exampleOutput("example");
+    MidiOutput exampleOutput(“example”);
     
     // Attempt to open an output device by port number. This method may throw internally
     // and will pretty-print the exception message on failure.
@@ -193,17 +193,17 @@ void ExampleReadWriteFile()
     {
         // One of the asset files is a font file that encodes the letters A through Z
         // as note on + note off events for use in an installation.
-        reader.parse(readFile("assets/midifonts.mid"));
+        reader.parse(readFile(“assets/midifonts.mid”));
     }
     catch (const std::exception & e)
     {
-        std::cout << "Parsing Error: " << e.what() << std::endl;
+        std::cout << “Parsing Error: “ << e.what() << std::endl;
     }
     
-    // Track 0 = meta; Track 1 = A; ... ; Track 26 = Z; Track 27 = debug
+    // Track 0 = meta; Track 1 = A; … ; Track 26 = Z; Track 27 = debug
     
     // Look for tempo event, assume we only have one
-    // Note: this is a little broken at the moment...
+    // Note: this is a little broken at the moment…
     for (const auto track : reader.tracks)
     {
         for (const auto e : track)
@@ -220,12 +220,12 @@ void ExampleReadWriteFile()
             }
             else if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TIME_SIGNATURE)
             {
-                std::cout << "Time Signature: " << (int) msg[1] << " / " << (int) msg[2] << std::endl; // Numerator / Denominator
+                std::cout << “Time Signature: “ << (int) msg[1] << “ / “ << (int) msg[2] << std::endl; // Numerator / Denominator
             }
         }
     }
     
-    // We're going to take track 1 from midifonts.mid and write it back out
+    // We’re going to take track 1 from midifonts.mid and write it back out
     // as a separate file. The file will contain the letter A.
     MidiFileWriter theLetterA;
     
@@ -235,7 +235,7 @@ void ExampleReadWriteFile()
     // Add an initial empty track (indexed at location 0)
     theLetterA.addTrack();
     
-    // It's useful to know the underlying types when parsing data,
+    // It’s useful to know the underlying types when parsing data,
     // but a helper typedefs are provided
     MidiTrack aTrack = reader.tracks[1]; // Where MidiTrack is actually std::vector<std::shared_ptr<TrackEvent>>
     
@@ -247,20 +247,20 @@ void ExampleReadWriteFile()
     }
     
     // Write back to disk
-    std::fstream output("assets/loopback.mid", std::ios::out);
+    std::fstream output(“assets/loopback.mid”, std::iOS::out);
     theLetterA.write(output);
     output.close();
 }
 
 void ExampleSequencePlayer()
 {
-    // ModernMIDI's sequence player is always in flux.
+    // ModernMIDI’s sequence player is always in flux.
     // In this implementation, the constructor takes a MidiOutput reference so it can directly play events
     // on a device. It also contains a concurrent queue so it can be polled from a separate thread,
     // (for instance to drive an animation system). In other incarnations, sequence_player also included an std::function
     // callback from the inner thread.
     
-    MidiOutput sequenceOutput("sequence");
+    MidiOutput sequenceOutput(“sequence”);
     
     bool success = sequenceOutput.openPort(0);
     
@@ -283,13 +283,13 @@ void ExampleSequencePlayer()
         // Started Event Callback
         player.startedEvent = [&]()
         {
-            std::cout << "Notification that the MidiSequencePlayer has started..." << std::endl;
+            std::cout << “Notification that the MidiSequencePlayer has started…” << std::endl;
         };
         
         // Stopped Event Callback
         player.stoppedEvent = [&]()
         {
-            std::cout << "Notification that the MidiSequencePlayer has stopped..." << std::endl;
+            std::cout << “Notification that the MidiSequencePlayer has stopped…” << std::endl;
         };
         
         player.start();
