@@ -15,25 +15,25 @@ namespace mm
   
 class MidiFileWriter
 {
-	std::vector<MidiTrack> tracks;
-	int ticksPerQuarterNote = 120;
+    std::vector<MidiTrack> tracks;
+    int ticksPerQuarterNote = 120;
 
 public:
 
-	MidiFileWriter();
-	~MidiFileWriter();
+    MidiFileWriter();
+    ~MidiFileWriter();
 
-	size_t getNumTracks() { return tracks.size(); }
-	int getTicksPerQuarterNote() { return ticksPerQuarterNote; }
+    size_t getNumTracks() { return tracks.size(); }
+    int getTicksPerQuarterNote() { return ticksPerQuarterNote; }
 
-	void addEvent(int tick, int track, std::shared_ptr<MidiMessage> m);
+    void addEvent(int tick, int track, std::shared_ptr<MidiMessage> m);
     void addEvent(int track, std::shared_ptr<TrackEvent> m);
     
     void setTicksPerQuarterNote(int tpqn) { ticksPerQuarterNote = tpqn; }
     
-	void addTrack(); 
+    void addTrack(); 
 
-	void write(std::ostream & out); 
+    void write(std::ostream & out); 
 };
     
 } // mm

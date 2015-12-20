@@ -14,28 +14,28 @@ namespace mm
 
 class MidiOutput
 {
-	bool attached = false;
+    bool attached = false;
 
-	bool sendRaw(std::vector<unsigned char> msg);
+    bool sendRaw(std::vector<unsigned char> msg);
 
 public:
 
-	MidiOutput(const std::string & name);
-	~MidiOutput();
+    MidiOutput(const std::string & name);
+    ~MidiOutput();
 
-	bool openPort(int32_t portNumber);
-	bool openPort(std::string deviceName);
-	bool openVirtualPort(std::string portName);
-	void closePort();
-	
-	bool send(const std::vector<uint8_t> & msg);
-	bool send(const mm::MidiMessage & msg);
+    bool openPort(int32_t portNumber);
+    bool openPort(std::string deviceName);
+    bool openVirtualPort(std::string portName);
+    void closePort();
+    
+    bool send(const std::vector<uint8_t> & msg);
+    bool send(const mm::MidiMessage & msg);
 
-	RtMidiOut * getOutputDevice() { return outputDevice.get(); }
+    RtMidiOut * getOutputDevice() { return outputDevice.get(); }
 
-	mm::MidiDeviceInfo info;
+    mm::MidiDeviceInfo info;
 
-	std::unique_ptr<RtMidiOut> outputDevice;
+    std::unique_ptr<RtMidiOut> outputDevice;
 };
 
 }

@@ -5,7 +5,7 @@
 
 namespace mm 
 {
-	
+    
     struct Scale
     {
         std::string name;

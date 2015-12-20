@@ -25,73 +25,73 @@ namespace mm
     
 class MidiSequencePlayer 
 {
-	MidiOutput & output;
+    MidiOutput & output;
 public:
 
-	MidiSequencePlayer(MidiOutput & output);
-	~MidiSequencePlayer();
-		
-	void loadSingleTrack(const MidiTrack & track, double ticksPerBeat = 480, double beatsPerMinute = 120);
+    MidiSequencePlayer(MidiOutput & output);
+    ~MidiSequencePlayer();
+        
+    void loadSingleTrack(const MidiTrack & track, double ticksPerBeat = 480, double beatsPerMinute = 120);
     void loadMultipleTracks(const std::vector<MidiTrack> & tracks, double ticksPerBeat = 480, double beatsPerMinute = 120);
 
-	void start();
-	void stop();
+    void start();
+    void stop();
 
-	void setLooping(bool newState)
-	{
-		loop = newState;
-	}
+    void setLooping(bool newState)
+    {
+        loop = newState;
+    }
 
-	float length() const; // length of the song in seconds
-		
-	double ticksToSeconds(int ticks)
-	{
-		double beats = (double) ticks / ticksPerBeat;
-		double seconds = beats / (beatsPerMinute / 60.0);
-		return seconds;
-	}
-		
-	int secondsToTicks(float seconds)
-	{
-		double ticksPerSecond = (beatsPerMinute * ticksPerBeat) / 60.0;
-		double ticks = ticksPerSecond * seconds;
-		return (int) ticks;
-	}
+    float length() const; // length of the song in seconds
+        
+    double ticksToSeconds(int ticks)
+    {
+        double beats = (double) ticks / ticksPerBeat;
+        double seconds = beats / (beatsPerMinute / 60.0);
+        return seconds;
+    }
+        
+    int secondsToTicks(float seconds)
+    {
+        double ticksPerSecond = (beatsPerMinute * ticksPerBeat) / 60.0;
+        double ticks = ticksPerSecond * seconds;
+        return (int) ticks;
+    }
 
-	void reset()
-	{
-		eventList.clear();
-		eventCursor = 0;
-		startTime = 0;
-		playTimeSeconds = 0;
-	}
+    void reset()
+    {
+        eventList.clear();
+        eventCursor = 0;
+        startTime = 0;
+        playTimeSeconds = 0;
+    }
 
-	std::function<void ()> startedEvent;
-	std::function<void ()> stoppedEvent;
+    std::function<void ()> startedEvent;
+    std::function<void ()> stoppedEvent;
 
-	std::function<void(const MidiPlayerEvent ev)> eventCallback;
+    std::function<void(const MidiPlayerEvent ev)> eventCallback;
 
-	ConcurrentQueue<MidiPlayerEvent> eventQueue;
+    ConcurrentQueue<MidiPlayerEvent> eventQueue;
 
-	std::vector<MidiPlayerEvent> eventList; // indexed by track
+    std::vector<MidiPlayerEvent> eventList; // indexed by track
 
 private:
 
-	void run();
+    void run();
 
-	void addTimestampedEvent(int track, double now, std::shared_ptr<TrackEvent> ev);
+    void addTimestampedEvent(int track, double now, std::shared_ptr<TrackEvent> ev);
 
-	float beatsPerMinute;
-	double ticksPerBeat;
-	double msPerTick;
-		
-	float playTimeSeconds = 0;
-	float startTime = 0;
-	int eventCursor = 0;
+    float beatsPerMinute;
+    double ticksPerBeat;
+    double msPerTick;
+        
+    float playTimeSeconds = 0;
+    float startTime = 0;
+    int eventCursor = 0;
 
-	std::thread sequencerThread;
-	std::atomic<bool> shouldSequence;
-	bool loop = false;
+    std::thread sequencerThread;
+    std::atomic<bool> shouldSequence;
+    bool loop = false;
 };
 
 } // mm

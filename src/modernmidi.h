@@ -19,24 +19,24 @@
 ///////////////
 
 #if defined(WIN32) || defined(_WIN32)
-	#define MM_PLATFORM_WINDOWS 1
-	//#define __WINDOWS_MM__
+    #define MM_PLATFORM_WINDOWS 1
+    //#define __WINDOWS_MM__
 #endif
 
 #ifdef __APPLE__
-	#define MM_PLATFORM_OSX 1
-	//#define __MACOSX_CORE__
+    #define MM_PLATFORM_OSX 1
+    //#define __MACOSX_CORE__
 #endif
 
 #if defined(__linux) || defined(__unix) || defined (__posix)
-	#define MM_PLATFORM_POSIX
-	//#define __LINUX_ALSA__
+    #define MM_PLATFORM_POSIX
+    //#define __LINUX_ALSA__
 #endif
 
 #if defined(MM_PLATFORM_WINDOWS)
-	#define INLINE __forceinline
+    #define INLINE __forceinline
 #else
-	#define INLINE inline
+    #define INLINE inline
 #endif
 
 #define MM_PI double(3.1415926535897932384626433832795)
@@ -55,23 +55,23 @@
 
 namespace mm
 {
-	enum PortType
-	{
-		TYPE_INPUT,
-		TYPE_OUTPUT,
-		TYPE_INVALID
-	};
+    enum PortType
+    {
+        TYPE_INPUT,
+        TYPE_OUTPUT,
+        TYPE_INVALID
+    };
 
-	struct MidiDeviceInfo
-	{
-		int32_t idx = -1; 
-		bool emulated = false;
-		std::string name = "";
-		MidiDeviceInfo() {};
-		MidiDeviceInfo(int32_t idx, bool e, std::string n) : idx(idx), emulated(e), name(n) {};
-	};
+    struct MidiDeviceInfo
+    {
+        int32_t idx = -1; 
+        bool emulated = false;
+        std::string name = "";
+        MidiDeviceInfo() {};
+        MidiDeviceInfo(int32_t idx, bool e, std::string n) : idx(idx), emulated(e), name(n) {};
+    };
 
-	template<class T> T clamp(T a, T min, T max) { return std::max(std::min(a, max), min); }
+    template<class T> T clamp(T a, T min, T max) { return std::max(std::min(a, max), min); }
 }
 
 #endif

@@ -12,23 +12,23 @@ MidiSequencePlayer::MidiSequencePlayer(MidiOutput & output) : shouldSequence(fal
 {
 
 }
-	
+    
 MidiSequencePlayer::~MidiSequencePlayer()
 {
-	shouldSequence = false;
+    shouldSequence = false;
 
-	if (sequencerThread.joinable())
-		sequencerThread.join();
+    if (sequencerThread.joinable())
+        sequencerThread.join();
 }
 
 
 void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPerBeat, double beatsPerMinute)
 {
-	reset();
+    reset();
 
     this->ticksPerBeat = ticksPerBeat;
     this->beatsPerMinute = beatsPerMinute;
-	msPerTick = 60000.0 / beatsPerMinute / ticksPerBeat;
+    msPerTick = 60000.0 / beatsPerMinute / ticksPerBeat;
 
     double localElapsedTicks = 0;
 
@@ -52,84 +52,84 @@ void MidiSequencePlayer::loadMultipleTracks(const std::vector<MidiTrack> & track
 
 void MidiSequencePlayer::start()
 {
-	if (sequencerThread.joinable()) 
-		sequencerThread.join();
+    if (sequencerThread.joinable()) 
+        sequencerThread.join();
 
-	shouldSequence = true;
-	sequencerThread = std::thread(&MidiSequencePlayer::run, this);
+    shouldSequence = true;
+    sequencerThread = std::thread(&MidiSequencePlayer::run, this);
 
 #if defined(MM_PLATFORM_WINDOWS)
-	HANDLE threadHandle = sequencerThread.native_handle();
-	auto err = SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
-	if (err == 0)
-	{
-		std::cerr << "SetThreadPriority() failed: " << GetLastError() << std::endl;
-	}
+    HANDLE threadHandle = sequencerThread.native_handle();
+    auto err = SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
+    if (err == 0)
+    {
+        std::cerr << "SetThreadPriority() failed: " << GetLastError() << std::endl;
+    }
 
-	err = SetThreadAffinityMask(threadHandle, 1);
-	if (err == 0)
-	{
-		std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
-	}
+    err = SetThreadAffinityMask(threadHandle, 1);
+    if (err == 0)
+    {
+        std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
+    }
 #endif
     
-	//sequencerThread.detach();
+    //sequencerThread.detach();
 
-	if (startedEvent)
-		startedEvent();
+    if (startedEvent)
+        startedEvent();
 }
-	
+    
 void MidiSequencePlayer::run()
 {
-	double lastTime = 0;
-	size_t eventCursor = 0;
+    double lastTime = 0;
+    size_t eventCursor = 0;
 
-	PlatformTimer timer;
-	timer.start();
+    PlatformTimer timer;
+    timer.start();
 
-	while (eventCursor < eventList.size())
-	{
-		auto outputMsg = eventList[eventCursor];
+    while (eventCursor < eventList.size())
+    {
+        auto outputMsg = eventList[eventCursor];
         
-		//std::cout << "Delta: " << lastTime - outputMsg.timestamp << std::endl;
+        //std::cout << "Delta: " << lastTime - outputMsg.timestamp << std::endl;
 
-		while((timer.running_time_s()) <= (outputMsg.timestamp))
-		{
-			continue; // Spinny spin spin.
-		}
+        while((timer.running_time_s()) <= (outputMsg.timestamp))
+        {
+            continue; // Spinny spin spin.
+        }
 
-		output.send(*outputMsg.msg);
+        output.send(*outputMsg.msg);
 
-		if (shouldSequence == false) 
-			break;
+        if (shouldSequence == false) 
+            break;
 
-		lastTime = outputMsg.timestamp;
-		eventCursor++;
-	}
+        lastTime = outputMsg.timestamp;
+        eventCursor++;
+    }
 
-	timer.stop(); 
+    timer.stop(); 
 
-	if (loop && shouldSequence == true) 
-		run();
-		
-	if (stoppedEvent)
-		stoppedEvent();
+    if (loop && shouldSequence == true) 
+        run();
+        
+    if (stoppedEvent)
+        stoppedEvent();
 }
 
 void MidiSequencePlayer::stop()
 {
-	shouldSequence = false;
+    shouldSequence = false;
 }
-	
+    
 void MidiSequencePlayer::addTimestampedEvent(int track, double now, std::shared_ptr<TrackEvent> ev)
 {
-	if (ev->m->isMetaEvent() == false)
-	{
-		eventList.push_back(MidiPlayerEvent(now, ev->m, track));
-	}
+    if (ev->m->isMetaEvent() == false)
+    {
+        eventList.push_back(MidiPlayerEvent(now, ev->m, track));
+    }
 }
 
 float MidiSequencePlayer::length() const
 {
-	return playTimeSeconds;
+    return playTimeSeconds;
 }

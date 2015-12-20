@@ -87,15 +87,15 @@ MidiFileWriter::~MidiFileWriter() { }
 
 void MidiFileWriter::addTrack()
 {
-	tracks.emplace_back(MidiTrack());
+    tracks.emplace_back(MidiTrack());
 }
 
 void MidiFileWriter::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
 {
-	if (track > tracks.size()) 
-		throw std::invalid_argument("track exceeds availble tracks");
+    if (track > tracks.size()) 
+        throw std::invalid_argument("track exceeds availble tracks");
 
-	tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
+    tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
 }
 
 void MidiFileWriter::addEvent(int track, std::shared_ptr<TrackEvent> m)
@@ -164,7 +164,7 @@ void MidiFileWriter::write(std::ostream & out)
     
     if ((size < 3) || !((trackRawData[size - 3] == 0xFF) && (trackRawData[size - 2] == 0x2F)))
     {
-		trackRawData.emplace_back(0x0); // tick
+        trackRawData.emplace_back(0x0); // tick
         trackRawData.emplace_back(eot[0]);
         trackRawData.emplace_back(eot[1]);
         trackRawData.emplace_back(eot[2]);

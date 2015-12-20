@@ -20,14 +20,14 @@ namespace mm
     
     enum class MessageType : uint8_t
     {
-		INVALID             = 0x0,
+        INVALID             = 0x0,
         // Standard Message
         NOTE_OFF           = 0x80,
         NOTE_ON            = 0x90,
         POLY_PRESSURE      = 0xA0,
         CONTROL_CHANGE     = 0xB0,
         PROGRAM_CHANGE     = 0xC0,
-        AFTERTOUCH		   = 0xD0,
+        AFTERTOUCH         = 0xD0,
         PITCH_BEND         = 0xE0,
         
         // System Common Messages
@@ -57,63 +57,63 @@ namespace mm
     
     enum class MetaEventType : uint8_t
     {
-        SEQUENCE_NUMBER 	= 0x00,
-        TEXT 				= 0x01,
-        COPYRIGHT 			= 0x02,
-        TRACK_NAME 			= 0x03,
-        INSTRUMENT 			= 0x04,
-        LYRIC 				= 0x05,
-        MARKER 				= 0x06,
-        CUE 				= 0x07,
-        PATCH_NAME 			= 0x08,
-        DEVICE_NAME 		= 0x09,
-        END_OF_TRACK 		= 0x2F,
-        TEMPO_CHANGE 		= 0x51,
-        SMPTE_OFFSET 		= 0x54,
-        TIME_SIGNATURE 		= 0x58,
-        KEY_SIGNATURE 		= 0x59,
-        PROPRIETARY 		= 0x7F,
-        UNKNOWN 			= 0xFF
+        SEQUENCE_NUMBER     = 0x00,
+        TEXT                = 0x01,
+        COPYRIGHT           = 0x02,
+        TRACK_NAME          = 0x03,
+        INSTRUMENT          = 0x04,
+        LYRIC               = 0x05,
+        MARKER              = 0x06,
+        CUE                 = 0x07,
+        PATCH_NAME          = 0x08,
+        DEVICE_NAME         = 0x09,
+        END_OF_TRACK        = 0x2F,
+        TEMPO_CHANGE        = 0x51,
+        SMPTE_OFFSET        = 0x54,
+        TIME_SIGNATURE      = 0x58,
+        KEY_SIGNATURE       = 0x59,
+        PROPRIETARY         = 0x7F,
+        UNKNOWN             = 0xFF
     };
     
-	inline uint32_t make_variable_length(std::vector<uint8_t> & buffer, uint64_t number) 
-	{
-		uint64_t value = number;
+    inline uint32_t make_variable_length(std::vector<uint8_t> & buffer, uint64_t number) 
+    {
+        uint64_t value = number;
 
-	   if (value >= (1 << 28)) 
-		   throw std::runtime_error("meta too large");
+       if (value >= (1 << 28)) 
+           throw std::runtime_error("meta too large");
 
-	   buffer[0] = (value >> 21) & 0x7F;
-	   buffer[1] = (value >> 14) & 0x7F;
-	   buffer[2] = (value >>  7) & 0x7F;
-	   buffer[3] = (value >>  0) & 0x7F;
+       buffer[0] = (value >> 21) & 0x7F;
+       buffer[1] = (value >> 14) & 0x7F;
+       buffer[2] = (value >>  7) & 0x7F;
+       buffer[3] = (value >>  0) & 0x7F;
 
-	   int flag = 0;
-	   int length = -1;
+       int flag = 0;
+       int length = -1;
 
-	   for (int i = 0; i < 3; i++) 
-	   {
-		  if (buffer[i] != 0)
-			 flag = 1;
+       for (int i = 0; i < 3; i++) 
+       {
+          if (buffer[i] != 0)
+             flag = 1;
 
-		  if (flag) 
-			 buffer[i] |= 0x80;
+          if (flag) 
+             buffer[i] |= 0x80;
 
-		  if (length == -1 && buffer[i] >= 0x80) 
-			 length = 4-i;
-	   }
+          if (length == -1 && buffer[i] >= 0x80) 
+             length = 4-i;
+       }
 
-	   if (length == -1) 
-		  length = 1;
+       if (length == -1) 
+          length = 1;
 
-	   if (length < 4) 
-		  for (int i = 0; i < length; i++) 
-			 buffer[i] = buffer[4 - length + i];
+       if (length < 4) 
+          for (int i = 0; i < length; i++) 
+             buffer[i] = buffer[4 - length + i];
 
-	   return length;
-	}
+       return length;
+    }
 
-	//////////////////
+    //////////////////
     // MidiMessage  //
     //////////////////
 
@@ -180,7 +180,7 @@ namespace mm
     // Message Factories //
     ///////////////////////
     
-	// Channel Events
+    // Channel Events
 
     inline uint8_t MakeCommand(const MessageType type, const int channel)
     {
@@ -227,37 +227,37 @@ namespace mm
         return MidiMessage(MakeCommand(MessageType::AFTERTOUCH, channel), value);
     }
 
-	// Meta Events
+    // Meta Events
 
-	inline MidiMessage MakeEndOfTrackMetaEvent()
+    inline MidiMessage MakeEndOfTrackMetaEvent()
     {
         return MidiMessage(0xFF, 0x2F, 0, 0.0);
     }
 
-	inline MidiMessage MakeTextMetaEvent(MetaEventType textType, std::string text)
-	{
-		std::vector<uint8_t> message;
+    inline MidiMessage MakeTextMetaEvent(MetaEventType textType, std::string text)
+    {
+        std::vector<uint8_t> message;
 
-		std::vector<uint8_t> size = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        std::vector<uint8_t> size = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-		auto length = text.size();
-		auto varLength =  make_variable_length(size, length);
+        auto length = text.size();
+        auto varLength =  make_variable_length(size, length);
 
-		message.resize(2 + varLength + length);
-		message[0] = 0xFF;	// set meta field
-		message[1] = (uint8_t) textType & 0x7F; // set meta subtype
+        message.resize(2 + varLength + length);
+        message[0] = 0xFF;  // set meta field
+        message[1] = (uint8_t) textType & 0x7F; // set meta subtype
 
-		for (int i = 0; i < varLength; i++)
-			message[2 + i] = size[i]; // set meta length
+        for (int i = 0; i < varLength; i++)
+            message[2 + i] = size[i]; // set meta length
 
-		for (int i = 0; i < length; i++) 
-			message[2 + varLength + i] = text.data()[i]; // set data
+        for (int i = 0; i < length; i++) 
+            message[2 + varLength + i] = text.data()[i]; // set data
 
-		MidiMessage m;
-		m.data.resize(message.size());
-		memcpy(m.data.data(), message.data(), message.size());
-		return m;
-	}
+        MidiMessage m;
+        m.data.resize(message.size());
+        memcpy(m.data.data(), message.data(), message.size());
+        return m;
+    }
 
     ///////////////
     // Utilities //
