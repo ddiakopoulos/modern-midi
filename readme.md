@@ -1,9 +1,14 @@
 # ModernMIDI
 
-ModernMIDI brings together a number of support classes to read, manipulate, and generate MIDI data. For realtime input/output, the library gently wraps RtMidi for cross-platform hardware IO. Furthermore, ModernMIDI includes a comprehensive file io module for reading and writing format-0 files. Other features include common music theory concepts expessed in MIDI, along with a decently performing real-time file player. It's currently thin on the example/documentation front, but more samples will be forthcoming. 
+ModernMIDI brings together a number of support classes to read, manipulate, and generate MIDI data. For realtime input/output, the library gently wraps RtMidi for cross-platform hardware IO. Furthermore, ModernMIDI includes a comprehensive file io module for reading and writing format-0 files. Other features include common music theory concepts expessed in MIDI, along with a decently performing real-time file player. It's currently thin on the example/documentation front, but more samples will be forthcoming.
 
-# Building
+In various forms, it has been used in performances with the [Seattle Symphony](http://www.geekwire.com/2015/conducting-with-kinect-seattle-symphony-to-use-microsofts-3d-sensor-in-world-premiere-performance/), installations at the [Jewish Contemporary Museum in SF](http://www.thecjm.org/about/press/press-releases/956-pour-crever-by-trimpin), and in many smaller Arduino prototypes in conjunction with [HIDUINO](https://github.com/ddiakopoulos/hiduino).
+
+## Building
 Use the included VS2013 or XCode 6 projects. ModernMIDI will build on any platform with a recent C++11 compiler.
 
-# License
+## Acknowledgements
+ModernMIDI is a continuation of the functionality developed in [LabMIDI](https://github.com/meshula/LabMidi) by [@meshula](https://twitter.com/meshula). 
+
+## License
 ModernMIDI is released under the simplified BSD 2-clause license. See the COPYING file for more information on the (license-compatible) third party code included within ModernMIDI. 
