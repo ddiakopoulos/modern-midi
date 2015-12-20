@@ -254,7 +254,46 @@ void ExampleReadWriteFile()
 
 void ExampleSequencePlayer()
 {
+    // ModernMIDI's sequence player is always in flux.
+    // In this implementation, the constructor takes a MidiOutput reference so it can directly play events
+    // on a device. It also contains a concurrent queue so it can be polled from a separate thread,
+    // (for instance to drive an animation system). In other incarnations, sequence_player also included an std::function
+    // callback from the inner thread.
     
+    MidiOutput sequenceOutput("sequence");
+    
+    bool success = sequenceOutput.openPort(0);
+    
+    if (success)
+    {
+        MidiSequencePlayer player(sequenceOutput);
+        
+        {
+            MidiTrack programmaticTrack;
+            
+            auto noteOnMsg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60, 96));
+            programmaticTrack.push_back(std::make_shared<TrackEvent>(120, 0, noteOnMsg));
+            
+            auto noteOffMsg = std::make_shared<MidiMessage>(MakeNoteOn(1, 60, 0));
+            programmaticTrack.push_back(std::make_shared<TrackEvent>(249, 0,  noteOffMsg));
+            
+            player.loadSingleTrack(programmaticTrack);
+        }
+        
+        player.start();
+        
+        // Started Event Callback
+        player.startedEvent = [&]()
+        {
+            std::cout << "Notification that the MidiSequencePlayer has started..." << std::endl;
+        };
+        
+        // Stopped Event Callback
+        player.stoppedEvent = [&]()
+        {
+            std::cout << "Notification that the MidiSequencePlayer has stopped..." << std::endl;
+        };
+    }
 }
 
 int main(int argc, char *argv[], char *envp[])
