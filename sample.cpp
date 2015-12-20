@@ -42,19 +42,20 @@
 
 #include "modernmidi.h"
 #include "port_manager.h"
+#include "midi_input.h"
 #include "midi_output.h"
 #include "midi_message.h"
 #include "midi_event.h"
-
 #include "midi_file_reader.h"
 #include "midi_file_writer.h"
+#include "sequence_player.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
 
 std::vector<uint8_t> readFile(std::string pathToFile)
 {
-	std::cout << "[Debug] Open: " << pathToFile << std::endl;
+    std::cout << "[Debug] Open: " << pathToFile << std::endl;
     
     FILE * file = fopen(pathToFile.c_str(), "rb");
     
@@ -71,14 +72,13 @@ std::vector<uint8_t> readFile(std::string pathToFile)
     
     if (elementsRead == 0 || fileBuffer.size() < 64)
         throw std::runtime_error("error reading file or file too small");
-
-	fclose(file);
     
-	return fileBuffer;
+    fclose(file);
+    
+    return fileBuffer;
 }
 
 using namespace mm;
-
 
 void ExampleConstructMessages()
 {
@@ -105,35 +105,24 @@ void ExampleReadWriteFile()
     
 }
 
-int main(int argc, char *argv[], char *envp[])
+void ExampleSequencePlayer()
 {
     
-    MidiFileReader reader;
-    reader.useAbsoluteTicks = false;
-    reader.parse(readFile("assets/midifonts.mid"));
-    
-    // Track = 0 meta, Track 27 = debug
-    
-    MidiFileWriter theLetterA;
-    theLetterA.setTicksPerQuarterNote(480);
-    
-    theLetterA.addTrack();
+}
 
-    auto aTrack = reader.tracks[1];
+int main(int argc, char *argv[], char *envp[])
+{
+    ExampleConstructMessages();
     
-    for (int i = 0; i < aTrack.size(); i++)
-    {
-        auto event = aTrack[i];
-        if (event->m->isNoteOnOrOff())
-        {
-            theLetterA.addEvent(0, event);
-        }
-    }
+    ExampleQueryMIDIDevices();
     
-    std::fstream output("assets/loopback.mid", std::ios::out);
-    theLetterA.write(output);
+    ExampleOpenMIDIInput();
     
-    output.close();
+    ExampleOpenMIDIOutput();
     
-	return 0;
+    ExampleReadWriteFile();
+    
+    ExampleSequencePlayer();
+    
+    return 0;
 }

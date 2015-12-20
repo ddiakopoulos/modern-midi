@@ -200,7 +200,7 @@ TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, Message
     }
 }
 
-MidiFileReader::MidiFileReader() : tracks(0), ticksPerBeat(120), startingTempo(120)
+MidiFileReader::MidiFileReader() : tracks(0), ticksPerBeat(480), startingTempo(120)
 {
         
 }
