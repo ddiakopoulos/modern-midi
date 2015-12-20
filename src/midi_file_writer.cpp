@@ -2,6 +2,85 @@
 
 using namespace mm;
 
+std::ostream & write_uint16_be(std::ostream & out, uint16_t value)
+{
+    union { uint8_t bytes[2]; uint16_t v; } data;
+    data.v = value;
+    out << data.bytes[1]; out << data.bytes[0];
+    return out;
+}
+
+std::ostream & write_int16_be(std::ostream & out, int16_t value)
+{
+    union { uint8_t bytes[2]; int16_t v; } data;
+    data.v = value;
+    out << data.bytes[1]; out << data.bytes[0];
+    return out;
+}
+
+std::ostream & write_uint32_be(std::ostream & out, uint32_t value)
+{
+    union { uint8_t bytes[4]; uint32_t v; } data;
+    data.v = value;
+    out << data.bytes[3]; out << data.bytes[2];
+    out << data.bytes[1]; out << data.bytes[0];
+    return out;
+}
+
+std::ostream & write_int32_be(std::ostream & out, int32_t value)
+{
+    union { uint8_t bytes[4]; int32_t v; } data;
+    data.v = value;
+    out << data.bytes[3]; out << data.bytes[2];
+    out << data.bytes[1]; out << data.bytes[0];
+    return out;
+}
+
+std::ostream & write_float_be(std::ostream & out, float value)
+{
+    union { uint8_t bytes[4]; float v; } data;
+    data.v = value;
+    out << data.bytes[3]; out << data.bytes[2];
+    out << data.bytes[1]; out << data.bytes[0];
+    return out;
+}
+
+std::ostream & write_double_be(std::ostream & out, double value)
+{
+    union { uint8_t bytes[8]; double v; } data;
+    data.v = value;
+    out << data.bytes[7]; out << data.bytes[6];
+    out << data.bytes[5]; out << data.bytes[4];
+    out << data.bytes[3]; out << data.bytes[2];
+    out << data.bytes[1]; out << data.bytes[0];
+    return out;
+}
+
+// Write a number to the midifile
+// as a variable length value which segments a file into 7-bit
+// values.  Maximum size of aValue is 0x7fffffff
+void write_variable_length(uint32_t aValue, std::vector<uint8_t> & outdata)
+{
+    uint8_t bytes[5] = {0};
+    
+    bytes[0] = (uint8_t) (((uint32_t) aValue >> 28) & 0x7F);  // most significant 5 bits
+    bytes[1] = (uint8_t) (((uint32_t) aValue >> 21) & 0x7F);  // next largest 7 bits
+    bytes[2] = (uint8_t) (((uint32_t) aValue >> 14) & 0x7F);
+    bytes[3] = (uint8_t) (((uint32_t) aValue >> 7)  & 0x7F);
+    bytes[4] = (uint8_t) (((uint32_t) aValue)       & 0x7F);  // least significant 7 bits
+    
+    int start = 0;
+    while (start < 5 && bytes[start] == 0)
+        start++;
+    
+    for (int i = start; i < 4; i++)
+    {
+        bytes[i] = bytes[i] | 0x80;
+        outdata.push_back(bytes[i]);
+    }
+    outdata.push_back(bytes[4]);
+}
+
 MidiFileWriter::MidiFileWriter() { }
 
 MidiFileWriter::~MidiFileWriter() { }
@@ -37,9 +116,6 @@ void MidiFileWriter::write(std::ostream & out)
     write_uint16_be(out, getTicksPerQuarterNote());
             
     std::vector<uint8_t> trackRawData;
-
-    //@tofix - Debugging Only:
-    uint64_t elapsedTicks = 0;
             
     for (auto & event_list : tracks)
     {
@@ -50,11 +126,6 @@ void MidiFileWriter::write(std::ostream & out)
             // Suppress end-of-track meta messages (one will be added
             // automatically after all track data has been written).
             if (msg->getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
-                    
-            // Debugging
-            std::cout << "[Tick] # " << int (event->tick) << std::endl;
-            elapsedTicks += event->tick;
-            std::cout << "[Elapsed] # " <<  elapsedTicks << std::endl;
                     
             write_variable_length(event->tick, trackRawData);
                     
@@ -73,7 +144,6 @@ void MidiFileWriter::write(std::ostream & out)
                         
                 for (size_t k = 1; k < msg->messageSize(); k++)
                 {
-                    std::cout << "[Sysex] Write: " << int ((*msg)[k]) << std::endl;
                     trackRawData.emplace_back((*msg)[k]);
                 }
             }
@@ -83,7 +153,6 @@ void MidiFileWriter::write(std::ostream & out)
                 // Non-sysex type of message, so just output the bytes of the message:
                 for (size_t k = 0; k < msg->messageSize(); k++)
                 {
-                    std::cout << "[Msg] Write: " << int ((*msg)[k]) << std::endl;
                     trackRawData.emplace_back((*msg)[k]);
                 }
             }
