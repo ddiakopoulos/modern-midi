@@ -53,6 +53,12 @@
 std::random_device rd;
 std::mt19937 gen(rd());
 
+inline int32_t Pack(uint8_t a, uint8_t b, uint8_t c)
+{
+    uint32_t tmp = ((c & 0x80) ? (0xFF << 24) : 0x00 << 24) | (c << 16) | (b << 8) | (a << 0);
+    return tmp;
+}
+
 std::vector<uint8_t> readFile(std::string pathToFile)
 {
     std::cout << "[Debug] Open: " << pathToFile << std::endl;
@@ -214,13 +220,16 @@ void ExampleReadWriteFile()
             
             if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TEMPO_CHANGE)
             {
-                double microsecondsPerBeat = msg[0];
+                double microsecondsPerBeat = Pack(msg[5], msg[4], msg[3]);
                 double beatsPerMinute = float(60000000.0 / double (microsecondsPerBeat));
                 double msPerTick = 60000.0 / beatsPerMinute / reader.ticksPerBeat;
+                std::cout << "Microseconds Per Beat: " << microsecondsPerBeat << std::endl;
+                std::cout << "Beats Per Minute: " << beatsPerMinute << std::endl;
+                std::cout << "Milliseconds per Tick: " << msPerTick << std::endl;
             }
             else if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TIME_SIGNATURE)
             {
-                std::cout << "Time Signature: " << (int) msg[1] << " / " << (int) msg[2] << std::endl; // Numerator / Denominator
+                std::cout << "Time Signature: " << (int) msg[4] << " / " << (int) powf(2.0f, msg[5]) << std::endl; // Numerator / Denominator
             }
         }
     }
