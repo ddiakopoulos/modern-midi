@@ -153,3 +153,7 @@ xcuserdata
 *.moved-aside
 DerivedData
 *.xcuserstate
+
+loopback_a.mid
+example.mid
+sample.mid
