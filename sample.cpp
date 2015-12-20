@@ -119,7 +119,17 @@ void ExampleConstructMessages()
 
 void ExampleQueryMIDIDevices()
 {
+    // Use the static functions to pretty-print a list of available devices
+    PortManager::PrintPortList(PortType::TYPE_OUTPUT);
+    PortManager::PrintPortList(PortType::TYPE_INPUT);
     
+    // Both functions come with parsable counterparts
+    std::vector<std::string> outputList = PortManager::GetPortList(PortType::TYPE_OUTPUT);
+    std::vector<std::string> inputList = PortManager::GetPortList(PortType::TYPE_INPUT);
+    
+    // Also query the name of a port number
+    std::string outputZeroPortName = PortManager::GetPortName(PortType::TYPE_OUTPUT, 0);
+    std::string inputZeroPortName = PortManager::GetPortName(PortType::TYPE_INPUT, 0);
 }
 
 void ExampleOpenMIDIInput()
