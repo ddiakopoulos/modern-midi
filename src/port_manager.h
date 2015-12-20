@@ -29,7 +29,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MODERNMIDI_MIDI_PORT_MGR_H
 
 #include "modernmidi.h"
-#include "rtmidi/RtMidi.h"
 #include <assert.h>
 
 namespace mm

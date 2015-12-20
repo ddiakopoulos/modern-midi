@@ -30,7 +30,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "modernmidi.h"
 #include "midi_message.h"
-#include "rtmidi/RtMidi.h"
 
 namespace mm
 {

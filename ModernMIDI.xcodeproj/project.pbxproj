@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		08264DD61B726EB4004BE7B2 /* midi_file_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08264DD21B726EB4004BE7B2 /* midi_file_reader.cpp */; };
 		08264DD71B726EB4004BE7B2 /* midi_file_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08264DD41B726EB4004BE7B2 /* midi_file_writer.cpp */; };
-		08567C701B6D68D700EB6C0D /* RtMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */; };
+		08270CBB1C273EE1007AFD01 /* RtMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08270CBA1C273EE1007AFD01 /* RtMidi.cpp */; };
 		08567C841B6D68E200EB6C0D /* midi_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C741B6D68E200EB6C0D /* midi_input.cpp */; };
 		08567C851B6D68E200EB6C0D /* midi_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C771B6D68E200EB6C0D /* midi_output.cpp */; };
 		08567C861B6D68E200EB6C0D /* midi_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08567C791B6D68E200EB6C0D /* midi_utils.cpp */; };
@@ -41,8 +41,8 @@
 		08264DD31B726EB4004BE7B2 /* midi_file_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_file_reader.h; path = src/midi_file_reader.h; sourceTree = SOURCE_ROOT; };
 		08264DD41B726EB4004BE7B2 /* midi_file_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_file_writer.cpp; path = src/midi_file_writer.cpp; sourceTree = SOURCE_ROOT; };
 		08264DD51B726EB4004BE7B2 /* midi_file_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = midi_file_writer.h; path = src/midi_file_writer.h; sourceTree = SOURCE_ROOT; };
+		08270CBA1C273EE1007AFD01 /* RtMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RtMidi.cpp; path = third_party/rtmidi/RtMidi.cpp; sourceTree = "<group>"; };
 		08567C601B6D684A00EB6C0D /* ModernMIDI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ModernMIDI; sourceTree = BUILT_PRODUCTS_DIR; };
-		08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RtMidi.cpp; path = third_party/rtmidi/RtMidi.cpp; sourceTree = "<group>"; };
 		08567C6F1B6D68D700EB6C0D /* RtMidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RtMidi.h; path = third_party/rtmidi/RtMidi.h; sourceTree = "<group>"; };
 		08567C721B6D68E200EB6C0D /* concurrent_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = concurrent_queue.h; path = src/concurrent_queue.h; sourceTree = SOURCE_ROOT; };
 		08567C741B6D68E200EB6C0D /* midi_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = midi_input.cpp; path = src/midi_input.cpp; sourceTree = SOURCE_ROOT; };
@@ -157,13 +157,13 @@
 				08264DD81B727070004BE7B2 /* realtime_io */,
 				08567C761B6D68E200EB6C0D /* midi_message.h */,
 				08264DCD1B70720A004BE7B2 /* midi_event.h */,
-				08264DCE1B70720A004BE7B2 /* modernmidi.h */,
 				08567C791B6D68E200EB6C0D /* midi_utils.cpp */,
 				08567C7A1B6D68E200EB6C0D /* midi_utils.h */,
 				08567C7B1B6D68E200EB6C0D /* music_theory.cpp */,
 				08567C7C1B6D68E200EB6C0D /* music_theory.h */,
 				08567C801B6D68E200EB6C0D /* sequence_player.cpp */,
 				08567C811B6D68E200EB6C0D /* sequence_player.h */,
+				08264DCE1B70720A004BE7B2 /* modernmidi.h */,
 			);
 			name = library;
 			sourceTree = "<group>";
@@ -179,8 +179,8 @@
 		08567C6D1B6D68C800EB6C0D /* rtmidi */ = {
 			isa = PBXGroup;
 			children = (
-				08567C6E1B6D68D700EB6C0D /* RtMidi.cpp */,
 				08567C6F1B6D68D700EB6C0D /* RtMidi.h */,
+				08270CBA1C273EE1007AFD01 /* RtMidi.cpp */,
 			);
 			name = rtmidi;
 			sourceTree = "<group>";
@@ -241,11 +241,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08567C701B6D68D700EB6C0D /* RtMidi.cpp in Sources */,
 				08567C851B6D68E200EB6C0D /* midi_output.cpp in Sources */,
 				08567C8C1B6D68EC00EB6C0D /* sample.cpp in Sources */,
 				08567C891B6D68E200EB6C0D /* sequence_player.cpp in Sources */,
 				08264DD61B726EB4004BE7B2 /* midi_file_reader.cpp in Sources */,
+				08270CBB1C273EE1007AFD01 /* RtMidi.cpp in Sources */,
 				08567C881B6D68E200EB6C0D /* port_manager.cpp in Sources */,
 				08567C861B6D68E200EB6C0D /* midi_utils.cpp in Sources */,
 				08264DD71B726EB4004BE7B2 /* midi_file_writer.cpp in Sources */,
