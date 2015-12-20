@@ -30,7 +30,7 @@ public:
 
 	bool empty() const
 	{
-		// mutex.lock();
+		std::unique_lock<std::mutex> lock(mutex);
 		return queue.empty();
 	}
 
