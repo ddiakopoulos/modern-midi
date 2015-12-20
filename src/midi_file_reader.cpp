@@ -271,14 +271,10 @@ double MidiFileReader::getEndTime()
 	{
 		double localLength = 0;
 		for (const auto e : t)
-		{
 			localLength += e->tick;
-		}
 
-		if (localLength > totalLength) 
-		{
+		if (localLength > totalLength)
 			totalLength = localLength;
-		}
 	}
 	return totalLength;
 }
