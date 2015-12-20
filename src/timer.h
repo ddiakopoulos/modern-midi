@@ -3,22 +3,12 @@
 #ifndef HIGH_RESOLUTION_TIMER_H
 #define HIGH_RESOLUTION_TIMER_H
 
-struct IPlatformTimer
-{
-    virtual ~IPlatformTimer() {};
-    virtual void start() = 0;
-    virtual void stop() = 0;
-    virtual double running_time_ms() const = 0;
-    virtual double running_time_s() const = 0;
-    virtual double diff_ms() const = 0;
-};
-
 #if defined(MM_PLATFORM_WINDOWS)
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-class PlatformTimer : public IPlatformTimer
+class PlatformTimer
 {
     LARGE_INTEGER start_timestamp;
     LARGE_INTEGER stop_timestamp;
@@ -32,32 +22,32 @@ public:
     
     virtual ~PlatformTimer() {}
     
-    virtual void start() override
+    void start()
     {
         QueryPerformanceFrequency(&timer_frequency);
         QueryPerformanceCounter(&start_timestamp);
     }
     
-    virtual void stop() override
+    void stop()
     {
         QueryPerformanceCounter(&stop_timestamp);
     }
     
-    virtual double running_time_ms() const override
+    double running_time_ms() const
     {
         LARGE_INTEGER tmp;
         QueryPerformanceCounter(&tmp);
         return (double) (tmp.QuadPart - start_timestamp.QuadPart) / timer_frequency.QuadPart * 1000;
     }
     
-    virtual double running_time_s() const override
+    double running_time_s() const
     {
         LARGE_INTEGER tmp;
         QueryPerformanceCounter(&tmp);
         return (double) (tmp.QuadPart - start_timestamp.QuadPart) / timer_frequency.QuadPart;
     }
     
-    virtual double diff_ms() const override
+    double diff_ms() const
     {
         return (double)(stop_timestamp.QuadPart - start_timestamp.QuadPart) / timer_frequency.QuadPart * 1000;
     }
@@ -66,7 +56,7 @@ public:
 #elif defined(MM_PLATFORM_OSX)
 #include <mach/mach_time.h>
 
-class PlatformTimer : public IPlatformTimer
+class PlatformTimer
 {
     uint64_t start_timestamp;
     uint64_t stop_timestamp;
@@ -81,29 +71,29 @@ public:
     
     virtual ~PlatformTimer() {}
     
-    virtual void start() override
+    void start()
     {
         start_timestamp = mach_absolute_time();
     }
     
-    virtual void stop() override
+    void stop()
     {
          stop_timestamp = mach_absolute_time();
     }
     
-    virtual double running_time_ms() const override
+    double running_time_ms() const
     {
         uint64_t current_time = mach_absolute_time();
         return (double)(current_time - start_timestamp) * timer_frequency * 1e-6;
     }
     
-    virtual double running_time_s() const override
+    double running_time_s() const
     {
         uint64_t current_time = mach_absolute_time();
         return (double)(current_time - start_timestamp) * timer_frequency * 1e-9;
     }
     
-    virtual double diff_ms() const override
+    double diff_ms() const
     {
         return static_cast<double>(stop_timestamp - start_timestamp) * timer_frequency * 1e-6;
     }
