@@ -1,32 +1,9 @@
 # ModernMIDI
 
-It's got templates! And c++11! 
+ModernMIDI brings together a number of support classes to read, manipulate, and generate MIDI data. For realtime input/output, the library gently wraps RtMidi for cross-platform hardware IO. Furthermore, ModernMIDI includes a comprehensive file io module for reading and writing format-0 files. Other features include common music theory concepts expessed in MIDI, along with a decently performing real-time file player.
 
-### ToDo
-- [X] build message factories
-- [X] rename MidiRtMessage + fix
-- [X] cross platform thread priority 
-- [X] cross-platform timer
-- [X] Flesh out MidiFile struct
-- [X] Convert Nick's midi parster to new message type
-- [X] Nuke events
-- [X] Initial file writing support
-- [ ] MidiFile sanity checks before writing (1 track, enough events, etc)
-- [ ] Sanity checks while reading (see todo list embedded in file)
-- [ ] Test multiple tracks (reading + writing)
-- [ ] Midi timing utilities
-- [ ] Sort tracks (out of order timed events)
-- [ ] Write all common meta events
-- [ ] Link note pairs (on/off)
-- [ ] Refactor scales/chords
-- [ ] Tempo/BPM/ticks/timing (absolute vs relative)
-- [ ] Take a look at mem mgmt
-- [ ] Time map => ticks relative to overall file with several tempo events
+# Building
+Use the included VS2013 or XCode 6 projects. ModernMIDI will build on any platform with a recent C++11 compiler.
 
-### Longer Term
-- [ ] Other helpful concepts, like tuning systems
-- [ ] Controller remapping (keyboards, other midi devices)
-- [ ] Virtual midi driver for Windows
-- [ ] MIDI clock source/generator
-- [ ] SMPTE support
-- [ ] Better SysEx test 
+# License
+ModernMIDI is released under the simplified BSD 2-clause license. See the COPYING file for more information on the (license-compatible) third party code included within ModernMIDI. 
