@@ -134,7 +134,30 @@ void ExampleQueryMIDIDevices()
 
 void ExampleOpenMIDIInput()
 {
+    // Initialize an input device. The string identifer is for human-readability
+    // and does not find or open a device by that handle.
+    MidiInput exampleInput("example");
     
+    // Attempt to open an input device by port number. This method may throw internally
+    // and will pretty-print the exception message on failure.
+    bool success = exampleInput.openPort(0);
+    
+    // Attempt to open an input device by port name. This function is particularly
+    // useful because most operating systems do not guarantee that port numbers
+    // remain static across reboots:
+    // bool success = exampleInput.openPort("midi-device-name");
+    
+    if (success)
+    {
+        // Attach an input callback to the device to accept incoming messages
+        exampleInput.messageCallback = [&](const mm::MidiMessage msg)
+        {
+            std::cout << "Data: " << (int) msg.data[0] << ", " << (int) msg.data[1] << ", " <<(int) msg.data[2] << std::endl;
+        };
+    }
+    
+    // exampleInput will automatically close itself when it leaves this scope, so the following line is not needed:
+    // exampleInput.closePort()
 }
 
 void ExampleOpenMIDIOutput()
