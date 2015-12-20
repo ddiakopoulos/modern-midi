@@ -59,7 +59,7 @@ int main(int argc, char *argv[], char *envp[])
     
     MidiFileReader reader;
     reader.useAbsoluteTicks = false;
-    reader.parse(readFile("midifonts.mid"));
+    reader.parse(readFile("assets/midifonts.mid"));
     
     // Track = 0 meta, Track 27 = debug
     
