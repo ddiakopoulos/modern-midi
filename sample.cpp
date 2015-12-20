@@ -34,9 +34,7 @@ std::vector<uint8_t> readFile(std::string pathToFile)
     FILE * file = fopen(pathToFile.c_str(), "rb");
     
     if (!file)
-    {
         throw std::runtime_error("file not found");
-    }
     
     fseek(file, 0, SEEK_END);
     size_t lengthInBytes = ftell(file);

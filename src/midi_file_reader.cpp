@@ -5,20 +5,22 @@
 #include "midi_message.h"
 #include <algorithm>
 
+// File Parsing Validation Todo:
+// ==============================
+// [] Bad file name
+// [] Bad header
+// [] Unknown header type
+// [] Bad header size
+// [] Bad type
+// [] Bad tmecode
+// [] Header too short
+// [] Track too short
+// [] Event too short
+// ==============================
+
 namespace mm 
 {
-	
-// Parse Validators
-// [ ] Bad file name
-// [ ] bad header
-// [ ] unknown header type
-// [ ] bad header size
-// [ ] bad type
-// [ ] bad tmecode
-// [ ] header too short
-// [ ] track too short
-// [ ] event too short
-    
+
 TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, MessageType lastEventTypeByte)
 {
 	MessageType type = (MessageType) *dataStart++;
