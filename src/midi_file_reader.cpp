@@ -69,7 +69,8 @@ TrackEvent * parseEvent(int tick, int track, uint8_t const *& dataStart, Message
 				case MetaEventType::TEMPO_CHANGE: 
 				{
 					if (length != 3) throw std::invalid_argument("Expected length for TEMPO_CHANGE event is 3");
-					event->m->data[3] = read_uint24_be(dataStart);
+					//event->m->data[3] = read_uint24_be(dataStart); // @dimitri TOFIX
+					read_bytes(event->m->data, dataStart, length);
 					return event;
 				}
 				case MetaEventType::SMPTE_OFFSET: 

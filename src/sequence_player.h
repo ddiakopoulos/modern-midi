@@ -15,18 +15,20 @@
 #include <chrono>
 #include <atomic>
 
+#include "midi_output.h"
+
 namespace mm 
 {
 
 class MidiSequencePlayer 
 {
-
+	MidiOutput & output;
 public:
 
-	MidiSequencePlayer();
+	MidiSequencePlayer(MidiOutput & output);
 	~MidiSequencePlayer();
 		
-	void loadSequence(MidiFileReader sequence); //@omgfix
+	void loadSequence(const std::vector<MidiTrack> & tracks);
 	void start();
 	void stop();
 
@@ -37,9 +39,9 @@ public:
 
 	float length() const; // length of the song in seconds
 		
-	double ticksToSeconds(double ticks)
+	double ticksToSeconds(int ticks)
 	{
-		double beats = ticks / ticksPerBeat;
+		double beats = (double) ticks / ticksPerBeat;
 		double seconds = beats / (beatsPerMinute / 60.0);
 		return seconds;
 	}
@@ -51,20 +53,28 @@ public:
 		return (int) ticks;
 	}
 
+	void reset()
+	{
+		eventList.clear();
+		eventCursor = 0;
+		startTime = 0;
+		playTimeSeconds = 0;
+	}
+
 	std::function<void ()> startedEvent;
 	std::function<void ()> stoppedEvent;
+
+	std::function<void(const MidiPlayerEvent ev)> eventCallback;
 
 	ConcurrentQueue<MidiPlayerEvent> eventQueue;
 
 	std::vector<MidiPlayerEvent> eventList; // indexed by track
 
 private:
-		
-	void preprocessSequence();
 
 	void run();
 
-	void addTimestampedEvent(std::vector<MidiPlayerEvent> & list, int track, double now, TrackEvent * ev);
+	void addTimestampedEvent(int track, double now, std::shared_ptr<TrackEvent> ev);
 
 	float beatsPerMinute;
 	double ticksPerBeat;
@@ -77,8 +87,6 @@ private:
 	std::thread sequencerThread;
 	std::atomic<bool> shouldSequence;
 	bool loop = false;
-
-	MidiFileReader internalSequence;
 };
 
 } // mm

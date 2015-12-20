@@ -17,29 +17,15 @@ namespace mm
 
 	struct MidiPlayerEvent
 	{
-		MidiPlayerEvent() {};
-
-		MidiPlayerEvent(double t, uint8_t b1, uint8_t b2, uint8_t b3, int track) : timestamp(t), trackIdx(track)
-		{
-			msg.data = {b1, b2, b3};
-		}
-		
-		MidiPlayerEvent & operator= (const MidiPlayerEvent & rhs)
-		{
-			timestamp = rhs.timestamp;
-			msg = rhs.msg;
-			trackIdx = rhs.trackIdx;
-			return *this;
-		}
-		
+		MidiPlayerEvent(double t,std::shared_ptr<MidiMessage> m, int track) : timestamp(t), trackIdx(track), msg(m) {}
 		double timestamp;
 		int trackIdx;
-		MidiMessage msg;
+		std::shared_ptr<MidiMessage> msg;
 	};
 
 	template<class C, class R> std::basic_ostream<C, R> & operator << (std::basic_ostream<C, R> & ss, const MidiPlayerEvent & v) 
 	{
-		return ss << "[" << int(v.msg.data[0]) << ", " << int(v.msg.data[1]) << ", " << int(v.msg.data[2]) << "]";
+		return ss << "[" << int(v.msg->data[0]) << ", " << int(v.msg->data[1]) << ", " << int(v.msg->data[2]) << "]";
 	}
 
 	///////////////////////

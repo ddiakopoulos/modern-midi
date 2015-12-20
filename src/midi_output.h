@@ -14,7 +14,6 @@ namespace mm
 
 class MidiOutput
 {
-	std::unique_ptr<RtMidiOut> outputDevice;
 	bool attached = false;
 
 	bool sendRaw(std::vector<unsigned char> msg);
@@ -35,6 +34,8 @@ public:
 	RtMidiOut * getOutputDevice() { return outputDevice.get(); }
 
 	mm::MidiDeviceInfo info;
+
+	std::unique_ptr<RtMidiOut> outputDevice;
 };
 
 }
