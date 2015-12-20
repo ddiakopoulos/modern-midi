@@ -22,36 +22,32 @@ MidiSequencePlayer::~MidiSequencePlayer()
 }
 
 
-void MidiSequencePlayer::loadSequence(const std::vector<MidiTrack> & tracks)
+void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPerBeat, double beatsPerMinute)
 {
 	reset();
 
-	ticksPerBeat = 480.0; //internalTracks.ticksPerBeat > 0 ? internalSequence.ticksPerBeat : 100.0f;
-	beatsPerMinute = 100; //internalSequence.startingTempo > 0 ? internalSequence.startingTempo : 120.0f;
+    this->ticksPerBeat = ticksPerBeat;
+    this->beatsPerMinute = beatsPerMinute;
 	msPerTick = 60000.0 / beatsPerMinute / ticksPerBeat;
 
-	int trackIdx = 0;
+    double localElapsedTicks = 0;
 
-	std::cout << "Track Size: " << tracks.size() << std::endl;
+    // Events in track
+    for (auto m : track)
+    {
+        localElapsedTicks += m->tick;
+        double deltaTimestampInSeconds = ticksToSeconds(localElapsedTicks);
+        if (m->m->getMessageType() == (uint8_t) MessageType::NOTE_ON) addTimestampedEvent(0, deltaTimestampInSeconds, m); // already checks if non-meta message
+    }
 
-	for (const auto t : tracks)
-	{
-		double localElapsedTicks = 0;
+    //std::cout << "Track Idx: " << trackIdx << std::endl;
+    //std::cout << "Local Elapsed Ticks " << localElapsedTicks << std::endl;
+    
+}
 
-		// Events in track
-		for (auto m : t)
-		{
-			localElapsedTicks += m->tick;
-			double deltaTimestampInSeconds = ticksToSeconds(localElapsedTicks);
-			if (m->m->getMessageType() == (uint8_t) MessageType::NOTE_ON) addTimestampedEvent(trackIdx, deltaTimestampInSeconds, m); // already checks if non-meta message
-		}
-
-		//std::cout << "Track Idx: " << trackIdx << std::endl;
-		//std::cout << "Local Elapsed Ticks " << localElapsedTicks << std::endl;
-		trackIdx++;
-	}
-
-	std::cout << "[New Sequence] Event List Size: " << eventList.size() << std::endl;
+void MidiSequencePlayer::loadMultipleTracks(const std::vector<MidiTrack> & tracks, double ticksPerBeat, double beatsPerMinute)
+{
+    // Unimplemented
 }
 
 void MidiSequencePlayer::start()
@@ -76,7 +72,8 @@ void MidiSequencePlayer::start()
 		std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
 	}
 #endif
-	sequencerThread.detach();
+    
+	//sequencerThread.detach();
 
 	if (startedEvent)
 		startedEvent();
@@ -90,19 +87,10 @@ void MidiSequencePlayer::run()
 	PlatformTimer timer;
 	timer.start();
 
-	int lastTrack = 0;
 	while (eventCursor < eventList.size())
 	{
 		auto outputMsg = eventList[eventCursor];
-
-		// Pause between letters (new idx)
-		if (outputMsg.trackIdx != lastTrack)
-		{
-			lastTrack = outputMsg.trackIdx;
-			std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-			timer.start();
-		}
-
+        
 		//std::cout << "Delta: " << lastTime - outputMsg.timestamp << std::endl;
 
 		while((timer.running_time_s()) <= (outputMsg.timestamp))

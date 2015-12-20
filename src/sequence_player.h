@@ -20,6 +20,9 @@
 namespace mm 
 {
 
+// This class is always a work in progress, and does not currently handle things like
+// mid-track tempo changes.
+    
 class MidiSequencePlayer 
 {
 	MidiOutput & output;
@@ -28,7 +31,9 @@ public:
 	MidiSequencePlayer(MidiOutput & output);
 	~MidiSequencePlayer();
 		
-	void loadSequence(const std::vector<MidiTrack> & tracks);
+	void loadSingleTrack(const MidiTrack & track, double ticksPerBeat = 480, double beatsPerMinute = 120);
+    void loadMultipleTracks(const std::vector<MidiTrack> & tracks, double ticksPerBeat = 480, double beatsPerMinute = 120);
+
 	void start();
 	void stop();
 
