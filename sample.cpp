@@ -79,6 +79,32 @@ std::vector<uint8_t> readFile(std::string pathToFile)
 
 using namespace mm;
 
+
+void ExampleConstructMessages()
+{
+    
+}
+
+void ExampleQueryMIDIDevices()
+{
+    
+}
+
+void ExampleOpenMIDIInput()
+{
+    
+}
+
+void ExampleOpenMIDIOutput()
+{
+    
+}
+
+void ExampleReadWriteFile()
+{
+    
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
     

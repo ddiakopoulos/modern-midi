@@ -99,7 +99,7 @@ namespace mm
         UNKNOWN             = 0xFF
     };
     
-    inline uint32_t make_variable_length(std::vector<uint8_t> & buffer, uint64_t number) 
+    inline uint32_t MakeVariableLength(std::vector<uint8_t> & buffer, uint64_t number)
     {
         uint64_t value = number;
 
@@ -264,7 +264,7 @@ namespace mm
         std::vector<uint8_t> size = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         auto length = text.size();
-        auto varLength =  make_variable_length(size, length);
+        auto varLength =  MakeVariableLength(size, length);
 
         message.resize(2 + varLength + length);
         message[0] = 0xFF;  // set meta field
