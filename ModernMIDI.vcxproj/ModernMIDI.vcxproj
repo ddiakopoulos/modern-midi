@@ -155,7 +155,6 @@
     <ClCompile Include="..\third_party\RtMidi\RtMidi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\circular_buffer.h" />
     <ClInclude Include="..\src\concurrent_queue.h" />
     <ClInclude Include="..\src\midi_event.h" />
     <ClInclude Include="..\src\midi_file_writer.h" />

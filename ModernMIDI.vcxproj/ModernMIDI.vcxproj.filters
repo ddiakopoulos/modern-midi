@@ -4,94 +4,94 @@
     <ClCompile Include="..\third_party\RtMidi\RtMidi.cpp">
       <Filter>third_party\rtmidi</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\midi_input.cpp">
-      <Filter>lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\midi_output.cpp">
-      <Filter>lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\midi_utils.cpp">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\music_theory.cpp">
-      <Filter>lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\port_manager.cpp">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\sequence_player.cpp">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\sample.cpp" />
     <ClCompile Include="..\src\midi_file_reader.cpp">
-      <Filter>lib\file_io</Filter>
+      <Filter>src\file_io</Filter>
     </ClCompile>
     <ClCompile Include="..\src\midi_file_writer.cpp">
-      <Filter>lib\file_io</Filter>
+      <Filter>src\file_io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\midi_output.cpp">
+      <Filter>src\realtime_io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\midi_input.cpp">
+      <Filter>src\realtime_io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\port_manager.cpp">
+      <Filter>src\realtime_io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\third_party\RtMidi\RtMidi.h">
       <Filter>third_party\rtmidi</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\timer.h">
-      <Filter>util</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\concurrent_queue.h">
-      <Filter>util</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\circular_buffer.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\modernmidi.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\midi_input.h">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\midi_message.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\midi_output.h">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\midi_utils.h">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\music_theory.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\port_manager.h">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\sequence_player.h">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\midi_event.h">
-      <Filter>lib</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\midi_file_reader.h">
-      <Filter>lib\file_io</Filter>
+      <Filter>src\file_io</Filter>
     </ClInclude>
     <ClInclude Include="..\src\midi_file_writer.h">
-      <Filter>lib\file_io</Filter>
+      <Filter>src\file_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_output.h">
+      <Filter>src\realtime_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\midi_input.h">
+      <Filter>src\realtime_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\port_manager.h">
+      <Filter>src\realtime_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\concurrent_queue.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\timer.h">
+      <Filter>src\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="third_party">
       <UniqueIdentifier>{aa518cee-b6cb-4c29-9b1b-10369bb9f7fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="util">
-      <UniqueIdentifier>{d89e6036-80ba-4ad9-ac34-a33d146ea9e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lib">
-      <UniqueIdentifier>{a1914162-b220-4264-8ba9-e0696e43d89b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="third_party\rtmidi">
       <UniqueIdentifier>{3ab7d7de-927d-4bfc-aded-01e8da95059a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="lib\file_io">
+    <Filter Include="src">
+      <UniqueIdentifier>{a1914162-b220-4264-8ba9-e0696e43d89b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\file_io">
       <UniqueIdentifier>{ea3488b0-55ba-433a-95df-546381f1f475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\realtime_io">
+      <UniqueIdentifier>{113ec05f-f8c4-4e26-9a6e-185fa17e9cab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{7ef7bd25-b776-4887-96bc-649aec5be79e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
