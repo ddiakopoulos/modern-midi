@@ -292,6 +292,33 @@ void ExampleSequencePlayer()
     }
 }
 
+void ExampleMusicTheory()
+{
+    std::vector<std::vector<int>> scales =
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 },
+        { 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 1, 0 },
+        { 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 0, -1 },
+        { 0, 1, 0, 1, 0, -1, 1, 0, 1, 0, -1, 1 },
+        { 0, -1, 1, 0, -1, 0, 1, 0, -1, 1, 0, -1 },
+        { 0, 1, 0, 0, -1, 0, 1, 0, 1, 0, 0, -1 },
+        { 0, 0, -1, 0, -1, 0, 1, 0, 0, -1, 0, -1 },
+        { 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 },
+        { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, -1 },
+        { 0, 0, -1, 0, -1, 0, 0, -1, 0, -1, 0, -1 },
+        { 0, 0, -1, 1, 0, 0, 1, 0, 0, -1, 1, 0 },
+        { 0, 1, 0, 0, -1, 0, 0, -1, 0, -1, 0, -1}
+    };
+    std::vector<int> progression = {0, -5, 2, -3, 4, -1, 6, 1, -4, 3, -2, 5};
+    
+    auto randomScaleDegree = std::uniform_int_distribution<int>(1, 7);
+    
+    int transposedNote = 0;
+    int scaleIndexToUse = transposedNote % 12;
+    int modifier = scales[5][scaleIndexToUse];
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
     ExampleConstructMessages();
@@ -305,6 +332,8 @@ int main(int argc, char *argv[], char *envp[])
     ExampleReadWriteFile();
     
     ExampleSequencePlayer();
+    
+    ExampleMusicTheory();
     
     return 0;
 }
