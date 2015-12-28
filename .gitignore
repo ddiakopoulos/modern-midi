@@ -154,6 +154,4 @@ xcuserdata
 DerivedData
 *.xcuserstate
 
-assets/loopback.mid
-assets/example.mid
-assets/sample.mid
+assets/output/*.mid

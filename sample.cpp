@@ -243,7 +243,7 @@ void ExampleReadWriteFile()
     }
     
     // Write back to disk
-    std::fstream output("assets/loopback.mid", std::ios::out);
+    std::fstream output("assets/output/loopback.mid", std::ios::out);
     theLetterA.write(output);
     output.close();
 }
@@ -294,6 +294,7 @@ void ExampleSequencePlayer()
 
 void ExampleMusicTheory()
 {
+    // Fixme
     std::vector<std::vector<int>> scales =
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -312,11 +313,29 @@ void ExampleMusicTheory()
     };
     std::vector<int> progression = {0, -5, 2, -3, 4, -1, 6, 1, -4, 3, -2, 5};
     
-    auto randomScaleDegree = std::uniform_int_distribution<int>(1, 7);
+    auto randomScaleDegree = std::uniform_int_distribution<int>(0, 11);
     
     int transposedNote = 0;
     int scaleIndexToUse = transposedNote % 12;
     int modifier = scales[5][scaleIndexToUse];
+    
+    MidiFileWriter scaleFile;
+    scaleFile.setTicksPerQuarterNote(240);
+    scaleFile.addTrack();
+    
+    // Generate note on/off pair
+    for (int i = 0; i < progression.size(); ++i)
+    {
+        int note = 24 + progression[i];
+        scaleFile.addEvent(i * 10, 0, std::make_shared<MidiMessage>(MakeNoteOn(1, note, 96)));
+        scaleFile.addEvent((i * 10) + 220, 0, std::make_shared<MidiMessage>(MakeNoteOff(1, note, 0)));
+    }
+  
+    // Write back to disk
+    std::fstream output("assets/output/scales.mid", std::ios::out);
+    scaleFile.write(output);
+    output.close();
+    
 }
 
 int main(int argc, char *argv[], char *envp[])
