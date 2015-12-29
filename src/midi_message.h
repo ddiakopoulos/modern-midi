@@ -291,6 +291,15 @@ namespace mm
         return m;
     }
     
+    inline MidiMessage MakeTempoMetaEvent(int mpqn)
+    {
+        std::vector<uint8_t> message = { 0xff, 81, 3, (uint8_t) (mpqn >> 16), (uint8_t) (mpqn >> 8), (uint8_t) mpqn };
+        MidiMessage m;
+        m.data.resize(message.size());
+        memcpy(m.data.data(), message.data(), message.size());
+        return m;
+    }
+
     inline MidiMessage MakeTimeSignatureMetaEvent(const int numerator, const int denominator)
     {
         int n = 1;
