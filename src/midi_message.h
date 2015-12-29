@@ -257,6 +257,15 @@ namespace mm
         return MidiMessage(0xFF, 0x2F, 0, 0.0);
     }
 
+    inline MidiMessage MakeChannelMetaEvent (const int channel)
+    {
+        std::vector<uint8_t> message = { 0xff, 0x20, 0x01, clamp<uint8_t> (0, 0xff, channel - 1) };
+        MidiMessage m;
+        m.data.resize(message.size());
+        memcpy(m.data.data(), message.data(), message.size());
+        return m;
+    }
+
     inline MidiMessage MakeTextMetaEvent(MetaEventType textType, std::string text)
     {
         std::vector<uint8_t> message;
@@ -281,7 +290,36 @@ namespace mm
         memcpy(m.data.data(), message.data(), message.size());
         return m;
     }
-
+    
+    inline MidiMessage MakeTimeSignatureMetaEvent(const int numerator, const int denominator)
+    {
+        int n = 1;
+        int powTwo = 0;
+        
+        while (n < denominator)
+        {
+            n <<= 1;
+            ++powTwo;
+        }
+        
+        std::vector<uint8_t> message = { 0xff, 0x58, 0x04, (uint8_t) numerator, (uint8_t) powTwo, 1, 96 };
+        MidiMessage m;
+        m.data.resize(message.size());
+        memcpy(m.data.data(), message.data(), message.size());
+        return m;
+    }
+    
+    // Where key index goes from -7 (7 flats, C♭ Major) to +7 (7 sharps, C♯ Major)
+    inline MidiMessage MakeKeySignatureMetaEvent (int keyIndex, bool isMinor)
+    {
+        if (keyIndex < -7 || keyIndex > 7) throw std::range_error("out of range");
+        std::vector<uint8_t> message = { 0xff, 0x59, 0x02, (uint8_t) keyIndex, isMinor ? (uint8_t) 1 : (uint8_t) 0 };
+        MidiMessage m;
+        m.data.resize(message.size());
+        memcpy(m.data.data(), message.data(), message.size());
+        return m;
+    }
+    
     ///////////////
     // Utilities //
     ///////////////
