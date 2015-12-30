@@ -57,10 +57,11 @@ namespace mm
             for (auto & event_list : tracks)
             {
                 int lastTickValue = 0;
+                int tmpTick = 0;
                 for (auto & event : event_list)
                 {
                     const auto msg = event->m;
-                    int tmpTick = event->tick;
+                    tmpTick = event->tick;
                     event->tick -= lastTickValue;
                     lastTickValue = tmpTick;
                 }
@@ -77,10 +78,11 @@ namespace mm
             for (auto & event_list : tracks)
             {
                 int runningTickCounter = 0;
+                int tmpTick = 0;
                 for (auto & event : event_list)
                 {
                     const auto msg = event->m;
-                    int tmpTick = event->tick;
+                    tmpTick = event->tick;
                     event->tick = runningTickCounter;
                     runningTickCounter += tmpTick;
                 }
