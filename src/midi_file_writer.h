@@ -56,7 +56,12 @@ public:
     
     void addTrack(); 
 
-    void write(std::ostream & out); 
+    void write(std::ostream & out);
+    
+    std::vector<MidiTrack> & getTracks() { return tracks; }
+    
+    bool useAbsoluteTicks = false;
+    
 };
     
 } // mm

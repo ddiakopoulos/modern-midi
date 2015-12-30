@@ -123,7 +123,6 @@ void MidiFileWriter::addEvent(int tick, int track, std::shared_ptr<MidiMessage> 
     if (track > tracks.size()) 
         throw std::out_of_range("track idx exceeds availble tracks");
 
-    std::cout << tick << std::endl;
     tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
 }
 
@@ -155,9 +154,9 @@ void MidiFileWriter::write(std::ostream & out)
             // Suppress end-of-track meta messages (one will be added
             // automatically after all track data has been written).
             if (msg->getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
-                    
+
             util::write_variable_length(event->tick, trackRawData);
-                    
+            
             if ((msg->getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event->m->getMessageType() == uint8_t(MessageType::EOX)))
             {
                 // 0xf0 == Complete sysex message (0xf0 is part of the raw MIDI).

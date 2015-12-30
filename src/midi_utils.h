@@ -29,6 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MODERNMIDI_UTIL_H
 
 #include "modernmidi.h"
+#include "midi_event.h"
 
 namespace mm 
 {
@@ -46,6 +47,47 @@ namespace mm
     // can be provided.
     uint8_t frequencyToNote(float freq);
     uint8_t frequencyToNote(float freq, float A);
+    
+    // In-place conversion of tracks in absolute tick format
+    // to a delta tick format
+    inline void ConvertToDeltaTicks(std::vector<MidiTrack> & tracks)
+    {
+        for (int i = 0; i < tracks.size(); i++)
+        {
+            for (auto & event_list : tracks)
+            {
+                int lastTickValue = 0;
+                for (auto & event : event_list)
+                {
+                    const auto msg = event->m;
+                    int tmpTick = event->tick;
+                    event->tick -= lastTickValue;
+                    lastTickValue = tmpTick;
+                }
+            }
+        }
+    }
+    
+    // In-place conversion of tracks in delta tick format
+    // to an absolute tick format
+    inline void ConvertToAbsoluteTicks(std::vector<MidiTrack> & tracks)
+    {
+        for (int i = 0; i < tracks.size(); i++)
+        {
+            for (auto & event_list : tracks)
+            {
+                int runningTickCounter = 0;
+                for (auto & event : event_list)
+                {
+                    const auto msg = event->m;
+                    int tmpTick = event->tick;
+                    event->tick = runningTickCounter;
+                    runningTickCounter += tmpTick;
+                }
+            }
+        }
+    }
+    
 
 } // mm
 
