@@ -314,6 +314,12 @@ namespace mm
         return MidiMessage(message);
     }
     
+    inline MidiMessage SongPositionMetaEvent(const int positionInBeats) noexcept
+    {
+        std::vector<uint8_t> message = {0xf2, (uint8_t) (positionInBeats & 127), (uint8_t) ((positionInBeats >> 7) & 127) };
+        return MidiMessage(message);
+    }
+    
     ///////////////
     // Utilities //
     ///////////////
