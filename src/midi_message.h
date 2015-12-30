@@ -175,22 +175,22 @@ namespace mm
         
         bool isMetaEvent() const { return data[0] == 0xFF; }
         
-        uint8_t getMetaEventSubtype() const
+        MetaEventType getMetaEventSubtype() const
         {
-            if (!isMetaEvent()) return -1;
-            return data[1];
+            if (!isMetaEvent()) return MetaEventType::UNKNOWN;
+            return (MetaEventType) data[1];
         }
         
-        uint8_t getMessageType() const
+        MessageType getMessageType() const
         {
-            if (data[0] >= uint8_t(MessageType::SYSTEM_EXCLUSIVE)) { return data[0] & 0xFF; }
-            else { return data[0] & 0xF0; }
+            if (data[0] >= uint8_t(MessageType::SYSTEM_EXCLUSIVE)) { return (MessageType) (data[0] & 0xFF); }
+            else { return (MessageType) (data[0] & 0xF0); }
         }
         
         bool isNoteOnOrOff() const
         {
             const auto status = getMessageType();
-            return (status == (uint8_t) MessageType::NOTE_ON) || (status == (uint8_t) MessageType::NOTE_OFF);
+            return (status == MessageType::NOTE_ON) || (status == MessageType::NOTE_OFF);
         }
         
         size_t messageSize() const { return data.size(); }

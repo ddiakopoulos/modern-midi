@@ -153,11 +153,11 @@ void MidiFileWriter::write(std::ostream & out)
                     
             // Suppress end-of-track meta messages (one will be added
             // automatically after all track data has been written).
-            if (msg->getMetaEventSubtype() == uint8_t(MetaEventType::END_OF_TRACK)) continue;
+            if (msg->getMetaEventSubtype() == MetaEventType::END_OF_TRACK) continue;
 
             util::write_variable_length(event->tick, trackRawData);
             
-            if ((msg->getMessageType() == uint8_t(MessageType::SYSTEM_EXCLUSIVE)) || (event->m->getMessageType() == uint8_t(MessageType::EOX)))
+            if ((msg->getMessageType() == MessageType::SYSTEM_EXCLUSIVE) || (event->m->getMessageType() == MessageType::EOX))
             {
                 // 0xf0 == Complete sysex message (0xf0 is part of the raw MIDI).
                 // 0xf7 == Raw byte message (0xf7 not part of the raw MIDI).

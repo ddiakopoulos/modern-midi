@@ -73,7 +73,7 @@ void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPe
     {
         localElapsedTicks += m->tick;
         double deltaTimestampInSeconds = ticksToSeconds(localElapsedTicks);
-        if (m->m->getMessageType() == (uint8_t) MessageType::NOTE_ON) addTimestampedEvent(0, deltaTimestampInSeconds, m); // already checks if non-meta message
+        if (m->m->getMessageType() == MessageType::NOTE_ON) addTimestampedEvent(0, deltaTimestampInSeconds, m); // already checks if non-meta message
     }
 }
 

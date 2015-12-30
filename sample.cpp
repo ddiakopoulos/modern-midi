@@ -95,7 +95,7 @@ void ExampleConstructMessages()
         // True!
     }
     
-    if (msg1.getMessageType() == (uint8_t) MessageType::NOTE_OFF)
+    if (msg1.getMessageType() == MessageType::NOTE_OFF)
     {
         // True!
     }
@@ -206,7 +206,7 @@ void ExampleReadWriteFile()
             
             if (!msg.isMetaEvent()) continue;
             
-            if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TEMPO_CHANGE)
+            if (msg.getMetaEventSubtype() == MetaEventType::TEMPO_CHANGE)
             {
                 double microsecondsPerBeat = Pack(msg[5], msg[4], msg[3]);
                 double beatsPerMinute = float(60000000.0 / double (microsecondsPerBeat));
@@ -215,7 +215,7 @@ void ExampleReadWriteFile()
                 std::cout << "Beats Per Minute: " << beatsPerMinute << std::endl;
                 std::cout << "Milliseconds per Tick: " << msPerTick << std::endl;
             }
-            else if (msg.getMetaEventSubtype() == (uint8_t) MetaEventType::TIME_SIGNATURE)
+            else if (msg.getMetaEventSubtype() == MetaEventType::TIME_SIGNATURE)
             {
                 std::cout << "Time Signature: " << (int) msg[4] << " / " << (int) powf(2.0f, msg[5]) << std::endl; // Numerator / Denominator
             }
