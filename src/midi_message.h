@@ -146,6 +146,7 @@ namespace mm
         MidiMessage() { data = {0, 0, 0}; }
         MidiMessage(const uint8_t b1, const uint8_t b2, const uint8_t b3, const double ts = 0) : timestamp(ts) { data = {b1, b2, b3}; }
         MidiMessage(const uint8_t b1, const  uint8_t b2, const double ts = 0) : timestamp(ts) { data = {b1, b2}; }
+        MidiMessage(const std::vector<uint8_t> msg) { data = msg; };
         MidiMessage(const MidiMessage & rhs) { *this = rhs; }
         
         MidiMessage & operator = (const MidiMessage & rhs)
@@ -260,10 +261,7 @@ namespace mm
     inline MidiMessage MakeChannelMetaEvent (const int channel)
     {
         std::vector<uint8_t> message = { 0xff, 0x20, 0x01, clamp<uint8_t> (0, 0xff, channel - 1) };
-        MidiMessage m;
-        m.data.resize(message.size());
-        memcpy(m.data.data(), message.data(), message.size());
-        return m;
+        return MidiMessage(message);
     }
 
     inline MidiMessage MakeTextMetaEvent(MetaEventType textType, std::string text)
@@ -285,19 +283,13 @@ namespace mm
         for (int i = 0; i < length; i++) 
             message[2 + varLength + i] = text.data()[i]; // set data
 
-        MidiMessage m;
-        m.data.resize(message.size());
-        memcpy(m.data.data(), message.data(), message.size());
-        return m;
+        return MidiMessage(message);
     }
     
     inline MidiMessage MakeTempoMetaEvent(int mpqn)
     {
         std::vector<uint8_t> message = { 0xff, 81, 3, (uint8_t) (mpqn >> 16), (uint8_t) (mpqn >> 8), (uint8_t) mpqn };
-        MidiMessage m;
-        m.data.resize(message.size());
-        memcpy(m.data.data(), message.data(), message.size());
-        return m;
+        return MidiMessage(message);
     }
 
     inline MidiMessage MakeTimeSignatureMetaEvent(const int numerator, const int denominator)
@@ -310,12 +302,8 @@ namespace mm
             n <<= 1;
             ++powTwo;
         }
-        
         std::vector<uint8_t> message = { 0xff, 0x58, 0x04, (uint8_t) numerator, (uint8_t) powTwo, 1, 96 };
-        MidiMessage m;
-        m.data.resize(message.size());
-        memcpy(m.data.data(), message.data(), message.size());
-        return m;
+        return MidiMessage(message);
     }
     
     // Where key index goes from -7 (7 flats, C♭ Major) to +7 (7 sharps, C♯ Major)
@@ -323,10 +311,7 @@ namespace mm
     {
         if (keyIndex < -7 || keyIndex > 7) throw std::range_error("out of range");
         std::vector<uint8_t> message = { 0xff, 0x59, 0x02, (uint8_t) keyIndex, isMinor ? (uint8_t) 1 : (uint8_t) 0 };
-        MidiMessage m;
-        m.data.resize(message.size());
-        memcpy(m.data.data(), message.data(), message.size());
-        return m;
+        return MidiMessage(message);
     }
     
     ///////////////

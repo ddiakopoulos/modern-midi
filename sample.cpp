@@ -323,16 +323,19 @@ void ExampleMusicTheory()
     scaleFile.setTicksPerQuarterNote(240);
     scaleFile.addTrack();
     
-    scaleFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTempoMetaEvent(600000)));
+    scaleFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTextMetaEvent(MetaEventType::TRACK_NAME, "scales!")));
+    scaleFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTempoMetaEvent(600000))); // 100 bpm
     scaleFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeTimeSignatureMetaEvent(3, 8)));
-    scaleFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeKeySignatureMetaEvent(-5, true)));
+    scaleFile.addEvent(0, 0, std::make_shared<MidiMessage>(MakeKeySignatureMetaEvent(-5, true))); // B flat minor
     
     // Generate note on/off pair
+    int ticks = 0;
     for (int i = 0; i < progression.size(); ++i)
     {
         int note = 24 + progression[i];
-        scaleFile.addEvent(i * 10, 0, std::make_shared<MidiMessage>(MakeNoteOn(1, note, 96)));
-        scaleFile.addEvent((i * 10) + 220, 0, std::make_shared<MidiMessage>(MakeNoteOff(1, note, 0)));
+        scaleFile.addEvent(ticks, 0, std::make_shared<MidiMessage>(MakeNoteOn(1, note, 96)));
+        scaleFile.addEvent(ticks + 240, 0, std::make_shared<MidiMessage>(MakeNoteOff(1, note, 0)));
+        //ticks += 10;
     }
   
     // Write back to disk

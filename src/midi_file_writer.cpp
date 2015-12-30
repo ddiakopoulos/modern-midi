@@ -121,15 +121,16 @@ void MidiFileWriter::addTrack()
 void MidiFileWriter::addEvent(int tick, int track, std::shared_ptr<MidiMessage> m)
 {
     if (track > tracks.size()) 
-        throw std::invalid_argument("track exceeds availble tracks");
+        throw std::out_of_range("track idx exceeds availble tracks");
 
+    std::cout << tick << std::endl;
     tracks[track].push_back(std::make_shared<TrackEvent>(tick, track, m));
 }
 
 void MidiFileWriter::addEvent(int track, std::shared_ptr<TrackEvent> m)
 {
     if (track > tracks.size())
-        throw std::invalid_argument("track exceeds availble tracks");
+        throw std::out_of_range("track idx exceeds availble tracks");
     
     tracks[track].push_back(m);
 }
