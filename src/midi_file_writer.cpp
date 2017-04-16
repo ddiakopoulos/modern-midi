@@ -140,7 +140,7 @@ void MidiFileWriter::write(std::ostream & out)
     out << 'M'; out << 'T'; out << 'h'; out << 'd';
     util::write_uint32_be(out, 6);
     util::write_uint16_be(out, (getNumTracks() == 1) ? 0 : 1);
-    util::write_uint16_be(out, getNumTracks());
+    util::write_uint16_be(out, (uint16_t)getNumTracks());
     util::write_uint16_be(out, getTicksPerQuarterNote());
             
     std::vector<uint8_t> trackRawData;
@@ -168,7 +168,7 @@ void MidiFileWriter::write(std::ostream & out)
                 // do it for you automatically.
                 trackRawData.emplace_back(msg->data[0]); // 0xf0 or 0xf7;
                         
-                util::write_variable_length(msg->messageSize() - 1, trackRawData);
+                util::write_variable_length(uint32_t(msg->messageSize() - 1), trackRawData);
                         
                 for (size_t k = 1; k < msg->messageSize(); k++)
                 {
@@ -200,6 +200,6 @@ void MidiFileWriter::write(std::ostream & out)
             
     // Write the track ID marker "MTrk":
     out << 'M'; out << 'T'; out << 'r'; out << 'k';
-    util::write_uint32_be(out, trackRawData.size());
+    util::write_uint32_be(out, uint32_t(trackRawData.size()));
     out.write((char*) trackRawData.data(), trackRawData.size());
 }

@@ -277,10 +277,10 @@ namespace mm
         message[0] = 0xFF;  // set meta field
         message[1] = (uint8_t) textType & 0x7F; // set meta subtype
 
-        for (int i = 0; i < varLength; i++)
+        for (uint32_t i = 0; i < varLength; i++)
             message[2 + i] = size[i]; // set meta length
 
-        for (int i = 0; i < length; i++) 
+        for (size_t i = 0; i < length; i++)
             message[2 + varLength + i] = text.data()[i]; // set data
 
         return MidiMessage(message);

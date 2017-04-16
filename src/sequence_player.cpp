@@ -63,7 +63,7 @@ void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPe
     reset();
 
     this->ticksPerBeat = ticksPerBeat;
-    this->beatsPerMinute = beatsPerMinute;
+    this->beatsPerMinute = float(beatsPerMinute);
     msPerTick = 60000.0 / beatsPerMinute / ticksPerBeat;
 
     double localElapsedTicks = 0;
@@ -72,7 +72,7 @@ void MidiSequencePlayer::loadSingleTrack(const MidiTrack & track, double ticksPe
     for (auto m : track)
     {
         localElapsedTicks += m->tick;
-        double deltaTimestampInSeconds = ticksToSeconds(localElapsedTicks);
+        double deltaTimestampInSeconds = ticksToSeconds( int(localElapsedTicks) );
         if (m->m->getMessageType() == MessageType::NOTE_ON) addTimestampedEvent(0, deltaTimestampInSeconds, m); // already checks if non-meta message
     }
 }
@@ -92,13 +92,13 @@ void MidiSequencePlayer::start()
 
 #if defined(MM_PLATFORM_WINDOWS)
     HANDLE threadHandle = sequencerThread.native_handle();
-    auto err = SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
+    int err = (int)SetThreadPriority(threadHandle, THREAD_PRIORITY_TIME_CRITICAL);
     if (err == 0)
     {
         std::cerr << "SetThreadPriority() failed: " << GetLastError() << std::endl;
     }
 
-    err = SetThreadAffinityMask(threadHandle, 1);
+    err = (int)SetThreadAffinityMask(threadHandle, 1);
     if (err == 0)
     {
         std::cerr<< "SetThreadAffinityMask() failed: " << GetLastError() << std::endl;
