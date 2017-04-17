@@ -23,6 +23,8 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <chrono>
 #include <random>
 #include <fstream>
