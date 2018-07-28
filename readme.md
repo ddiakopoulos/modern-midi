@@ -4,6 +4,8 @@ ModernMIDI brings together a number of support classes to read, manipulate, and 
 
 In various forms, it has been used in performances with the [Seattle Symphony](http://www.geekwire.com/2015/conducting-with-kinect-seattle-symphony-to-use-microsofts-3d-sensor-in-world-premiere-performance/), installations at the [Jewish Contemporary Museum in SF](http://www.thecjm.org/about/press/press-releases/956-pour-crever-by-trimpin), and in many smaller Arduino prototypes in conjunction with [HIDUINO](https://github.com/ddiakopoulos/hiduino).
 
+This code is functional but rarely maintained. For a newer take on midi library support in C++, see [RtMidi17](https://github.com/jcelerier/RtMidi17).
+
 ## Building / Usage
 To run the included exampes, use the included VS2013 or XCode 6 projects. ModernMIDI will build on any platform with a recent C++11 compiler. At present, ModernMIDI is not packaged into a static or dynamic library -- instead, the usage model is that developers will compile the small number of files directly into a new project.
 
